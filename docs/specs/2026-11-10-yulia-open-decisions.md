@@ -16,9 +16,9 @@ This register consolidates every open decision in the Phase 0 specifications, wi
 
 | # | Decision | Owner | Decide by | Status |
 |---|---|---|---|---|
-| D1 | Phase 1 subset boundary (exact type/construct set) | spec owner (B) | Phase 1 gate | open |
-| D2 | Error and diagnostic model (messages, exit codes, abort behavior) | spec owner (B) | Phase 1 gate | open |
-| D3 | Region inference rules for the by-value subset | spec owner (B) | Phase 1 gate | open |
+| D1 | Phase 1 subset boundary (exact type/construct set) | spec owner (B) | Phase 1 gate | resolved 2026-11-10 (see Resolved) |
+| D2 | Error and diagnostic model (messages, exit codes, abort behavior) | spec owner (B) | Phase 1 gate | resolved 2026-11-10 (see Resolved) |
+| D3 | Region inference rules for the by-value subset | spec owner (B) | Phase 1 gate | resolved 2026-11-10 (see Resolved) |
 
 ## Phase 2 gate
 
@@ -38,6 +38,7 @@ This register consolidates every open decision in the Phase 0 specifications, wi
 | # | Decision | Owner | Decide by | Status |
 |---|---|---|---|---|
 | D12 | Benchmark kernels K1–K5 implementation + baseline data (0.8) | spec owner (B) + infra (A) | Phase 4 gate | open |
+| D26 | Phase 3 / codegen phase naming (G8): the phase plan is 1,2,4,5,6; the 'codegen phase' (D21) is never named. Moving K1 to Phase 4 implies codegen lands in Phase 3 or Phase 4 — the plan must say which. | spec owner (B) | Phase 4 gate | open |
 
 ## Phase 5 gate
 
@@ -60,6 +61,9 @@ This register consolidates every open decision in the Phase 0 specifications, wi
 
 | # | Decision | Resolution | Date |
 |---|---|---|---|
+| D1 | Phase 1 subset boundary | IN: `int`, `bool`, structs, fixed-size arrays `[T; N]`, functions incl. `main`, `if`/`else`, `while`, `for`/`in`, `return`, `break`, `continue`, `let`/`const`. OUT: `float`, `char`, `string`, `panic()`, `extern "C"`, `export`, `pin`, `CPtr`, references, growable arrays, modules/imports, concurrency, generics, SoA, stdlib. Deliverables: lexer, parser, AST, type checker, region inference, diagnostics, tests. No codegen, no execution path. | 2026-11-10 |
+| D2 | Error and diagnostic model | Compile error -> stderr `file:line:col: error: <msg>`, exit 1. Runtime error (bounds check, div-by-zero, trapping overflow) -> stderr + `abort()` (SIGABRT/134), no region cleanup; **verify when codegen lands** (not exercisable in Phase 1). No `panic()` builtin in Phase 1. Stable error code per diagnostic. | 2026-11-10 |
+| D3 | Region inference rules for the by-value subset | Resolved by 0.3 §3: single lexical pass, O(n), Lemma 1 (trivially sound). No new rules needed. | 2026-11-10 |
 | D20 | Fallback policy (R.1 / R.2 / R.3) | R.1 restrict + R.2 warned escape hatch (user sign-off) | 2026-11-10 |
 | D21 | Implementation language / backend | Rust + LLVM (inkwell enters at the codegen phase) | 2026-11-10 |
 | D22 | License | MPL-2.0 | 2026-11-10 |

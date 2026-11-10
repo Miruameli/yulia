@@ -101,6 +101,8 @@ See `docs/specs/2026-11-09-yulia-region-inference.md` (0.3 §6), `docs/specs/202
 
 ## MVP feature set
 
+This is the **whole-MVP** feature set, not the Phase 1 subset. Phase 1 is specified in 0.3 §3 and delivers `int`, `bool`, structs, fixed-size arrays, functions, and control flow only — no `float`, no `char`, no `string`, no codegen.
+
 - Primitive types: `int`, `float`, `bool`, `char`, `string`
 - Functions / procedures
 - Structs

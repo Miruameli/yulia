@@ -38,11 +38,12 @@ Regions  -- stack of active regions
 ### 4.1 Values
 
 ```
-Val ::= INT_LIT | FLOAT_LIT | BOOL_LIT | CHAR_LIT | STRING_LIT
-      | StructVal | ArrayVal
+Val ::= INT_LIT | BOOL_LIT | StructVal | ArrayVal
 StructVal ::= "struct" IDENT "{" field_values "}"
 ArrayVal  ::= "array" "[" Val { "," Val } "]"
 ```
+
+Phase 1 values are `int`, `bool`, structs, and fixed-size arrays. `float`, `char`, and `string` are Phase 2+ (0.3 §4).
 
 ### 4.2 Environments
 

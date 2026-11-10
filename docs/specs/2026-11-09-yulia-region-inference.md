@@ -35,7 +35,7 @@ Given a program, assign each value to a region such that:
 
 ## 3. The Phase 1 subset is trivial — and that is the point
 
-The Phase 1 subset (`int`, structs, fixed-size arrays, functions) has **no pointers or references**. All values are passed by value. Therefore:
+The Phase 1 subset (`int`, `bool`, structs, fixed-size arrays, functions, control flow) has **no pointers or references**. All values are passed by value. Therefore:
 
 - Each local variable's region is its enclosing function's region.
 - Each function call creates a fresh region for the callee's locals; it is reclaimed on return.
