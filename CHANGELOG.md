@@ -46,6 +46,12 @@ development builds are identified by git commit hash
   (`.codegraph/` is not committed), and a spell-check false positive caused by
   an inline-code split in `docs/specs/2026-11-09-yulia-ffi-rules.md` (R-FFI-2)
   is resolved by rewording.
+- Phase 0 consistency gate (user directive, 2026-11-10): Phase 0 must be made
+  internally consistent and pass strict review and theoretical soundness before
+  Phase 1 begins. Phase 1 (toolchain) is ON HOLD until the user accepts the
+  Phase 0 gate. `README.md` status, `CONTRIBUTING.md` §5, and `SECURITY.md`
+  dependency policy now distinguish Phase 1a (std-only) from Phase 1b (adds
+  inkwell/LLVM for codegen).
 
 ### Removed
 

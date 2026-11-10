@@ -95,9 +95,9 @@ Configured in `Cargo.toml` (`[lints]`) and `clippy.toml`.
 - At least one **negative test per invariant**
   (`docs/specs/2026-11-09-yulia-design-review.md` §6.3).
 - Use `proptest` for the lexer and parser: tokenisation and parsing are
-  adversarial surfaces. It is not yet a dependency — Phase 1 is std-only
-  (`Cargo.toml`) — so add it to `[dev-dependencies]` when the first property
-  test lands.
+  adversarial surfaces. It is not yet a dependency — the Phase 1a runtime is
+  std-only (`Cargo.toml`) — so add it to `[dev-dependencies]` when the first
+  property test lands.
 - `make test` locally; the full suite also runs in CI on every push and pull request.
 
 ## 6. Benchmarks

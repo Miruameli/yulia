@@ -51,8 +51,9 @@ Out of scope:
 
 ## Dependency Policy
 
-The compiler is intentionally dependency-free in Phase 1. Dependencies are
-added deliberately and reviewed before introduction:
+The compiler is intentionally dependency-free in Phase 1a (Phase 1b adds
+inkwell for codegen). Dependencies are added deliberately and reviewed before
+introduction:
 
 - Every dependency is pinned and covered by a lockfile.
 - `cargo deny` checks licenses, advisories, and duplicate versions in CI.

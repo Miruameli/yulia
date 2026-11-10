@@ -8,8 +8,10 @@ collector, no lifetime annotations, and deterministic reclamation.
 
 **Status:** Phase 0 (language specification) deliverables are complete; the
 Phase 0 exit sign-off is pending further review (held 2026-11-10). Phase 1
-(toolchain) is starting. The specification lives in [`docs/specs/`](docs/specs/);
-the development workflow is in [`CONTRIBUTING.md`](CONTRIBUTING.md).
+(toolchain) is ON HOLD until the Phase 0 gate passes strict review and
+theoretical soundness (user directive 2026-11-10). The specification lives in
+[`docs/specs/`](docs/specs/); the development workflow is in
+[`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## Layout
 
