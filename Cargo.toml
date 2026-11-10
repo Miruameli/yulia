@@ -1,0 +1,76 @@
+[package]
+name = "yulia"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.99"
+license = "MPL-2.0"
+description = "Yulia compiler — region-based memory, C-class performance, Python-class simplicity"
+readme = "README.md"
+keywords = ["compiler", "programming-language", "llvm", "region-inference"]
+categories = ["compilers"]
+# The compiler is not published to crates.io.
+publish = false
+# No remote yet; set `repository` when one is added so `cargo publish` metadata
+# and CI badges resolve.
+
+[[bin]]
+name = "yulia"
+path = "src/main.rs"
+
+[lib]
+name = "yulia"
+path = "src/lib.rs"
+
+# Phase 1 is std-only on purpose: the lexer, parser, and diagnostics must not
+# pull in a runtime dependency tree before the language itself is stable.
+# Dev-dependencies (e.g. proptest, per CONTRIBUTING.md §5) are exempt: they do
+# not ship in the compiler binary.
+[dependencies]
+
+[dev-dependencies]
+
+[lints.rust]
+unsafe_code = "forbid"
+missing_docs = "warn"
+missing_debug_implementations = "warn"
+rust_2018_idioms = { level = "deny", priority = -1 }
+unused = { level = "warn", priority = -1 }
+dead_code = "warn"
+elided_lifetimes_in_paths = "warn"
+unreachable_pub = "warn"
+
+[lints.clippy]
+# Correctness + style are non-negotiable.
+all = { level = "deny", priority = -1 }
+# Pedantic is advisory: it is warn-level so new lints do not break the build,
+# but CI's `-D warnings` turns them into errors anyway.
+pedantic = { level = "warn", priority = -1 }
+nursery = { level = "allow", priority = -1 }
+cargo = { level = "warn", priority = -1 }
+
+# A compiler reports errors; it does not panic at the user.
+unwrap_used = "deny"
+expect_used = "deny"
+panic = "deny"
+todo = "deny"
+unimplemented = "deny"
+dbg_macro = "deny"
+
+# Known-noisy pedantic lints, allowed with justification.
+module_name_repetitions = "allow"   # `lexer::Lexer`, `parser::Parser` read better
+similar_names = "allow"             # `span`/`spans`, `token`/`tokens` are clear
+missing_errors_doc = "allow"        # error variants are documented on the enum
+missing_panics_doc = "allow"        # `panic!` is denied above; docs add nothing
+must_use_candidate = "allow"        # too chatty for a compiler's internal API
+return_self_not_must_use = "allow"  # builder-style APIs are not the house style
+wildcard_imports = "allow"          # `use super::*` in tests and small modules
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+strip = "symbols"
+
+[profile.bench]
+inherits = "release"
+debug = true

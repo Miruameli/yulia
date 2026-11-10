@@ -1,0 +1,121 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+
+# NOTE: the repository has no git remote yet, so these jobs do not run.
+# Run `make ci` locally until a remote is configured.
+
+# SOP-RESLIM: every job AND every step carries an explicit `timeout-minutes`;
+# `concurrency` cancels superseded runs; nothing is uploaded, so there is no
+# artifact/cache growth to bound. `ubuntu-latest` (4 vCPU / 7 GB) is sized for
+# these jobs — the crate is small and no job is memory-heavy today. If a job
+# grows, pin a larger runner here and record the reason.
+
+jobs:
+  fmt:
+    name: Formatting
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      # Pinned to a full-length commit SHA; the mutable `v4` tag is not used.
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+      # `cargo --version` makes rustup install the toolchain pinned in
+      # rust-toolchain.toml (including the rustfmt component).
+      - name: Install pinned toolchain
+        run: cargo --version
+        timeout-minutes: 5
+      - run: cargo fmt --all -- --check
+        timeout-minutes: 5
+
+  lint:
+    name: Clippy
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+      - name: Install pinned toolchain
+        run: cargo --version
+        timeout-minutes: 5
+      - run: cargo clippy --workspace --all-targets --all-features -- -D warnings
+        timeout-minutes: 5
+
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+      - name: Install pinned toolchain
+        run: cargo --version
+        timeout-minutes: 5
+      - run: cargo test --workspace --all-features
+        timeout-minutes: 5
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+      - name: Install pinned toolchain
+        run: cargo --version
+        timeout-minutes: 5
+      - run: cargo build --workspace --all-features --release
+        timeout-minutes: 10
+
+  deny:
+    name: Dependency audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+      - name: Install pinned toolchain
+        run: cargo --version
+        timeout-minutes: 5
+      # `--version` pins the tool itself; `--locked` only pins its own deps.
+      - run: cargo install --locked cargo-deny --version 0.20.2
+        timeout-minutes: 15
+      - run: cargo deny --config deny.toml check
+        timeout-minutes: 5
+
+  typos:
+    name: Spell check
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+      - run: cargo install --locked typos-cli --version 1.52.1
+        timeout-minutes: 15
+      - run: typos
+        timeout-minutes: 5
+
+  codegraph:
+    name: Codegraph index
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+      - name: Install pinned toolchain
+        run: cargo --version
+        timeout-minutes: 5
+      # The package is `@colbymchenry/codegraph` (the bare name `codegraph` on
+      # npm is an unrelated package).
+      - name: Install codegraph
+        run: npm install --global @colbymchenry/codegraph@1.6.2
+        timeout-minutes: 5
+      - name: Build the index
+        run: codegraph index
+        timeout-minutes: 10

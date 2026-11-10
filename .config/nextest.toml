@@ -1,0 +1,18 @@
+# cargo-nextest configuration.
+# Install: `cargo install cargo-nextest`
+
+[profile.default]
+test-threads = "num-cpus"
+fail-fast = false
+# A test that hangs is killed after two 60s periods rather than stalling CI.
+slow-timeout = { period = "60s", terminate-after = 2 }
+
+[profile.ci]
+fail-fast = false
+retries = 0
+slow-timeout = { period = "120s", terminate-after = 2 }
+
+[profile.default.junit]
+path = "junit.xml"
+store-success-output = true
+store-failure-output = true

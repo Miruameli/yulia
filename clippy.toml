@@ -1,0 +1,26 @@
+# clippy configuration. The lint *levels* live in Cargo.toml `[lints.clippy]`;
+# this file only carries clippy's behavioural knobs.
+
+# MSRV must match `rust-version` in Cargo.toml and the pinned toolchain.
+msrv = "1.99"
+
+# Tests are allowed to unwrap/expect/dbg: asserting on a `Result` is the
+# idiomatic way to write a failing test.
+allow-unwrap-in-tests = true
+allow-expect-in-tests = true
+allow-dbg-in-tests = true
+
+# Complexity budgets. Deliberately generous for a compiler, where a large
+# match over token kinds or AST nodes is normal; they exist so a genuinely
+# out-of-control function still trips.
+too-many-arguments-threshold = 8
+too-many-lines-threshold = 250
+type-complexity-threshold = 250
+cognitive-complexity-threshold = 30
+too-large-for-stack = 200
+
+# `process::exit` skips destructors and makes the CLI untestable; return
+# `ExitCode` from `main` instead.
+disallowed-methods = [
+    { path = "std::process::exit", reason = "return std::process::ExitCode from main instead" },
+]

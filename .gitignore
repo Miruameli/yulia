@@ -1,0 +1,62 @@
+# --- Rust / Cargo -----------------------------------------------------------
+/target/
+**/*.rs.bk
+*.pdb
+
+# --- codegraph --------------------------------------------------------------
+# The index is a derived artifact; rebuild it with `make codegraph`.
+/.codegraph/
+
+# --- coverage / profiling ---------------------------------------------------
+/coverage/
+*.profraw
+*.profdata
+
+# --- build artifacts --------------------------------------------------------
+/dist/
+/out/
+*.o
+*.a
+*.so
+*.dylib
+*.dll
+*.exe
+
+# --- test reports -----------------------------------------------------------
+/junit.xml
+
+# --- editors ----------------------------------------------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# --- OS ---------------------------------------------------------------------
+.DS_Store
+Thumbs.db
+
+# --- other tooling ----------------------------------------------------------
+node_modules/
+__pycache__/
+.venv/
+*.log
+.hypothesis/
+
+# --- secrets / credentials --------------------------------------------------
+# Never commit these. `git add -A` must not silently stage a secret.
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+id_rsa
+id_ed25519
+.netrc
+.npmrc
+.cargo/credentials*
+secrets.*
+credentials.json
+*.service-account.json

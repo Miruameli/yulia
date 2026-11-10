@@ -1,0 +1,6 @@
+# Pinned so that every contributor, CI job, and release build sees the same
+# compiler, rustfmt, and clippy. Bump this deliberately (see CONTRIBUTING.md).
+[toolchain]
+channel = "1.99.1"
+components = ["rustfmt", "clippy"]
+profile = "minimal"

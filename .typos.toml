@@ -1,0 +1,11 @@
+# typos configuration.
+# Install: `cargo install typos-cli`  (https://crates.io/crates/typos-cli)
+
+[default.extend-words]
+
+[files]
+extend-exclude = [
+    ".codegraph/",
+    # User-supplied operating contract; not project prose.
+    "KONTRAK.md",
+]
