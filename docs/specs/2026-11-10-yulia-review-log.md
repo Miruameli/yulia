@@ -63,3 +63,26 @@ The Phase 1 plan (lost 2026-11-10; `docs/plans/2026-11-10-yulia-phase1.md`) orig
 | inkwell supported LLVM | LLVM 12–23 via `llvmM-N` feature flags (e.g. `llvm18-1`, `llvm23-1`) | https://lib.rs/crates/inkwell |
 
 Action: plan lines 9 and 15 updated to LLVM 23.1.x / Rust 1.99.x with sources and retrieval date. LLVM 18 remains a valid inkwell-supported floor but is not current.
+
+## Soundness audit (2026-11-10, session A)
+
+Independent audit of the memory-safety argument across 0.2/0.3/0.3a/0.4/0.5/0.6/0.7/0.8. **Verdict: the Phase 1 half holds; the Phase 2 half did not hold as written.** All findings are now fixed or explicitly scoped.
+
+**Blockers (6).**
+
+| ID | File | Finding | Resolution |
+|---|---|---|---|
+| B1 | 0.3 §7 | Theorem claims Phase 1–2; Lemma 2's premise undecided | Theorem scoped: Phase 1 unconditional, Phase 2 conditional on D4–D11 |
+| B2 | 0.3 §7 / 0.4 §5 | Lemma 2 invokes R.2, which 0.4 excludes from Phase 1–2 | Lemma 2 uses R.1 only |
+| B3 | 0.3a §7 / 0.6 §3.1 | R-FFI-1 unenforceable (C retention undetectable) | C FFI declared a trust boundary outside the Theorem |
+| B4 | 0.2 §4.4 | SOS never reclaims (Return does not pop) | Return pops the region and invalidates its locations |
+| B5 | 0.2 §6 | Progress false (out-of-bounds index) | runtime-error rule added; Progress restated |
+| B6 | 0.2 §6 | Preservation unprovable (no type system) | minimal type system added |
+
+**High (14).** B7–B20: escape-lattice contradictions (E1 direction, C FFI levels, E3 vs pin, region assignment rule), region granularity (scope vs function), Lemma 1 vs Rule 3.1, O(n) vs the interprocedural Rule 3.1 proof, alias analysis, 0.6:120 cross-ref, 0.5 "borrow checking", 0.7 lifetime-annotation exception, 0.7 exclusivity vs immutable sharing, 0.5 atomicity/rollback. All fixed.
+
+**Medium/Low (17).** B21–B37: panic propagation scope, pin example syntax, array ABI, CPtr leak, benchmark targets, negative-test phase labels, 0.4 contradictions, Val domain, confidence, complexity, reclamation, SoA Phase 2, Rust prior art, illustrative syntax, `-march`. All fixed.
+
+**Net effect on the claim.** The design's core claim is unchanged in substance but is now honestly bounded: *compiler-inferred region-based memory for a decidable safe subset* — Phase 1 established; Phase 2 conditional on the Phase 2 gate (D4–D11); C FFI a trust boundary; concurrency Phase 5.
+
+**Residual fixes (2026-11-10, session A, follow-up pass).** Two cross-reference defects survived the first pass and were fixed after a later review: (a) 0.2 §4.1 cited 0.6 §4.4 for the `int` width while 0.6 §4.4 cited 0.2 §4.1 — 0.2 now owns the definition and the back-pointer is dropped; (b) 0.6 §7 said the SoA annotation is "accepted in Phase 2 but no-op", contradicting 0.6 §4.3 ("rejected in Phase 2") — §7 now matches §4.3.

@@ -26,11 +26,11 @@ This register consolidates every open decision in the Phase 0 specifications, wi
 |---|---|---|---|---|
 | D4 | String ownership model (0.3 §5.1 Q3: copy / copy-on-write / region-owned). **Split discipline (D27):** plain immutable value types use copy semantics; move and copy coincide, so affine is vacuous for them. | spec owner (B) | Phase 2 gate | open |
 | D5 | Growable array sharing rule (0.3 §5.2: invalidate / indirection / no sharing). **Split discipline (D27):** resource handles use move/affine; moving the handle is cheap and source invalidation is expected. | spec owner (B) | Phase 2 gate | open |
-| D6 | C FFI pinning rule (0.3 §5.3) | spec owner (B) | Phase 2 gate | open |
+| D6 | C FFI pinning rule (0.3 §5.3) | spec owner (B) | Phase 2 gate | scoped 2026-11-10 — `pin` defined as a region-lifetime extension (0.3a §4.3); rule adoption remains at the Phase 2 gate |
 | D7 | Recoverable errors: `Result` type shape (0.5 §2) | spec owner (B) | Phase 2 gate | open |
-| D8 | Escape lattice coverage for growable collections (0.3a) | spec owner (B) | Phase 2 gate | open |
-| D9 | E3 handling: reject vs R.2 promote (0.3a §8) | spec owner (B) | Phase 2 gate | open |
-| D10 | `pin` representation in the analysis (0.3a §8) | spec owner (B) | Phase 2 gate | open |
+| D8 | Escape lattice coverage for growable collections (0.3a) | spec owner (B) | Phase 2 gate | open — lattice defined (0.3a §3); growable-collection coverage still open |
+| D9 | E3 handling: reject vs R.2 promote (0.3a §8) | spec owner (B) | Phase 2 gate | scoped 2026-11-10 — E3 promotes to the global region; reject if promotion is impossible (0.3a §5) |
+| D10 | `pin` representation in the analysis (0.3a §8) | spec owner (B) | Phase 2 gate | scoped 2026-11-10 — pin is a region-lifetime extension, not a lattice level (0.3a §4.3) |
 | D11 | Escape analysis order vs type checking (0.3a §8) | spec owner (B) | Phase 2 gate | open |
 | D27 | move/affine ownership assumption (0.7 §4.1) | spec owner (B) | Phase 2 gate | resolved 2026-11-10 (see Resolved) |
 

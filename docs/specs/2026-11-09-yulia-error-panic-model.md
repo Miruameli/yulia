@@ -17,7 +17,7 @@ Yulia has two classes of errors:
 
 | Class | When | Recoverable? | Example |
 |---|---|---|---|
-| **Compile-time error** | Type checking, region inference, borrow checking | No (program rejected) | Type mismatch, dangling reference, uninitialized read |
+| **Compile-time error** | Type checking, region inference | No (program rejected) | Type mismatch, dangling reference, uninitialized read |
 | **Runtime error** | Bounds check failure, integer overflow (if trapping), assertion failure | No (program aborts) | Array index out of bounds, division by zero |
 | **Panic** | Explicit `panic()` call, or unrecoverable runtime error | No (program aborts) | `panic("unreachable")` |
 
@@ -31,7 +31,7 @@ There is no exception mechanism. Yulia does not have `try`/`catch`/`throw`. Erro
 
 ## 3. Panic semantics
 
-A panic immediately terminates the current function and propagates up the call stack. No further statements in the current function are executed. The panic is not catchable.
+A panic immediately terminates the current function and propagates up the call stack. **(Phase 2+; in Phase 1, panic calls `abort()` — §4.4.)** No further statements in the current function are executed. The panic is not catchable.
 
 **Panic propagation:**
 1. The current function's region is reclaimed (see §4).
@@ -119,7 +119,7 @@ When a panic occurs while a growable collection is being modified (e.g., during 
 - The collection's region is reclaimed, which frees the buffer.
 - No partial state is observable because the panic terminates the function.
 
-- **Outer-region rule:** If the growable collection resides in an **outer region** (a region that outlives the panicking function), the collection MUST NOT be observable in a partially-modified state. The runtime MUST either (a) complete the modification atomically before the panic propagates, or (b) roll back the modification to the pre-operation state. If neither is possible, the collection is in an **indeterminate state** and the program MUST panic at the outer-region boundary before the caller can observe it. This rule is enforced in Phase 2+ when references to outer-region collections are permitted.
+- **Outer-region rule:** If the growable collection resides in an **outer region** (a region that outlives the panicking function), the collection MUST NOT be observable in a partially-modified state. The runtime MUST either (a) complete the modification atomically before the panic propagates, or (b) roll back the modification to the pre-operation state. If neither is possible, the collection is in an **indeterminate state** and the program MUST panic at the outer-region boundary before the caller can observe it. This rule is enforced in Phase 2+ when references to outer-region collections are permitted. **Status:** the transactional semantics (atomicity/rollback) is not yet specified; it is a Phase 2 deliverable (D5).
 
 ---
 

@@ -5,6 +5,8 @@
 **Subject:** `docs/specs/2026-11-09-yulia-design.md` (status: *Draft for review*)
 **Verdict:** **REVISE BEFORE IMPLEMENTATION.** The vision is coherent and the chosen approach (B, region-based memory) is defensible. But the central claim — *annotation-free, compiler-inferred region-based memory with no GC* — is asserted without the restrictions or the fallback that make it achievable. The document also lacks a grammar, a formal memory model, an error-handling model, and a concurrency model.
 
+**Status note (2026-11-10):** this review is a historical record of the design as of 2026-11-09. Its findings have been addressed: the restrictions and fallback are now stated in the design doc (§Restrictions and fallback), and the missing deliverables (grammar 0.1, operational semantics 0.2, region inference 0.3, escape analysis 0.3a, error/panic 0.5, FFI 0.6, concurrency 0.7, benchmarks 0.8, versioning 0.9) now exist. See `2026-11-10-yulia-review-log.md`.
+
 ---
 
 ## 1. Executive summary

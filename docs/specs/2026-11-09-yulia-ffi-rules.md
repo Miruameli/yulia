@@ -66,17 +66,21 @@ When C returns a pointer to Yulia:
 A `pin` construct keeps a Yulia region alive for an extended duration:
 
 ```yulia
+extern "C" fn c_process(data: [int; 256], len: int) -> void;
+
 fn process(data: [int; 256]) {
     pin data as pinned {
-        c_process(pinned.ptr, 256);
-        // pinned.ptr is valid here
+        c_process(pinned, 256);
+        // `pinned` is valid here
     }
-    // pinned.ptr is now invalid
+    // `pinned` is now invalid
 }
 ```
 
+**Note:** the grammar has no explicit address-of operator (0.1 §7.3). When a pinned lvalue is passed to C, the compiler passes its address; an array is passed as pointer + length (§4.4).
+
 **Rules:**
-- A pinned value is E3 by declaration (0.3a §4.3).
+- A pinned value's region is extended to the pin's scope (0.3a §4.3); it is **not** promoted to the global region.
 - The pin's region is reclaimed when the pin goes out of scope.
 - A pin that outlives its scope is a compile error.
 - Pinning does not transfer ownership to C; C must not retain the pointer beyond the pin's scope.
@@ -112,18 +116,18 @@ struct Particle { x: float; y: float; z: float; }
 **Rules:**
 - SoA structs are **not** FFI-compatible. Passing a SoA struct to C is a compile error.
 - SoA arrays are stored as separate arrays per field. Access is transparent (the language handles indexing).
-- SoA is a Phase 5 optimization (5.2 "Static layout layer"). The annotation is accepted in Phase 2 but has no effect until Phase 5.
+- SoA is a Phase 5 optimization (5.2 "Static layout layer"). The annotation is **rejected** in Phase 2 (it has no effect); it is accepted in Phase 5.
 
 ### 4.4 ABI stability
 
 Yulia's C ABI for exported functions follows the platform's C calling convention:
-- `int` → `int32_t` (Yulia's `int` is 32-bit; fixed width for ABI determinism). See 0.2 §3 (semantic domains) for the type definition.
+- `int` → `int32_t` (Yulia's `int` is 32-bit; fixed width for ABI determinism). See 0.2 §4.1 for the type definition.
 - `float` → `double` (Yulia's `float` is 64-bit)
 - `bool` → `int` (0 or 1)
 - `char` → `char` (UTF-8 byte)
 - `string` → `const char*` (null-terminated, UTF-8). **Buffer ownership:** Yulia allocates a null-terminated UTF-8 copy of the string in the caller's region. The pointer is valid for the duration of the C call only (R-FFI-1). C must not retain the pointer. If C needs a longer-lived buffer, the programmer must allocate it explicitly via `c_malloc` and copy the string content. See 0.3 Q3 (string ownership model) for details on string representation.
 - Structs → C struct (AoS layout, packed according to platform ABI)
-- Arrays → pointer + length (two arguments: `T* ptr, size_t len`)
+- Arrays → pointer + length (two arguments: `T* ptr, size_t len`). The length is passed explicitly because a C array parameter carries no length; the Yulia-side type `[T; N]` is checked against `len` at the FFI boundary.
 - `void` return → `void`
 
 **Commitment:** The ABI is stable within a major version. Breaking ABI changes require a major version bump (SemVer).
@@ -138,7 +142,7 @@ Yulia's C ABI for exported functions follows the platform's C calling convention
 | Pass pinned Yulia pointer to C that retains it beyond pin scope | Reject (R-FFI-2) |
 | Pass growable collection buffer to C | Reject (R-FFI-4) |
 | Dereference CPtr without wrapper | Reject (R-FFI-6) |
-| Leak CPtr (no free) | Compile-time warning (not error; C memory is programmer's responsibility) |
+| Leak CPtr (no free) | Compile-time warning (not error; C memory is programmer's responsibility). MEM-SAFE-5 does not apply to C memory (R-FFI-8); the warning is advisory. |
 | Pass SoA struct to C | Reject (§4.3) |
 
 ---
@@ -164,7 +168,7 @@ Yulia's C ABI for exported functions follows the platform's C calling convention
 | **Alternatives** | (a) AoS default + SoA annotation; (b) SoA default + AoS FFI conversion; (c) AoS only (no SoA). |
 | **Chosen** | (a). AoS default for FFI compatibility; SoA as explicit optimization. |
 | **Risks** | SoA annotation may be underused if the default is AoS; performance claims may suffer. |
-| **Mitigations** | SoA is Phase 5 optimization; annotation accepted in Phase 2 but no-op until Phase 5. |
+| **Mitigations** | SoA is Phase 5 optimization; the annotation is rejected in Phase 2 (§4.3) and accepted in Phase 5. |
 | **Confidence** | High on pointer rules; medium on SoA timeline. |
 | **Kill-criteria** | If SoA proves essential for MVP performance, escalate before Phase 2. |
 | **Verification plan** | Peer review; negative tests; FFI integration tests. |

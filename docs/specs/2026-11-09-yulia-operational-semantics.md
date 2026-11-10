@@ -9,7 +9,7 @@
 
 ## 1. Purpose
 
-This document defines the operational semantics and memory model of Yulia. It is the formal foundation for the compiler, the reference interpreter, and the soundness proof.
+This document defines the operational semantics and memory model of Yulia. It is an **operational-semantics sketch** for the Phase 1 subset; the formal proof is Phase 5.4 (D17).
 
 ---
 
@@ -23,7 +23,7 @@ We use **small-step operational semantics** (SOS) with an explicit store and a r
 
 ```
 Expr     -- expressions
-Val      -- values: int | float | bool | char | string | struct | array
+Val      -- values: int | bool | struct | array (Phase 1; float/char/string are Phase 2+)
 Var      -- variable names
 Region   -- region identifiers
 Loc      -- memory locations
@@ -43,7 +43,7 @@ StructVal ::= "struct" IDENT "{" field_values "}"
 ArrayVal  ::= "array" "[" Val { "," Val } "]"
 ```
 
-Phase 1 values are `int`, `bool`, structs, and fixed-size arrays. `float`, `char`, and `string` are Phase 2+ (0.3 §4).
+Phase 1 values are `int`, `bool`, structs, and fixed-size arrays. `int` is 32-bit two's complement. `float`, `char`, and `string` are Phase 2+ (0.3 §4).
 
 ### 4.2 Environments
 
@@ -89,10 +89,11 @@ The store maps locations to values. The region stack tracks active regions. A re
 **Return:**
 
 ```
-(return e, env, store, regions) -> (e_val, env, store, regions)
+(return e, env, store, regions) -> (v, env, store', regions')
+  where e evaluates to v, regions = regions' ++ [r], and store' = store restricted to locations not allocated in r
 ```
 
-The caller copies the return value into its own region. For Phase 1 (by-value), this is a deep copy for structs and arrays (element-wise). For Phase 2, strings and growable arrays follow the rules in 0.3 §5.
+The caller copies the return value into its own region; the callee's region `r` is popped and its locations are removed from the store. For Phase 1 (by-value), the copy is a deep copy for structs and arrays (element-wise). For Phase 2, strings and growable arrays follow the rules in 0.3 §5.
 
 **Struct field access:**
 
@@ -106,6 +107,8 @@ The caller copies the return value into its own region. For Phase 1 (by-value), 
 ```
 (a[i], env, store, regions) -> (v, env, store, regions)
   where store(env(a)) = ArrayVal [v0, ..., vn] and 0 <= i < n
+(a[i], env, store, regions) -> (runtime_error "index out of bounds", env, store, regions)
+  where store(env(a)) = ArrayVal [v0, ..., vn] and not (0 <= i < n)
 
 Note: the bounds check `0 <= i < n` is a runtime check in Phase 1. Compile-time bounds checking (when provable) is a Phase 2 optimization (MEM-SAFE-2).
 
@@ -115,11 +118,11 @@ Note: the bounds check `0 <= i < n` is a runtime check in Phase 1. Compile-time 
 
 ### 5.1 Regions
 
-A region is a scope-bound arena. A region is created on function entry and reclaimed on return. Reclamation is deterministic and O(1).
+A region is a function-bound arena. A region is created on function entry and reclaimed on return. Reclamation is deterministic and O(1).
 
 ### 5.2 Allocation
 
-A value is allocated in the region of its lexical scope. Allocation is a bump-pointer increment.
+A value is allocated in the region of its enclosing function. Allocation is a bump-pointer increment.
 
 ### 5.3 Reclamation
 
@@ -133,13 +136,35 @@ In Phase 1, this holds trivially: there are no references.
 
 ---
 
-## 6. Type safety
+## 6. Type system and type safety (Phase 1)
 
-**Theorem (Progress).** If `e` is well-typed, then `e` is either a value or can take a step.
+### 6.1 Types
+
+```
+T ::= int | bool | StructT | ArrayT(T, N)
+```
+
+### 6.2 Typing rules (selected)
+
+```
+INT_LIT n            : int
+BOOL_LIT b           : bool
+e1 + e2              : int      if e1 : int and e2 : int
+e1 == e2             : bool     if e1 : int and e2 : int
+s.f                  : T_f      if s : StructT { f: T_f, ... }
+a[i]                 : T        if a : ArrayT(T, N) and i : int
+StructVal { f: v, .. } : StructT { f: T, .. }  if v : T for each field
+ArrayVal [v0, .., vN-1] : ArrayT(T, N)         if vi : T for all i
+f(e1, .., en)        : T        if f : (T1, .., Tn) -> T and ei : Ti
+```
+
+### 6.3 Theorems
+
+**Theorem (Progress).** If `e` is well-typed, then `e` is either a value, can take a step, or is a runtime error (bounds check, division by zero — D2).
 
 **Theorem (Preservation).** If `e` is well-typed and `e -> e'`, then `e'` is well-typed.
 
-*Proof sketch.* By induction on the reduction rules. Each rule preserves the type of the expression.
+*Proof sketch.* By induction on the reduction rules; each rule preserves the type of the expression. The full proof is Phase 5.4 (D17).
 
 ---
 

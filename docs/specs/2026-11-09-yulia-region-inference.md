@@ -17,7 +17,7 @@ This document specifies how Yulia assigns values to regions and argues that the 
 
 ### 2.1 Regions
 
-A **region** is a scope-bound arena. A region is created on entry to a scope and reclaimed on exit. Reclamation is deterministic and O(1) (bump-pointer reset or freelist).
+A **region** is a function-bound arena. A region is created on function entry and reclaimed on return. Reclamation is deterministic and O(1) (bump-pointer reset or freelist).
 
 ### 2.2 Values and references
 
@@ -28,7 +28,7 @@ Every value has a region. A reference (where the language has one) names a value
 Given a program, assign each value to a region such that:
 
 1. **Safety:** no reference outlives the region of its referent.
-2. **Determinism:** reclamation happens at scope exit.
+2. **Determinism:** reclamation happens at function return.
 3. **Efficiency:** regions are as small as possible (slot reuse).
 
 ---
@@ -42,9 +42,9 @@ The Phase 1 subset (`int`, `bool`, structs, fixed-size arrays, functions, contro
 - Return values are copied into the caller's region.
 - No reference can escape, because there are no references.
 
-**Rule 3.1 (pass-by-value optimization).** The compiler MAY optimize pass-by-value to pass-by-reference only when it can prove the callee does not mutate the parameter, or that the caller does not observe the parameter after the call. Otherwise it MUST copy. Without this rule, an internal reference would break by-value semantics (e.g., a callee mutating a caller's struct).
+**Rule 3.1 (pass-by-value optimization).** The compiler MAY optimize pass-by-value to pass-by-reference only when it can prove the callee does not mutate the parameter, or that the caller does not observe the parameter after the call. Otherwise it MUST copy. Without this rule, an internal reference would break by-value semantics (e.g., a callee mutating a caller's struct). This proof is **interprocedural**; it is separate from the O(n) region assignment.
 
-**Consequence:** region inference for Phase 1 is a single lexical pass, O(n), and is trivially sound. The hard part of the design is deferred to Phase 2.
+**Consequence:** region *assignment* for Phase 1 is a single lexical pass, O(n), and is trivially sound. Rule 3.1's mutation proof is a separate, interprocedural obligation. The hard part of the design is deferred to Phase 2.
 
 This is a deliberate sequencing decision: prove the toolchain on a subset where the memory model is trivial, then extend the model carefully.
 
@@ -99,7 +99,7 @@ Each of these requires an explicit rule. The rules are the real content of this 
 
 ### 5.4 Concurrency
 
-**Deferred** to Phase 5 (plan §8). The boundary: no shared regions across threads until the ownership-transfer model is defined. The model is a **design input** (0.7 §4.1: move/affine + no shared regions); the concurrency rule and its soundness are Phase 5.4 deliverables (D17), not settled lemmas.
+**Deferred** to Phase 5 (0.7). The boundary: no shared regions across threads until the ownership-transfer model is defined. The model is a **design input** (0.7 §4.1: move/affine + no shared regions); the concurrency rule and its soundness are Phase 5.4 deliverables (D17), not settled lemmas.
 
 ---
 
@@ -108,7 +108,7 @@ Each of these requires an explicit rule. The rules are the real content of this 
 The design review identified three options. This specification recommends:
 
 - **R.1 (restrict):** enforce the rules in §5 at compile time. A program that violates them is rejected.
-- **R.2 (fallback):** if a future feature cannot be made safe, promote the value to a global region (never reclaimed) and emit a warning. This is a leak, bounded by program semantics, and documented.
+- **R.2 (fallback):** if a future feature cannot be made safe, promote the value to a global region (never reclaimed) and emit a warning. This is an **unbounded** leak (0.4 §3), documented and warned.
 - **R.3 (novel algorithm):** not claimed.
 
 **Decision:** R.1 for Phase 1–2; R.2 as an explicit, warned escape hatch for future features. No GC.
@@ -117,21 +117,25 @@ The design review identified three options. This specification recommends:
 
 ## 7. Soundness argument
 
-**Lemma 1 (Phase 1).** Under by-value semantics with no references, every value's region contains its entire lifetime.
+**Lemma 1 (Phase 1).** At the language level, Phase 1 has no reference type (0.1 §7.3), so no reference to a value can be expressed outside the value's scope. Every value's region therefore contains its entire lifetime.
 
-*Proof.* A value is created in its lexical scope and destroyed at scope exit. No reference to it exists outside the scope. ∎
+*Proof.* Phase 1 has no `&`, `*`, or reference types (0.1 §7.3). Values are passed by value; return values are copied into the caller's region (§3). No reference to a value can be formed, so none can outlive the value's region. ∎
 
-**Lemma 2 (Phase 2, under §5 rules).** Under the string/array/FFI rules, no reference outlives its referent's region.
+**Lemma 2 (Phase 2, conditional).** *If* the §5 rules are decided (D4–D11) and enforced with R.1, then no reference outlives its referent's region.
 
-*Proof sketch.* Each rule either forbids the escaping reference (R.1) or promotes the value to a region that outlives the reference (R.2). ∎
+*Proof sketch.* Under R.1, a program that cannot be proven safe is rejected; the remaining programs contain no escaping reference. R.2 is reserved for future features (0.4 §5) and is not invoked for Phase 2. ∎
 
-**Theorem (memory safety).** Yulia programs do not access dangling pointers.
+**Theorem (memory safety).** Yulia programs in the safe subset do not access dangling pointers.
 
-*Proof.* By Lemma 1 (Phase 1) and Lemma 2 (Phase 2). ∎
+*Proof.* By Lemma 1 (Phase 1, unconditional) and Lemma 2 (Phase 2, conditional on D4–D11). ∎
 
-**Scope:** the Theorem covers Phase 1–2. Concurrency (Phase 5) is deferred (§5.4); its soundness is a Phase 5.4 deliverable (D17).
+**Scope.**
+- **Phase 1: established.** No reference type exists, so no dangling pointer is expressible.
+- **Phase 2: conditional** on the Phase 2 gate (D4–D11) and the chosen rules.
+- **C FFI: a trust boundary outside the Theorem.** R-FFI-1 is a documented contract on C code, not a compiler-enforced rule. The compiler rejects passing a non-pinned pointer, but it cannot detect retention by C (0.3a §7).
+- **Concurrency (Phase 5): deferred** (§5.4); its soundness is a Phase 5.4 deliverable (D17).
 
-**Caveat:** the proof is a sketch. A formal proof is Phase 5 deliverable 5.4.
+**Caveat:** the proof is a sketch. A formal proof is Phase 5 deliverable 5.4 (D17).
 
 ---
 
@@ -139,19 +143,19 @@ The design review identified three options. This specification recommends:
 
 | Phase | Complexity | Notes |
 |---|---|---|
-| Phase 1 | O(n) | Single lexical pass |
-| Phase 2 | O(n · k) | k = number of region promotions |
+| Phase 1 | O(n) | Single lexical pass for region assignment |
+| Phase 2 | O(n · k) | k = region promotions; escape analysis O(n · d), d = max value depth (0.3a §6) |
 | Full | Open | Depends on the concurrency model |
 
 ---
 
 ## 9. Negative tests
 
-| Invariant | Test | Expected |
-|---|---|---|
-| MEM-SAFE-1 | Return a reference to a region-local value | Reject |
-| MEM-SAFE-1 | Store a region pointer in a C global | Reject |
-| MEM-SAFE-5 | Construct a cycle in a long-lived region | Documented leak or reject |
+| Invariant | Test | Phase | Expected |
+|---|---|---|---|
+| MEM-SAFE-1 | Return a reference to a region-local value | 2 (ungrammatical in 1) | Reject |
+| MEM-SAFE-1 | Store a region pointer in a C global | 2 | Reject |
+| MEM-SAFE-5 | Construct a cycle in a long-lived region | 2+ | Documented leak or reject |
 
 ---
 
@@ -186,11 +190,11 @@ See `docs/specs/2026-11-10-yulia-open-decisions.md` for owner + decision gate.
 |---|---|
 | **Goal** | Specify region inference and argue soundness. |
 | **Assumptions** | The Phase 1 subset is by-value with no references; Phase 2 adds strings, growable arrays, FFI. |
-| **Evidence** | Design review §2; plan §2; Tofte & Talpin (1997); Cyclone (2004). |
+| **Evidence** | Design review §2; Tofte & Talpin (1997); Cyclone (2004). |
 | **Alternatives** | (a) Full inference for the whole language now; (b) trivial Phase 1 + explicit Phase 2 rules; (c) GC fallback. |
 | **Chosen** | (b). |
 | **Risks** | Phase 2 rules may prove insufficient; the soundness argument is a sketch. |
 | **Mitigations** | Negative tests; formal proof in Phase 5.4; R.2 fallback. |
-| **Confidence** | High on Phase 1; medium on Phase 2 rules. |
+| **Confidence** | High on Phase 1; medium on Phase 2 rules (conditional on D4–D11). |
 | **Kill-criteria** | If a Phase 2 rule cannot be made sound, escalate before implementation. |
 | **Verification plan** | Peer review; negative tests; formal proof (Phase 5.4). |

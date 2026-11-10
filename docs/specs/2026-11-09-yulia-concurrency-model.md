@@ -20,7 +20,7 @@
 1. **Memory model first:** The region-inference model (0.3) must be proven on the sequential subset before concurrency is added. Concurrency introduces shared regions, ownership transfer, and data races — all of which complicate the model.
 2. **Simplicity:** The simplicity philosophy favors sequential correctness first. Concurrency is a cross-cutting concern that should not be bolted on.
 3. **Risk reduction:** Deferring concurrency reduces the risk that the memory model is unsound. If concurrency is added later, it builds on a proven foundation.
-4. **Prior art:** Rust deferred concurrency to later phases (threads were added after the borrow checker was proven). Go included concurrency from the start but had to retrofit the memory model.
+4. **Prior art:** Rust shipped threads in 1.0 (2015) and the NLL borrow checker in 2018 — concurrency was *not* added after the borrow checker. Go included concurrency from the start and retrofitted the memory model. The relevant precedent is Go's: add concurrency only after the sequential model is proven.
 
 ---
 
@@ -56,7 +56,7 @@ When concurrency is added in Phase 5, the following model is proposed (subject t
 
 Regions are not shared across threads. Instead, ownership of a region is **transferred** from one thread to another. After transfer, the original thread can no longer access the region.
 
-**Assumed model: move semantics (affine).** A value may be moved to another thread; the source thread's access is invalidated. For values that are moved, affine is the *minimum* that invalidates the source — linear types (full consumption) would be too strong, since they require every value to be consumed and break values that are merely dropped. Affine alone is **not sufficient**: affine permits aliasing (multiple shared reads). Transfer also requires *exclusivity* — no outstanding borrows at transfer time — supplied by §4.2 ("no shared regions"). The two together are the model 0.3 is designed against.
+**Assumed model: move semantics (affine).** A value may be moved to another thread; the source thread's access is invalidated. For values that are moved, affine is the *minimum* that invalidates the source — linear types (full consumption) would be too strong, since they require every value to be consumed and break values that are merely dropped. Affine alone is **not sufficient**: affine permits aliasing (multiple shared reads). Transfer also requires *exclusivity* — no outstanding borrows at transfer time — supplied by §4.2 ("no shared regions"). The two together are the model 0.3 is designed against. **Exclusivity applies to moves and to mutable access; immutable sharing (§4.2) is the documented exception** — read-only data in a region that outlives both threads may be shared without a move.
 
 **Status: design input, not a settled lemma.** The claim that this model keeps 0.3 sound is a design assertion, not a proved result. 0.3 §5.4 defers the concurrency rule to Phase 5, and the soundness proof is a Phase 5.4 deliverable (D17). If Phase 5 chooses a different model, 0.3 §5.4 must be re-verified. (Resolved by user decision 2026-11-10, see D27.)
 
@@ -68,7 +68,7 @@ Regions are not shared across threads. Instead, ownership of a region is **trans
 
 Shared mutable regions are forbidden. If two threads need to access the same data, one of the following must be used:
 - **Message passing:** data is moved (ownership transferred) via a channel.
-- **Immutable sharing:** data is read-only and may be shared. The compiler proves the data's region outlives both threads by requiring the data to be owned by a region that is not tied to either thread's stack (e.g., a `static`-like or explicitly scoped region). Without lifetime annotations, this is expressed as an explicit region binding, not inferred. **This is a Phase 5 requirement on 0.3:** if 0.3 cannot express it, immutable sharing is removed from Phase 5.
+- **Immutable sharing:** data is read-only and may be shared. The compiler proves the data's region outlives both threads by requiring the data to be owned by a region that is not tied to either thread's stack (e.g., a `static`-like or explicitly scoped region). **Exception to the no-annotations claim:** this is expressed as an explicit region binding, not inferred — the same category of explicit escape hatch as `pin` (0.3a §4.3). It is a Phase 5 requirement on 0.3: if 0.3 cannot express it, immutable sharing is removed from Phase 5.
 - **Synchronization:** explicit locks (with documented lock ordering to prevent deadlocks).
 ### 4.3 Region per thread
 
@@ -120,6 +120,8 @@ Each test is a program that MUST be rejected. The concurrency grammar is require
 | Share a mutable region across threads | `let r = region::new(); thread::spawn(move \|\| r.write(1)); thread::spawn(move \|\| r.write(2));` | Reject (Phase 5) |
 | Access a moved value from the source thread | `let v = 1; thread::spawn(move \|\| v); print(v);` | Reject (Phase 5: use after move) |
 | Deadlock via circular lock acquisition | `let a = mutex::new(); let b = mutex::new(); two threads lock a then b, and b then a` | Not prevented; documented convention required |
+
+**Note:** the program forms above are illustrative; the concurrency grammar is defined in Phase 5 (§3.2).
 
 ---
 

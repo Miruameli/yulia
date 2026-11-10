@@ -33,9 +33,9 @@ When region inference cannot prove that a value's reference stays within its reg
 
 | Criterion | Weight | R.1 | R.2 | R.3 |
 |---|---|---|---|---|
-| Soundness | Must | ✅ | ✅ (with warning) | Unproven |
+| Soundness | Must | ✅ | ✅ for dangling pointers; leaks memory | Unproven |
 | Expressiveness | High | Medium | High | High |
-| Predictability | High | High | Low (silent leak) | Unknown |
+| Predictability | High | High | Low (unbounded leak, but warned) | Unknown |
 | Implementation cost | Medium | Low | Low | High |
 | Reversibility | Medium | High | Medium | Low |
 
@@ -46,7 +46,7 @@ When region inference cannot prove that a value's reference stays within its reg
 **R.1 for Phase 1–2, with R.2 as an explicit, warned escape hatch for future features.**
 
 Rationale:
-- R.1 is the only option that is sound, predictable, and reversible.
+- R.1 is the only option that is sound, predictable, and reversible for Phase 1–2.
 - R.2 is acceptable only as an explicit, warned escape hatch — never silent.
 - R.3 is not claimed; no novel algorithm is asserted.
 
@@ -55,7 +55,7 @@ Rationale:
 ## 6. Consequences
 
 - The language's real semantics is the safe subset, not the full grammar.
-- Programs outside the subset are rejected with a clear diagnostic. The diagnostic MUST name the specific rule violated and suggest the R.2 escape hatch if applicable.
+- Programs outside the subset are rejected with a clear diagnostic. The diagnostic MUST name the specific rule violated. R.2 is not available in Phase 1–2 (§5).
 - The escape hatch (R.2) is documented and warned.
 
 ---

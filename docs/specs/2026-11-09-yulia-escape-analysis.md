@@ -25,12 +25,14 @@ For each value, the analysis computes an escape level:
 
 | Level | Name | Meaning |
 |---|---|---|
-| **E0** | no-escape | The value never leaves its region. Stack-allocate; reclaim at scope exit. |
-| **E1** | argument-escape | The value is passed to a function but not returned or stored. The callee's region must outlive the call. |
-| **E2** | return-escape | The value is returned from a function. The caller's region must outlive the callee's. |
-| **E3** | global-escape | The value is stored in a global, a C global, or a long-lived region. Promote to a global region. |
+| **E0** | no-escape | The value never leaves its region. Reclaimed at function return. |
+| **E1** | argument-escape | The value is passed to a function. The **caller's** region must outlive the call; lexical nesting satisfies this. |
+| **E2** | return-escape | The value is returned from a function. The caller's region must outlive the callee's; lexical nesting satisfies this. |
+| **E3** | global-escape | The value is stored in a global or a long-lived region. Promoted to a global region (never reclaimed). |
 
 The levels form a lattice: E0 < E1 < E2 < E3. The analysis computes the least upper bound.
+
+A `pin` is **not** a lattice level: it is a region-lifetime extension (§4.3).
 
 ---
 
@@ -45,21 +47,22 @@ Trivially E0 for all values. No escape analysis is needed. This is why Phase 1 r
 - **Function call:** if a value is passed as an argument, its level is at least E1.
 - **Return:** if a value is returned, its level is at least E2.
 - **Global store:** if a value is stored in a global, its level is E3.
-- **C FFI:** if a value's address is passed to C, its level is E3 (unless pinned; see §4.3).
+- **C FFI:** if a value's address is passed to C, the value must be pinned (§4.3). A pinned value's region is extended to the pin's scope. Passing an unpinned pointer is rejected (R.1).
 - **Transitivity:** if a value is stored in another value, the container's level is the max of its own and the stored value's level.
 
 ### 4.3 Pinning
 
-A `pin` construct (0.3 §5.3) marks a value as intentionally long-lived. A pinned value is E3 by declaration, and the compiler does not reject its escape. The `pin` region is reclaimed when the pin goes out of scope. **Clarification:** pinning keeps the region alive for the duration of the C call (or the pin's scope), not indefinitely. A pin that outlives its scope is a compile error, not a leak.
+A `pin` construct (0.3 §5.3) **extends a value's region to the pin's scope**. A pinned value is not promoted to the global region; its region is reclaimed when the pin goes out of scope. A pin that outlives its scope is a compile error, not a leak. Pinning is what makes the C FFI rule (§4.2) sound: the pin's scope encloses the call, so the value's region outlives it.
 
 ---
 
 ## 5. Integration with region inference
 
 1. Run escape analysis.
-2. For each value, assign the smallest region that contains its escape level.
-3. If a value's escape level exceeds its lexical region, promote it.
-4. If promotion is impossible (e.g., E3 in a stack region), reject the program (R.1) or promote to the global region (R.2).
+2. Allocate each value in its enclosing function's region.
+3. E1 and E2 are satisfied by lexical nesting: the caller's region outlives the callee's.
+4. E3 requires promotion to the global region (never reclaimed).
+5. If an E3 value cannot be promoted, reject the program (R.1).
 
 ---
 
@@ -76,11 +79,11 @@ A `pin` construct (0.3 §5.3) marks a value as intentionally long-lived. A pinne
 
 | Test | Expected |
 |---|---|
-| Return a local reference | Reject (R.1) or promote (R.2) |
-| Store a local in a global | Reject or promote |
-| Pass a local to C and retain | Reject (R-FFI-1) |
-| Pass a local to C without retaining | Accept (E1) — the value escapes as an argument but the region is reclaimed after the call returns. Sound only if C does not retain the pointer. |
-| Pin a local and pass to C | Accept (E3 by declaration) |
+| Return a local reference | Reject (R.1) — ungrammatical in Phase 1 |
+| Store a local in a global | Reject or promote (E3) |
+| Pass an unpinned local to C | Reject (R.1) |
+| Pass a pinned local to C | Accept — the pin's scope encloses the call |
+| Retain a pinned pointer beyond the pin's scope | Reject (R-FFI-2) |
 ---
 
 ## 8. Open decisions

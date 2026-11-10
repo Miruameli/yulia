@@ -21,7 +21,7 @@ The baseline is **C** (compiled with `gcc -O2` or `clang -O2`). C is the gold st
 
 ### 2.2 Target
 
-**Yulia must achieve C-class performance (within 10% of C) on all defined kernels.** This is a hard requirement, not an aspiration.
+**Yulia must achieve C-class performance (within 10% of C) on K1, K2, K4, and K5, and within 15% on K3 (§3.3).** This is a hard requirement, not an aspiration.
 
 ### 2.3 Comparison languages
 
@@ -88,7 +88,7 @@ The baseline is **C** (compiled with `gcc -O2` or `clang -O2`). C is the gold st
 
 - **Hardware:** Dedicated benchmark machine (no other processes). Record CPU model, RAM, storage.
 - **OS:** Linux (Ubuntu LTS). Record kernel version.
-- **Compiler:** Yulia compiler built in release mode. C compiled with `gcc -O2 -march=x86-64-v3` (fixed architecture for reproducibility; `-march=native` is prohibited because it varies by machine and breaks reproducibility).
+- **Compiler:** Yulia compiler built in release mode. C compiled with `gcc -O2 -march=x86-64-v3` (fixed architecture for reproducibility; `-march=native` is prohibited because it varies by machine and breaks reproducibility). On ARM64 hosts, the equivalent fixed baseline is used.
 - **Warm-up:** 3 warm-up runs (discarded).
 - **Runs:** 10 measured runs per kernel.
 - **Reporting:** Median and standard deviation. No cherry-picking.
