@@ -39,6 +39,9 @@ development builds are identified by git commit hash
   every push to `main` and on pull requests; the stale "no git remote" notes in
   `README.md`, `CONTRIBUTING.md`, and `.github/workflows/ci.yml` are corrected,
   and `Cargo.toml` now carries the `repository` metadata.
+- Remaining stale "once a remote is configured" notes corrected: `CONTRIBUTING.md`
+  §5 and `SECURITY.md` (reporting now points at the repository's private advisory
+  form); `README.md` records that the Phase 0 exit sign-off is held.
 - CI fixes: the codegraph job runs `codegraph init --yes` on a fresh checkout
   (`.codegraph/` is not committed), and a spell-check false positive caused by
   an inline-code split in `docs/specs/2026-11-09-yulia-ffi-rules.md` (R-FFI-2)

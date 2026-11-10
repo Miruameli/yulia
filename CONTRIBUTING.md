@@ -98,7 +98,7 @@ Configured in `Cargo.toml` (`[lints]`) and `clippy.toml`.
   adversarial surfaces. It is not yet a dependency — Phase 1 is std-only
   (`Cargo.toml`) — so add it to `[dev-dependencies]` when the first property
   test lands.
-- `make test` locally; the full suite runs in CI once a remote is configured.
+- `make test` locally; the full suite also runs in CI on every push and pull request.
 
 ## 6. Benchmarks
 

@@ -6,9 +6,10 @@ Yulia is a procedural programming language with explicit types and a
 compiler-inferred, region-based memory model: no `malloc`/`free`, no garbage
 collector, no lifetime annotations, and deterministic reclamation.
 
-**Status:** Phase 0 (language specification) is complete. Phase 1 (toolchain)
-is starting. The specification lives in [`docs/specs/`](docs/specs/); the
-development workflow is in [`CONTRIBUTING.md`](CONTRIBUTING.md).
+**Status:** Phase 0 (language specification) deliverables are complete; the
+Phase 0 exit sign-off is pending further review (held 2026-11-10). Phase 1
+(toolchain) is starting. The specification lives in [`docs/specs/`](docs/specs/);
+the development workflow is in [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## Layout
 

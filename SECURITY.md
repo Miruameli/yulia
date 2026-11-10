@@ -18,9 +18,9 @@ the previous stable release.
 Report suspected vulnerabilities privately. Do **not** open a public issue for
 a security report before a fix is available.
 
-- **Preferred:** open a private security advisory in the repository (once a
-  remote is configured).
-- **Until a remote exists:** email the maintainers at
+- **Preferred:** open a private security advisory at
+  <https://github.com/Miruameli/yulia/security/advisories/new>.
+- **Fallback:** email the maintainers at
   miruamelizabethelrathvonalwood@gmail.com.
 
 Please include:
