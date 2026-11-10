@@ -12,7 +12,7 @@ development workflow is in [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 | Path | Purpose |
 |---|---|
-| `src/` | Compiler crate: lexer, parser, types, regions, codegen |
+| `src/` | Compiler crate (Phase 1 pipeline modules) |
 | `benchmarks/` | Benchmark suite and harness (spec §4.3) |
 | `docs/specs/` | Language specification — Phase 0 deliverables 0.1–0.9 |
 | `docs/specs/2026-11-10-yulia-open-decisions.md` | Open decisions register (owner + decision gate) |
@@ -33,8 +33,9 @@ make codegraph   # rebuild the codegraph index
 
 **CI status:** the repository currently has no git remote, so the workflow in
 `.github/workflows/ci.yml` cannot run automatically. Until a remote is added,
-run `make ci` locally to execute the same checks (format, clippy, tests, build,
-cargo-deny, typos, codegraph).
+run `make ci` locally to execute the same checks (format, clippy, tests, build).
+`make ci-full` additionally runs the dependency audit, spell check, and
+codegraph index; it requires `cargo-deny` and `typos-cli` to be installed.
 
 ## Compiler status
 
