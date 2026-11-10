@@ -52,6 +52,14 @@ development builds are identified by git commit hash
   Phase 0 gate. `README.md` status, `CONTRIBUTING.md` §5, and `SECURITY.md`
   dependency policy now distinguish Phase 1a (std-only) from Phase 1b (adds
   inkwell/LLVM for codegen).
+- `README.md` headline claims aligned with the spec audit findings: the language
+  is now described as a "decidable safe subset" with "no implicit malloc/free,
+  no tracing GC, no lifetime annotations, and deterministic reclamation for
+  scoped regions"; the status line, benchmark harness line, and spec deliverable
+  list are corrected.
+- Security alerting enabled on the repository: Dependabot alerts and CodeQL code
+  scanning (default setup) are now active, ahead of the first third-party
+  dependency (inkwell, Phase 1b).
 
 ### Removed
 
