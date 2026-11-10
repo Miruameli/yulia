@@ -42,7 +42,7 @@ When a Yulia value's address is passed to C:
 | Rule | Description |
 |---|---|
 | **R-FFI-1** | A C function may not retain a pointer to a Yulia region value beyond the call. |
-| **R-FFI-2** | If C needs to retain a pointer, the value must be `pin`ned (0.3a §4.3). A pinned value's region is kept alive for the duration of the pin. |
+| **R-FFI-2** | If C needs to retain a pointer, the value must be pinned using `pin` (0.3a §4.3). A pinned value's region is kept alive for the duration of the pin. |
 | **R-FFI-3** | A C function may read or write the pointed-to value during the call. After the call returns, the pointer is invalid. |
 | **R-FFI-4** | Passing a pointer to a growable collection's internal buffer is forbidden (the buffer may reallocate). |
 

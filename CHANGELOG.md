@@ -35,6 +35,14 @@ development builds are identified by git commit hash
   (user decision, 2026-11-10). `docs/specs/2026-11-09-yulia-design.md`
   §Constraints, §Toolchain, and §Restrictions and fallback now state Rust,
   LLVM via inkwell, and the MPL-2.0 license.
+- The repository has a GitHub remote (`Miruameli/yulia`, public). CI runs on
+  every push to `main` and on pull requests; the stale "no git remote" notes in
+  `README.md`, `CONTRIBUTING.md`, and `.github/workflows/ci.yml` are corrected,
+  and `Cargo.toml` now carries the `repository` metadata.
+- CI fixes: the codegraph job runs `codegraph init --yes` on a fresh checkout
+  (`.codegraph/` is not committed), and a spell-check false positive caused by
+  an inline-code split in `docs/specs/2026-11-09-yulia-ffi-rules.md` (R-FFI-2)
+  is resolved by rewording.
 
 ### Removed
 

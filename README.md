@@ -1,5 +1,7 @@
 # Yulia
 
+[![CI](https://github.com/Miruameli/yulia/actions/workflows/ci.yml/badge.svg)](https://github.com/Miruameli/yulia/actions/workflows/ci.yml)
+
 Yulia is a procedural programming language with explicit types and a
 compiler-inferred, region-based memory model: no `malloc`/`free`, no garbage
 collector, no lifetime annotations, and deterministic reclamation.
@@ -31,11 +33,11 @@ make benchmark   # benchmark suite (spec §4.3)
 make codegraph   # rebuild the codegraph index
 ```
 
-**CI status:** the repository currently has no git remote, so the workflow in
-`.github/workflows/ci.yml` cannot run automatically. Until a remote is added,
-run `make ci` locally to execute the same checks (format, clippy, tests, build).
-`make ci-full` additionally runs the dependency audit, spell check, and
-codegraph index; it requires `cargo-deny` and `typos-cli` to be installed.
+**CI status:** the workflow in `.github/workflows/ci.yml` runs on every push to
+`main` and on every pull request. `make ci` runs the same fast checks locally
+(format, clippy, tests, build); `make ci-full` additionally runs the dependency
+audit, spell check, and codegraph index, and requires `cargo-deny` and
+`typos-cli` to be installed.
 
 ## Compiler status
 

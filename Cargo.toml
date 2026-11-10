@@ -6,12 +6,11 @@ rust-version = "1.99"
 license = "MPL-2.0"
 description = "Yulia compiler — region-based memory, C-class performance, Python-class simplicity"
 readme = "README.md"
+repository = "https://github.com/Miruameli/yulia"
 keywords = ["compiler", "programming-language", "llvm", "region-inference"]
 categories = ["compilers"]
 # The compiler is not published to crates.io.
 publish = false
-# No remote yet; set `repository` when one is added so `cargo publish` metadata
-# and CI badges resolve.
 
 [[bin]]
 name = "yulia"

@@ -15,8 +15,8 @@ concurrency:
 env:
   CARGO_TERM_COLOR: always
 
-# NOTE: the repository has no git remote yet, so these jobs do not run.
-# Run `make ci` locally until a remote is configured.
+# The repository's remote is https://github.com/Miruameli/yulia, so these jobs
+# run on every push to `main` and on every pull request.
 
 # SOP-RESLIM: every job AND every step carries an explicit `timeout-minutes`;
 # `concurrency` cancels superseded runs; nothing is uploaded, so there is no
@@ -116,6 +116,8 @@ jobs:
       - name: Install codegraph
         run: npm install --global @colbymchenry/codegraph@1.6.2
         timeout-minutes: 5
-      - name: Build the index
-        run: codegraph index
+      - name: Init and build the index
+        # `init` is required on a fresh checkout: `.codegraph/` is not committed.
+        # `--yes` makes it non-interactive (CI has no TTY).
+        run: codegraph init --yes
         timeout-minutes: 10
