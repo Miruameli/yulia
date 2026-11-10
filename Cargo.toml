@@ -20,8 +20,9 @@ path = "src/main.rs"
 name = "yulia"
 path = "src/lib.rs"
 
-# Phase 1 is std-only on purpose: the lexer, parser, and diagnostics must not
+# Phase 1a is std-only on purpose: the lexer, parser, and diagnostics must not
 # pull in a runtime dependency tree before the language itself is stable.
+# Phase 1b adds inkwell (LLVM) for the codegen backend (D1/D21).
 # Dev-dependencies (e.g. proptest, per CONTRIBUTING.md §5) are exempt: they do
 # not ship in the compiler binary.
 [dependencies]
