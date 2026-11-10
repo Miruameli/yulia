@@ -56,9 +56,9 @@ When concurrency is added in Phase 5, the following model is proposed (subject t
 
 Regions are not shared across threads. Instead, ownership of a region is **transferred** from one thread to another. After transfer, the original thread can no longer access the region.
 
-**Assumed model: move semantics (affine).** A value may be moved to another thread; the source thread's access is invalidated. Affine is the *minimum* that invalidates the source — linear types (full consumption) would be too strong, since they require every value to be consumed and break values that are merely dropped. Affine alone is **not sufficient**: affine permits aliasing (multiple shared reads). Transfer also requires *exclusivity* — no outstanding borrows at transfer time — supplied by §4.2 ("no shared regions"). The two together are the model 0.3 is designed against.
+**Assumed model: move semantics (affine).** A value may be moved to another thread; the source thread's access is invalidated. For values that are moved, affine is the *minimum* that invalidates the source — linear types (full consumption) would be too strong, since they require every value to be consumed and break values that are merely dropped. Affine alone is **not sufficient**: affine permits aliasing (multiple shared reads). Transfer also requires *exclusivity* — no outstanding borrows at transfer time — supplied by §4.2 ("no shared regions"). The two together are the model 0.3 is designed against.
 
-**Status: design input, not a settled lemma.** The claim that this model keeps 0.3 sound is a design assertion, not a proved result. 0.3 §5.4 defers the concurrency rule to Phase 5, and the soundness proof is a Phase 5.4 deliverable (D17). If Phase 5 chooses a different model, 0.3 §5.4 must be re-verified.
+**Status: design input, not a settled lemma.** The claim that this model keeps 0.3 sound is a design assertion, not a proved result. 0.3 §5.4 defers the concurrency rule to Phase 5, and the soundness proof is a Phase 5.4 deliverable (D17). If Phase 5 chooses a different model, 0.3 §5.4 must be re-verified. (Resolved by user decision 2026-11-10, see D27.)
 
 **Input to 0.3:** region inference (0.3) is designed against this model. Any other ownership model is a Phase 5 change that requires re-verification of 0.3.
 

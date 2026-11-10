@@ -848,7 +848,7 @@ The following constructs are **not** in this grammar but are reserved for later 
 - **Macros:** No macro system.
 - **Unsafe blocks:** No `unsafe` keyword (reserved for Phase 2+).
 - **Concurrency:** `thread`, `spawn`, `async`, `await`, `send`, `recv`, `mutex` are reserved keywords (§2.5) but have no grammar productions yet. Their syntax is defined in Phase 5 (see 0.7).
-- **Future keywords:** `defer`, `yield`, `match`, `trait`, `impl` are reserved (§2.5) but have no grammar productions yet. They are activated in later phases; a program using them as an identifier is a compile error (0.9 §3.2).
+- **Future keywords:** `defer`, `yield`, `match`, `trait`, `impl` are reserved (§2.5) but have no grammar productions yet. They are activated in later phases; a program using them as an identifier is a compile error (0.9 §3.3).
 - **Growable strings:** `string` is a primitive type; its mutability and growth semantics are defined in Phase 2 (0.2 semantics).
 
 ---
