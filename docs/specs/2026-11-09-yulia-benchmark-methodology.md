@@ -123,7 +123,7 @@ The baseline is **C** (compiled with `gcc -O2` or `clang -O2`). C is the gold st
 - [x] Comparison languages listed (C, Rust, Zig, Go).
 - [x] 5 kernels defined (K1–K5).
 - [x] Measurement protocol specified (environment, metrics, reproducibility, regression detection).
-- [ ] Benchmarks implemented (Phase 4).
+- [ ] Benchmarks implemented (K1 in Phase 1; K2-K5 in Phase 4).
 - [ ] Baseline results recorded (Phase 4).
 
 ---
