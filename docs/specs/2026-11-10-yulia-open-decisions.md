@@ -24,15 +24,15 @@ This register consolidates every open decision in the Phase 0 specifications, wi
 
 | # | Decision | Owner | Decide by | Status |
 |---|---|---|---|---|
-| D4 | String ownership model (0.3 §5.1 Q3: copy / copy-on-write / region-owned) | spec owner (B) | Phase 2 gate | open |
-| D5 | Growable array sharing rule (0.3 §5.2: invalidate / indirection / no sharing) | spec owner (B) | Phase 2 gate | open |
+| D4 | String ownership model (0.3 §5.1 Q3: copy / copy-on-write / region-owned). **Split discipline (D27):** plain immutable value types use copy semantics; move and copy coincide, so affine is vacuous for them. | spec owner (B) | Phase 2 gate | open |
+| D5 | Growable array sharing rule (0.3 §5.2: invalidate / indirection / no sharing). **Split discipline (D27):** resource handles use move/affine; moving the handle is cheap and source invalidation is expected. | spec owner (B) | Phase 2 gate | open |
 | D6 | C FFI pinning rule (0.3 §5.3) | spec owner (B) | Phase 2 gate | open |
 | D7 | Recoverable errors: `Result` type shape (0.5 §2) | spec owner (B) | Phase 2 gate | open |
 | D8 | Escape lattice coverage for growable collections (0.3a) | spec owner (B) | Phase 2 gate | open |
 | D9 | E3 handling: reject vs R.2 promote (0.3a §8) | spec owner (B) | Phase 2 gate | open |
 | D10 | `pin` representation in the analysis (0.3a §8) | spec owner (B) | Phase 2 gate | open |
 | D11 | Escape analysis order vs type checking (0.3a §8) | spec owner (B) | Phase 2 gate | open |
-| D27 | move/affine ownership assumption (0.7 §4.1) — RE-OPENED at user request 2026-11-10. #95 was A's technical endorsement only, not ratification. Binds Phase 2+ (0.3 §5.4) and Phase 5. | spec owner (B) | Phase 2 gate | open |
+| D27 | move/affine ownership assumption (0.7 §4.1) | spec owner (B) | Phase 2 gate | resolved 2026-11-10 (see Resolved) |
 
 ## Phase 4 gate
 
@@ -71,3 +71,4 @@ This register consolidates every open decision in the Phase 0 specifications, wi
 | D24 | Mechanical doc staleness (C++ → Rust, dangling plan refs) | Fixed in `docs/specs/` | 2026-11-10 |
 | D25 | G1 claim integrity | R.1 restriction stated explicitly in the design doc | 2026-11-10 |
 | D26 | Phase 3 / codegen phase naming (G8) | Resolved by user directive 2026-11-10: codegen is a Phase 1 deliverable (staged 1a front-end / 1b codegen). 'Phase 3' is not a phase; the plan is 1, 2, 4, 5, 6 with codegen inside Phase 1. | 2026-11-10 |
+| D27 | move/affine ownership assumption (0.7 §4.1) | Resolved by user decision 2026-11-10: **split discipline** — copy semantics for plain immutable value types (`string` §5.1 (a)); move/affine for resource handles (growable arrays §5.2, `CPtr`, channels). 0.7 §4.1 corrected: affine is necessary but not sufficient (§4.2 supplies exclusivity); move/affine is a **design input**, soundness = Phase 5.4 (D17). 0.3 §5.4/§7 updated. | 2026-11-10 |

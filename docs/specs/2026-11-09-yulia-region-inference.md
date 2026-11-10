@@ -99,7 +99,7 @@ Each of these requires an explicit rule. The rules are the real content of this 
 
 ### 5.4 Concurrency
 
-**Deferred** to Phase 5 (plan §8). The boundary: no shared regions across threads until the ownership-transfer model is defined.
+**Deferred** to Phase 5 (plan §8). The boundary: no shared regions across threads until the ownership-transfer model is defined. The model is a **design input** (0.7 §4.1: move/affine + no shared regions); the concurrency rule and its soundness are Phase 5.4 deliverables (D17), not settled lemmas.
 
 ---
 
@@ -128,6 +128,8 @@ The design review identified three options. This specification recommends:
 **Theorem (memory safety).** Yulia programs do not access dangling pointers.
 
 *Proof.* By Lemma 1 (Phase 1) and Lemma 2 (Phase 2). ∎
+
+**Scope:** the Theorem covers Phase 1–2. Concurrency (Phase 5) is deferred (§5.4); its soundness is a Phase 5.4 deliverable (D17).
 
 **Caveat:** the proof is a sketch. A formal proof is Phase 5 deliverable 5.4.
 
