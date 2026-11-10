@@ -48,11 +48,11 @@ This log persists review findings that previously existed only in coord messages
 ## Open items
 
 - **F55+ (deeper grammar review):** explicit **no findings** (B, 2026-11-10).
-- **Phase 1 language/backend:** proposal pending user approval. B proposed Rust + LLVM (inkwell) + proptest. User authorized *planning* (session B, ask tool, "Yes, begin Phase 1 planning"), not execution. Version pins verified 2026-11-10 and corrected in the plan (LLVM 23.1.x / Rust 1.99.x) — see Version-pin verification below.
+- **Phase 1 language/backend:** ✅ RESOLVED by user decision (2026-11-10): **Rust + LLVM backend** (inkwell later). License: **MPL-2.0**. Version pins verified 2026-11-10 (LLVM 23.1.x / Rust 1.99.x) — see Version-pin verification below. The Phase 1 plan document itself was lost on 2026-11-10.
 
 ## Version-pin verification (INV-2 / SOP-NET, retrieved 2026-11-10)
 
-The Phase 1 plan (`docs/plans/2026-11-10-yulia-phase1.md`) originally pinned "LLVM 18" and "Rust 1.75+" without sources. Verified against primary sources:
+The Phase 1 plan (lost 2026-11-10; `docs/plans/2026-11-10-yulia-phase1.md`) originally pinned "LLVM 18" and "Rust 1.75+" without sources. Verified against primary sources:
 
 | Claim | Verified value (2026-11-10) | Source |
 |---|---|---|

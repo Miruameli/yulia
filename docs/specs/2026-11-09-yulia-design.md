@@ -37,10 +37,11 @@ The language takes sophisticated ideas that already exist in other languages —
 
 ## Constraints
 
-- **Implementation language:** C++.
+- **Implementation language:** Rust.
 - **Compilation target:** native machine code via LLVM IR.
 - **Memory management:** deterministic; no GC.
 - **Runtime:** no heavyweight runtime; libc only.
+- **License:** MPL-2.0.
 
 ## Approaches considered
 
@@ -74,19 +75,29 @@ Mechanically:
 | Lamp A replaced by lamp B | Slot reuse / freelist recycling, not repeated alloc+free |
 | Everything managed from behind | Compiler-managed lifetime and ownership; invisible to the programmer |
 
+## Restrictions and fallback
+
+The memory-safety guarantee holds for a **decidable subset** of the language. Full region inference for arbitrary imperative programs is not generally decidable (see the design review §2); the language therefore bounds the claim and makes the boundary explicit.
+
+- **R.1 (restrict).** A program that the compiler cannot prove safe is **rejected at compile time**. The diagnostic names the specific rule violated and, where applicable, points to the R.2 escape hatch. The language's real semantics is this safe subset, not the full grammar.
+- **R.2 (warned escape hatch).** When a future feature cannot be made safe, the value is promoted to a **global region** (never reclaimed) and the compiler emits a **warning**. This is a documented, bounded leak — not a garbage collector, and not a lifetime annotation. It is an explicit opt-in deviation, never silent.
+- **No stronger inference is claimed.** A novel inference algorithm that removes the escape hatch is not asserted. The claim "compiler-inferred region-based memory, no lifetime annotations" holds within the safe subset; R.2 is a warned deviation from it, not an annotation.
+
+See `docs/specs/2026-11-09-yulia-region-inference.md` (0.3 §6), `docs/specs/2026-11-09-yulia-escape-analysis.md` (0.3a), and `docs/specs/2026-11-09-yulia-fallback-policy.md` (0.4).
+
 ## Syntax
 
 - Custom modern syntax, designed from scratch for simplicity.
 - Explicit types on all declarations.
 - Procedural constructs: functions, structs, modules.
-- Concrete grammar is left to the builder, but must be documented as a standard before implementation (see the plan's standardization task).
+- Concrete grammar is specified in `docs/specs/2026-11-09-yulia-grammar-draft.md` (0.1).
 
 ## Toolchain
 
-- **Compiler:** C++ → LLVM IR → native code.
+- **Compiler:** Rust → LLVM IR → native code (LLVM via inkwell; inkwell enters at the codegen phase).
 - **LSP:** built from the start; a custom syntax needs tooling to be usable.
 - **Formatter:** built from the start, driven by the same grammar.
-- **Build system:** simple and fast; no external build dependency beyond CMake and LLVM.
+- **Build system:** Cargo; LLVM via inkwell.
 
 ## MVP feature set
 
@@ -108,6 +119,6 @@ Mechanically:
 ## What is left to the builder
 
 - Exact grammar and lexical rules.
-- The region inference algorithm.
+- The region inference algorithm for Phase 2+ features (Phase 1 is specified in 0.3 §3).
 - Standard library design.
 - Package manager (post-MVP).

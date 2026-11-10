@@ -3,7 +3,7 @@
 **Date:** 2026-11-09
 **Status:** Draft for review (Phase 0 deliverable 0.8)
 **Depends on:** `docs/specs/2026-11-09-yulia-design.md`
-**Plan ref:** `docs/plans/2026-11-09-yulia-implementation-plan.md` §2, deliverable 0.8
+**Plan ref:** unavailable — `docs/plans/` was lost on 2026-11-10 (see decision log #82).
 
 ---
 

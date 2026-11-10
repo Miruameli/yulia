@@ -1,0 +1,68 @@
+# Yulia Language — Open Decisions Register
+
+**Date:** 2026-11-10
+**Status:** Living document — updated as decisions are made
+**Owner:** spec owner (session B)
+
+This register consolidates every open decision in the Phase 0 specifications, with an owner and the phase gate by which it must be decided. It is the single source of truth for "what is still open"; the per-spec "Open decisions" sections are pointers to it.
+
+## How to use
+
+- **Owner:** who drives the decision to closure.
+- **Decide by:** the phase gate before which the decision must be made. A decision not made by its gate blocks that gate.
+- **Status:** `open` or `resolved` (with the decision and date).
+
+## Phase 1 gate — must decide before Phase 1 implementation
+
+| # | Decision | Owner | Decide by | Status |
+|---|---|---|---|---|
+| D1 | Phase 1 subset boundary (exact type/construct set) | spec owner (B) | Phase 1 gate | open |
+| D2 | Error and diagnostic model (messages, exit codes, abort behavior) | spec owner (B) | Phase 1 gate | open |
+| D3 | Region inference rules for the by-value subset | spec owner (B) | Phase 1 gate | open |
+
+## Phase 2 gate
+
+| # | Decision | Owner | Decide by | Status |
+|---|---|---|---|---|
+| D4 | String ownership model (0.3 §5.1 Q3: copy / copy-on-write / region-owned) | spec owner (B) | Phase 2 gate | open |
+| D5 | Growable array sharing rule (0.3 §5.2: invalidate / indirection / no sharing) | spec owner (B) | Phase 2 gate | open |
+| D6 | C FFI pinning rule (0.3 §5.3) | spec owner (B) | Phase 2 gate | open |
+| D7 | Recoverable errors: `Result` type shape (0.5 §2) | spec owner (B) | Phase 2 gate | open |
+| D8 | Escape lattice coverage for growable collections (0.3a) | spec owner (B) | Phase 2 gate | open |
+| D9 | E3 handling: reject vs R.2 promote (0.3a §8) | spec owner (B) | Phase 2 gate | open |
+| D10 | `pin` representation in the analysis (0.3a §8) | spec owner (B) | Phase 2 gate | open |
+| D11 | Escape analysis order vs type checking (0.3a §8) | spec owner (B) | Phase 2 gate | open |
+
+## Phase 4 gate
+
+| # | Decision | Owner | Decide by | Status |
+|---|---|---|---|---|
+| D12 | Benchmark kernels K1–K5 implementation + baseline data (0.8) | spec owner (B) + infra (A) | Phase 4 gate | open |
+
+## Phase 5 gate
+
+| # | Decision | Owner | Decide by | Status |
+|---|---|---|---|---|
+| D13 | Concurrency model: threads (0.7) | spec owner (B) | Phase 5 gate | open |
+| D14 | Async / await / coroutines (0.7 §3.2) | spec owner (B) | Phase 6 gate | open |
+| D15 | SoA layout layer (0.6 §4.3) | spec owner (B) | Phase 5 gate | open |
+| D16 | Generics (`CPtr<T>`, `Result<T, E>`) (0.1 §10.5) | spec owner (B) | Phase 5 gate | open |
+| D17 | Soundness argument — pen-and-paper with explicit invariants (not machine-checked) | spec owner (B) + independent reviewer | Phase 5.4 | open |
+
+## Post-MVP
+
+| # | Decision | Owner | Decide by | Status |
+|---|---|---|---|---|
+| D18 | Standard library design | spec owner (B) | post-MVP | open |
+| D19 | Package manager | spec owner (B) | post-MVP | open |
+
+## Resolved
+
+| # | Decision | Resolution | Date |
+|---|---|---|---|
+| D20 | Fallback policy (R.1 / R.2 / R.3) | R.1 restrict + R.2 warned escape hatch (user sign-off) | 2026-11-10 |
+| D21 | Implementation language / backend | Rust + LLVM (inkwell enters at the codegen phase) | 2026-11-10 |
+| D22 | License | MPL-2.0 | 2026-11-10 |
+| D23 | R.2 acceptability | Acceptable as an explicit, warned escape hatch only | 2026-11-10 |
+| D24 | Mechanical doc staleness (C++ → Rust, dangling plan refs) | Fixed in `docs/specs/` | 2026-11-10 |
+| D25 | G1 claim integrity | R.1 restriction stated explicitly in the design doc | 2026-11-10 |

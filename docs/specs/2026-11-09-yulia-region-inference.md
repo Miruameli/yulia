@@ -3,7 +3,7 @@
 **Date:** 2026-11-09
 **Status:** Draft for review (Phase 0 deliverable 0.3)
 **Depends on:** `docs/specs/2026-11-09-yulia-design.md`, `docs/specs/2026-11-09-yulia-design-review.md`
-**Plan ref:** `docs/plans/2026-11-09-yulia-implementation-plan.md` §2, deliverable 0.3
+**Plan ref:** unavailable — `docs/plans/` was lost on 2026-11-10 (see decision log #82).
 
 ---
 
@@ -154,6 +154,8 @@ The design review identified three options. This specification recommends:
 ---
 
 ## 10. Open decisions
+
+See `docs/specs/2026-11-10-yulia-open-decisions.md` for owner + decision gate.
 
 1. String ownership model (Q3).
 2. Growable array sharing rule.

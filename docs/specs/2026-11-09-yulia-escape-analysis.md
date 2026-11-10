@@ -3,7 +3,7 @@
 **Date:** 2026-11-09
 **Status:** Draft for review (Phase 0 deliverable 0.3a)
 **Depends on:** `docs/specs/2026-11-09-yulia-region-inference.md` (0.3)
-**Plan ref:** `docs/plans/2026-11-09-yulia-implementation-plan.md` §2, deliverable 0.3a
+**Plan ref:** unavailable — `docs/plans/` was lost on 2026-11-10 (see decision log #82).
 
 ---
 
@@ -84,6 +84,8 @@ A `pin` construct (0.3 §5.3) marks a value as intentionally long-lived. A pinne
 ---
 
 ## 8. Open decisions
+
+See `docs/specs/2026-11-10-yulia-open-decisions.md` for owner + decision gate.
 
 1. Is E3 always a rejection, or is the global-region fallback (R.2) acceptable?
 2. How is `pin` represented in the analysis?

@@ -3,7 +3,7 @@
 **Date:** 2026-11-09
 **Status:** Draft for review (Phase 0 deliverable 0.7). **Pending 0.3 stable:** written against a 0.3 still in review; claims that depend on 0.3 region inference must be re-verified when 0.3 is finalized.
 **Depends on:** `docs/specs/2026-11-09-yulia-region-inference.md` (0.3), `docs/specs/2026-11-09-yulia-operational-semantics.md` (0.2)
-**Plan ref:** `docs/plans/2026-11-09-yulia-implementation-plan.md` §2, deliverable 0.7
+**Plan ref:** unavailable — `docs/plans/` was lost on 2026-11-10 (see decision log #82).
 
 ---
 

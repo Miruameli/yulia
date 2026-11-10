@@ -265,8 +265,8 @@ This sequences risk correctly: prove the memory model on a subset before buildin
 | Field | Content |
 |---|---|
 | **Goal** | Produce a critical design review and a phased implementation plan for the Yulia design document. |
-| **Assumptions** | The design doc is the complete current spec; no implementation exists; the toolchain is C++/LLVM; the user wants a review before implementation. |
-| **Evidence** | Repo state (1 commit, no remote, empty `docs/plans/`); design doc content; prior-art sources (§8). |
+| **Assumptions** | The design doc is the complete current spec; no implementation exists; the toolchain is C++/LLVM *(superseded: user decided Rust + LLVM on 2026-11-10)*; the user wants a review before implementation. |
+| **Evidence** | Repo state at review time (1 commit, no remote, empty `docs/plans/`); design doc content; prior-art sources (§8). *Note: `docs/plans/` was lost on 2026-11-10; the repo was re-initialized (root commit 9921f5a).* |
 | **Alternatives** | (a) Implement immediately; (b) Review then plan; (c) Reject the design; (d) Ask the user for direction. |
 | **Chosen** | (b) Review then plan. |
 | **Risks** | The review may be wrong; the user may have wanted implementation; the design may be intentionally aspirational. |
@@ -336,7 +336,7 @@ This sequences risk correctly: prove the memory model on a subset before buildin
 - **Refinement:** MVP re-scope suggested (§9.3).
 - **Further development:** see the implementation plan.
 - **Consistency:** the review's claims are consistent with the cited sources.
-- **Learning:** see `docs/plans/2026-11-09-yulia-implementation-plan.md` and the session memory entry.
+- **Learning:** see the decision log (#82) — `docs/plans/` was lost on 2026-11-10.
 - **Smallest things:** the metaphor table is evocative but not a specification — flagged.
 - **Second-order:** if the memory model is wrong, the toolchain investment is wasted — hence Phase 0.
 - **Third-order:** if Yulia succeeds, it competes with Rust/Zig/Carbon; the differentiator must be the annotation-free inference, which is unproven.

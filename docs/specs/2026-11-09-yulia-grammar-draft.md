@@ -3,7 +3,7 @@
 **Date:** 2026-11-09
 **Status:** Draft for review (Phase 0 deliverable 0.1)
 **Depends on:** `docs/specs/2026-11-09-yulia-design.md`, `docs/specs/2026-11-09-yulia-design-review.md`
-**Plan ref:** `docs/plans/2026-11-09-yulia-implementation-plan.md` §2, deliverable 0.1
+**Plan ref:** unavailable — `docs/plans/` was lost on 2026-11-10 (see decision log #82).
 
 ---
 
@@ -854,6 +854,8 @@ The following constructs are **not** in this grammar but are reserved for later 
 ---
 
 ## 8. Open questions for review
+
+See `docs/specs/2026-11-10-yulia-open-decisions.md` for owner + decision gate.
 
 1. **String mutability:** Is `string` immutable (value type, copy-on-write) or mutable (in-place)? This affects the memory model and must be decided in 0.2.
 2. **Array bounds checking:** Compile-time (when provable) + runtime trap, or always runtime? Affects MEM-SAFE-2.
