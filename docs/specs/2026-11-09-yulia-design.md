@@ -94,14 +94,14 @@ See `docs/specs/2026-11-09-yulia-region-inference.md` (0.3 §6), `docs/specs/202
 
 ## Toolchain
 
-- **Compiler:** Rust → LLVM IR → native code (LLVM via inkwell; inkwell enters at the codegen phase).
+- **Compiler:** Rust → LLVM IR → native code (LLVM via inkwell; inkwell enters in Phase 1b, codegen).
 - **LSP:** built from the start; a custom syntax needs tooling to be usable.
 - **Formatter:** built from the start, driven by the same grammar.
 - **Build system:** Cargo; LLVM via inkwell.
 
 ## MVP feature set
 
-This is the **whole-MVP** feature set, not the Phase 1 subset. Phase 1 is specified in 0.3 §3 and delivers `int`, `bool`, structs, fixed-size arrays, functions, and control flow only — no `float`, no `char`, no `string`, no codegen.
+This is the **whole-MVP** feature set, not the Phase 1 subset. Phase 1 is specified in 0.3 §3 and delivers `int`, `bool`, structs, fixed-size arrays, functions, and control flow, **plus incremental codegen** (LLVM/inkwell) for that subset — staged: 1a front-end, 1b codegen backend. No `float`, no `char`, no `string`.
 
 - Primitive types: `int`, `float`, `bool`, `char`, `string`
 - Functions / procedures

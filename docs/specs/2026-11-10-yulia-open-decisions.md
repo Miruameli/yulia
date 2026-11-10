@@ -16,7 +16,7 @@ This register consolidates every open decision in the Phase 0 specifications, wi
 
 | # | Decision | Owner | Decide by | Status |
 |---|---|---|---|---|
-| D1 | Phase 1 subset boundary (exact type/construct set) | spec owner (B) | Phase 1 gate | resolved 2026-11-10 (see Resolved) |
+| D1 | Phase 1 subset boundary (exact type/construct set) | spec owner (B) | Phase 1 gate | revised 2026-11-10 (see Resolved) |
 | D2 | Error and diagnostic model (messages, exit codes, abort behavior) | spec owner (B) | Phase 1 gate | resolved 2026-11-10 (see Resolved) |
 | D3 | Region inference rules for the by-value subset | spec owner (B) | Phase 1 gate | resolved 2026-11-10 (see Resolved) |
 
@@ -38,7 +38,6 @@ This register consolidates every open decision in the Phase 0 specifications, wi
 | # | Decision | Owner | Decide by | Status |
 |---|---|---|---|---|
 | D12 | Benchmark kernels K1–K5 implementation + baseline data (0.8) | spec owner (B) + infra (A) | Phase 4 gate | open |
-| D26 | Phase 3 / codegen phase naming (G8): the phase plan is 1,2,4,5,6; the 'codegen phase' (D21) is never named. Moving K1 to Phase 4 implies codegen lands in Phase 3 or Phase 4 — the plan must say which. | spec owner (B) | Phase 4 gate | open |
 
 ## Phase 5 gate
 
@@ -61,12 +60,13 @@ This register consolidates every open decision in the Phase 0 specifications, wi
 
 | # | Decision | Resolution | Date |
 |---|---|---|---|
-| D1 | Phase 1 subset boundary | IN: `int`, `bool`, structs, fixed-size arrays `[T; N]`, functions incl. `main`, `if`/`else`, `while`, `for`/`in`, `return`, `break`, `continue`, `let`/`const`. OUT: `float`, `char`, `string`, `panic()`, `extern "C"`, `export`, `pin`, `CPtr`, references, growable arrays, modules/imports, concurrency, generics, SoA, stdlib. Deliverables: lexer, parser, AST, type checker, region inference, diagnostics, tests. No codegen, no execution path. | 2026-11-10 |
-| D2 | Error and diagnostic model | Compile error -> stderr `file:line:col: error: <msg>`, exit 1. Runtime error (bounds check, div-by-zero, trapping overflow) -> stderr + `abort()` (SIGABRT/134), no region cleanup; **verify when codegen lands** (not exercisable in Phase 1). No `panic()` builtin in Phase 1. Stable error code per diagnostic. | 2026-11-10 |
+| D1 | Phase 1 subset boundary | IN: `int`, `bool`, structs, fixed-size arrays `[T; N]`, functions incl. `main`, `if`/`else`, `while`, `for`/`in`, `return`, `break`, `continue`, `let`/`const`. OUT: `float`, `char`, `string`, `panic()`, `extern "C"`, `export`, `pin`, `CPtr`, references, growable arrays, modules/imports, concurrency, generics, SoA, stdlib. Deliverables: lexer, parser, AST, type checker, region inference, diagnostics, tests, **plus incremental codegen** (LLVM/inkwell) for the subset — staged: 1a front-end, 1b codegen backend. Revised by user directive 2026-11-10 ("percepat codegen jadi phase 1, tapi bertahap pengembangannya"). | 2026-11-10 |
+| D2 | Error and diagnostic model | Compile error -> stderr `file:line:col: error: <msg>`, exit 1. Runtime error (bounds check, div-by-zero, trapping overflow) -> stderr + `abort()` (SIGABRT/134), no region cleanup; **exercisable from Phase 1b (codegen)**. No `panic()` builtin in Phase 1. Stable error code per diagnostic. | 2026-11-10 |
 | D3 | Region inference rules for the by-value subset | Resolved by 0.3 §3: single lexical pass, O(n), Lemma 1 (trivially sound). No new rules needed. | 2026-11-10 |
 | D20 | Fallback policy (R.1 / R.2 / R.3) | R.1 restrict + R.2 warned escape hatch (user sign-off) | 2026-11-10 |
-| D21 | Implementation language / backend | Rust + LLVM (inkwell enters at the codegen phase) | 2026-11-10 |
+| D21 | Implementation language / backend | Rust + LLVM (inkwell enters in Phase 1b, codegen) | 2026-11-10 |
 | D22 | License | MPL-2.0 | 2026-11-10 |
 | D23 | R.2 acceptability | Acceptable as an explicit, warned escape hatch only | 2026-11-10 |
 | D24 | Mechanical doc staleness (C++ → Rust, dangling plan refs) | Fixed in `docs/specs/` | 2026-11-10 |
 | D25 | G1 claim integrity | R.1 restriction stated explicitly in the design doc | 2026-11-10 |
+| D26 | Phase 3 / codegen phase naming (G8) | Resolved by user directive 2026-11-10: codegen is a Phase 1 deliverable (staged 1a front-end / 1b codegen). 'Phase 3' is not a phase; the plan is 1, 2, 4, 5, 6 with codegen inside Phase 1. | 2026-11-10 |

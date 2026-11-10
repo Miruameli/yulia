@@ -114,7 +114,7 @@ The baseline is **C** (compiled with `gcc -O2` or `clang -O2`). C is the gold st
 - Every PR that touches the compiler or runtime runs the benchmark suite.
 - A regression of >5% on any kernel blocks the PR.
 - Regressions are tracked in the issue tracker.
-- **Phase note:** applies from Phase 4, when K1–K5 land. Before Phase 4 there is no benchmark suite to run.
+- **Phase note:** the K1–K5 suite applies from Phase 4. Phase 1b codegen is validated by subset-specific tests (`int`/`bool`/structs/arrays/control flow), not by the K-suite — K1 is `float`, which is Phase 2+.
 
 ---
 
@@ -124,7 +124,7 @@ The baseline is **C** (compiled with `gcc -O2` or `clang -O2`). C is the gold st
 - [x] Comparison languages listed (C, Rust, Zig, Go).
 - [x] 5 kernels defined (K1–K5).
 - [x] Measurement protocol specified (environment, metrics, reproducibility, regression detection).
-- [ ] Benchmarks implemented (K1–K5 in Phase 4).
+- [ ] Benchmarks implemented (K1–K5 in Phase 4; K1 is `float`, Phase 2+).
 - [ ] Baseline results recorded (Phase 4).
 
 ---
