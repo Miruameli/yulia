@@ -60,6 +60,9 @@ development builds are identified by git commit hash
 - Security alerting enabled on the repository: Dependabot alerts and CodeQL code
   scanning (default setup) are now active, ahead of the first third-party
   dependency (inkwell, Phase 1b).
+- `benchmarks/README.md` kernel table corrected: K1 is a Phase 4 benchmark
+  (spec 0.8 §4.4), not Phase 1; the phase note now records that K1 requires
+  `float` (Phase 2+).
 
 ### Removed
 
