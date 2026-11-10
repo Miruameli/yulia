@@ -57,6 +57,10 @@ development builds are identified by git commit hash
   no tracing GC, no lifetime annotations, and deterministic reclamation for
   scoped regions"; the status line, benchmark harness line, and spec deliverable
   list are corrected.
+- `README.md` rewritten as a project-facing README: banner, badges, table of
+  contents, "Why Yulia?", a feature list, a worked code example, the memory-model
+  metaphor table, repository layout, getting-started, a phase roadmap, and a
+  specification index.
 - Security alerting enabled on the repository: Dependabot alerts and CodeQL code
   scanning (default setup) are now active, ahead of the first third-party
   dependency (inkwell, Phase 1b).
