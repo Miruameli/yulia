@@ -16,7 +16,7 @@ This log persists review findings that previously existed only in coord messages
 | F15 | minor | 0.6 §4.4 | string → const char* buffer ownership | ✅ addressed (0.6 §4.4 buffer ownership) |
 | F16 | minor | 0.6 §4.4 | int width cross-ref to 0.2 | ✅ addressed (0.6 §4.4) |
 | F17 | minor | 0.6 §3.1 | panic-at-FFI cross-ref to 0.5 §4.4 | ✅ addressed (0.6 §3.1) |
-| F18 | minor | 0.7 §4.1 | ownership transfer enforcement unspecified | ✅ addressed (0.7 §4.1 move/affine assumption) |
+| F18 | minor | 0.7 §4.1 | ownership transfer enforcement unspecified | ♻️ re-opened 2026-11-10 (D27) — move/affine assumption under review |
 | F19 | minor | 0.7 §4.2 | immutable sharing region outliving threads | ✅ addressed (0.7 §4.2 Phase 5 requirement) |
 | F20 | minor | 0.8 §4.1 | -march=native harms reproducibility | ✅ addressed (0.8 §4.1 fixed arch) |
 | F21 | minor | 0.8 §3.2 | K2 linked list needs pointers/indices not in Phase 1 | ✅ addressed (0.8 §3.2 phase note) |
@@ -30,7 +30,7 @@ This log persists review findings that previously existed only in coord messages
 |---|---|---|---|---|
 | F40 | blocker | 0.7 §3.3/§6 | Grammar had no concurrency keywords → diagnostic unreachable | ✅ resolved (0.1 §2.5) |
 | F41 | high | 0.7 §1 | Leaked coordination-channel reference in §1 syntax note | ✅ resolved |
-| F42 | high | 0.7 §4.1 | Ownership model direction | ✅ resolved (move/affine assumption) |
+| F42 | high | 0.7 §4.1 | Ownership model direction | ♻️ re-opened 2026-11-10 (D27) — move/affine assumption under review |
 | F43 | high | 0.7 §4.2 | Immutable sharing lifetime | ✅ resolved |
 | F44 | high | 0.7 §4.4 | Panic semantics incomplete | ✅ resolved |
 | F45 | high | 0.7 §5 | MEM-SAFE-8 deadlock claim too strong | ✅ resolved |
