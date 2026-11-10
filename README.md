@@ -188,11 +188,13 @@ The specification lives in [`docs/specs/`](docs/specs/):
 | Document | Contents |
 |---|---|
 | [`2026-11-09-yulia-design.md`](docs/specs/2026-11-09-yulia-design.md) | Intent, goals, memory model, restrictions |
+| [`2026-11-09-yulia-design-review.md`](docs/specs/2026-11-09-yulia-design-review.md) | Independent design review — verdict and findings |
 | [`2026-11-09-yulia-grammar-draft.md`](docs/specs/2026-11-09-yulia-grammar-draft.md) | Concrete grammar and lexical rules (0.1) |
+| [`2026-11-09-yulia-operational-semantics.md`](docs/specs/2026-11-09-yulia-operational-semantics.md) | Operational semantics (0.2) |
 | [`2026-11-09-yulia-region-inference.md`](docs/specs/2026-11-09-yulia-region-inference.md) | Region inference rules (0.3) |
 | [`2026-11-09-yulia-escape-analysis.md`](docs/specs/2026-11-09-yulia-escape-analysis.md) | Escape analysis and the `pin` escape hatch (0.3a) |
-| [`2026-11-09-yulia-operational-semantics.md`](docs/specs/2026-11-09-yulia-operational-semantics.md) | Operational semantics (0.2) |
-| [`2026-11-09-yulia-error-panic-model.md`](docs/specs/2026-11-09-yulia-error-panic-model.md) | Errors, panics, and abort behavior (0.4) |
+| [`2026-11-09-yulia-fallback-policy.md`](docs/specs/2026-11-09-yulia-fallback-policy.md) | Fallback policy: R.1 restrict / R.2 warned escape hatch (0.4) |
+| [`2026-11-09-yulia-error-panic-model.md`](docs/specs/2026-11-09-yulia-error-panic-model.md) | Errors, panics, and abort behavior (0.5) |
 | [`2026-11-09-yulia-ffi-rules.md`](docs/specs/2026-11-09-yulia-ffi-rules.md) | C FFI rules (0.6) |
 | [`2026-11-09-yulia-concurrency-model.md`](docs/specs/2026-11-09-yulia-concurrency-model.md) | Concurrency model (0.7) |
 | [`2026-11-09-yulia-benchmark-methodology.md`](docs/specs/2026-11-09-yulia-benchmark-methodology.md) | Benchmark methodology (0.8) |
