@@ -31,7 +31,7 @@ No `malloc`/`free` for Yulia values.
 - [The memory model](#the-memory-model)
 - [Repository layout](#repository-layout)
 - [Getting started](#getting-started)
-- [Status and roadmap](#status-androadmap)
+- [Status and roadmap](#status-and-roadmap)
 - [Documentation](#documentation)
 - [Contributing](#contributing)
 - [License](#license)
