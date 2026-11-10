@@ -163,6 +163,8 @@ Every change receives **two independent review passes** before it is merged.
 
 `.github/workflows/ci.yml` runs formatting, clippy, tests, build, dependency
 audit, spell checking, and the codegraph index on every push and pull request.
+CodeQL code scanning (GitHub's default setup) runs separately on every push and
+pull request; Dependabot alerts are enabled for dependency advisories.
 
 > The remote is `https://github.com/Miruameli/yulia`, so GitHub Actions runs on
 > every push to `main` and on every pull request. `make ci` runs the same fast
