@@ -57,7 +57,8 @@ explicitly ([R.1 / R.2](#the-memory-model)).
 |---|---|
 | **Paradigm** | Procedural — functions, structs, modules |
 | **Types** | Explicit and static; no `auto`, no `var` |
-| **Memory** | Compiler-inferred regions; deterministic reclamation |
+| **Memory** | Compiler-inferred regions; deterministic reclamation for scoped regions |
+| **Performance** | Targeting C-class speed (0.8 §2.2); not yet measured |
 | **Garbage collector** | None |
 | **Lifetime annotations** | None — `pin` is the sole explicit escape hatch |
 | **Implementation** | Rust → LLVM IR (inkwell, Phase 1b) |
@@ -75,8 +76,9 @@ explicitly ([R.1 / R.2](#the-memory-model)).
   memory inference, not type inference.
 - **Familiar, unambiguous syntax.** C-style braces, `fn`, `struct`, `let`, and
   at most 3 tokens of lookahead — every program has exactly one parse tree.
-- **Deterministic by construction.** Reclamation happens at region exit, at a
-  point the programmer can reason about.
+- **Deterministic reclamation.** Values in scoped regions are reclaimed at
+  region exit, at a point the programmer can reason about. R.2-promoted values
+  are the documented exception.
 - **A real toolchain plan.** Compiler, LSP, formatter, and build tooling are
   scheduled from the start.
 
@@ -174,8 +176,9 @@ CI runs on every push to `main` and on every pull request. The compiler driver
 | **6** | Async / await / coroutines | Open (D14) |
 
 Phase 1 is **on hold** until the Phase 0 gate passes strict review and
-theoretical soundness (user directive, 2026-11-10). The open decisions register
-is the single source of truth for what is still undecided:
+theoretical soundness (user directive, 2026-11-10). Formal proofs (D17) and
+the benchmark suite (D12, Phase 4) remain open. The open decisions register is
+the single source of truth for what is still undecided:
 [`docs/specs/2026-11-10-yulia-open-decisions.md`](docs/specs/2026-11-10-yulia-open-decisions.md).
 
 ## Documentation
