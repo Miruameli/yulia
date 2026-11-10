@@ -32,6 +32,7 @@ This register consolidates every open decision in the Phase 0 specifications, wi
 | D9 | E3 handling: reject vs R.2 promote (0.3a §8) | spec owner (B) | Phase 2 gate | open |
 | D10 | `pin` representation in the analysis (0.3a §8) | spec owner (B) | Phase 2 gate | open |
 | D11 | Escape analysis order vs type checking (0.3a §8) | spec owner (B) | Phase 2 gate | open |
+| D27 | move/affine ownership assumption (0.7 §4.1) — RE-OPENED at user request 2026-11-10. #95 was A's technical endorsement only, not ratification. Binds Phase 2+ (0.3 §5.4) and Phase 5. | spec owner (B) | Phase 2 gate | open |
 
 ## Phase 4 gate
 

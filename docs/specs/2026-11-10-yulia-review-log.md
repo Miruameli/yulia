@@ -48,7 +48,7 @@ This log persists review findings that previously existed only in coord messages
 ## Open items
 
 - **F55+ (deeper grammar review):** explicit **no findings** (B, 2026-11-10).
-- **Phase 1 language/backend:** ✅ RESOLVED by user decision (2026-11-10): **Rust + LLVM backend** (inkwell later). License: **MPL-2.0**. Version pins verified 2026-11-10 (LLVM 23.1.x / Rust 1.99.x) — see Version-pin verification below. The Phase 1 plan document itself was lost on 2026-11-10.
+- **Phase 1 language/backend:** ✅ RESOLVED by user decision (2026-11-10): **Rust + LLVM backend** (inkwell enters in Phase 1b, codegen). License: **MPL-2.0**. Version pins verified 2026-11-10 (LLVM 23.1.x / Rust 1.99.x) — see Version-pin verification below. The Phase 1 plan document itself was lost on 2026-11-10.
 - **G7 (four-way Phase 1 subset/codegen conflict):** ✅ RESOLVED 2026-11-10 by D1 — Phase 1 = `int`/`bool`/structs/fixed-size arrays/functions/control flow, no `float`. **Superseded by user directive 2026-11-10: codegen is now a Phase 1 deliverable (staged 1a front-end / 1b codegen); K1 stays Phase 4 (it is `float`, Phase 2+).** See `2026-11-10-yulia-open-decisions.md` D1 (revised).
 - **G8 (Phase 3 / codegen phase naming):** ✅ RESOLVED 2026-11-10 by user directive — codegen lands in Phase 1 (staged 1a/1b). 'Phase 3' is not a phase; the plan is 1, 2, 4, 5, 6 with codegen inside Phase 1. Recorded as **D26** (resolved).
 
