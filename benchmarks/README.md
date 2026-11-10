@@ -39,11 +39,12 @@ set -euo pipefail
 
 | id | name | target | phase |
 |---|---|---|---|
-| K1 | matrix multiply, N=1024, float64 | within 5% of C | 1 |
+| K1 | matrix multiply, N=1024, float64 | within 5% of C | 4 |
 | K2 | linked list, 1,000,000 nodes | within 10% of C | 4 |
 | K3 | string processing, 10 MB file | within 15% of C | 4 |
 | K4 | region allocation, 1,000,000 × 16-byte structs | ≥ 2× faster than C | 4 |
 | K5 | compile time, 10,000-line program | ≥ 1.5× faster than rustc | 4 |
 
-No kernels are registered yet; the harness is in place so the first kernel
-lands without plumbing changes.
+The K1–K5 suite applies from Phase 4 (spec §4.4); K1 requires `float`, which is
+Phase 2+. No kernels are registered yet; the harness is in place so the first
+kernel lands without plumbing changes.
