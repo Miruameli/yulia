@@ -140,6 +140,8 @@ mechanism:
 | `docs/adr/` | Architecture decision records |
 | `docs/runbook/` | Developer runbook — setup, build, test, spec workflow |
 | `.github/workflows/ci.yml` | CI: formatting, clippy, tests, build, dependency audit, spell check, codegraph |
+| `.github/ISSUE_TEMPLATE/` | Issue templates (bug report, feature request, documentation) |
+| `.github/CODEOWNERS` | Code ownership |
 
 ## Getting started
 
