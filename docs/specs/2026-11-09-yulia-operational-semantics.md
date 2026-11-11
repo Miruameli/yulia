@@ -144,18 +144,52 @@ In Phase 1, this holds trivially: there are no references.
 T ::= int | bool | StructT | ArrayT(T, N)
 ```
 
-### 6.2 Typing rules (selected)
+### 6.2 Typing rules (Phase 1 subset)
+
+The Phase 1 types are `int`, `bool`, `StructT`, and `ArrayT(T, N)` (0.1 §3.2).
+The rules below are exhaustive for that subset; `e : T` means "expression `e`
+has type `T`".
 
 ```
-INT_LIT n            : int
-BOOL_LIT b           : bool
-e1 + e2              : int      if e1 : int and e2 : int
-e1 == e2             : bool     if e1 : int and e2 : int
-s.f                  : T_f      if s : StructT { f: T_f, ... }
-a[i]                 : T        if a : ArrayT(T, N) and i : int
-StructVal { f: v, .. } : StructT { f: T, .. }  if v : T for each field
+INT_LIT n               : int
+BOOL_LIT b              : bool
+e1 + e2                 : int      if e1 : int and e2 : int
+e1 - e2                 : int      if e1 : int and e2 : int
+e1 * e2                 : int      if e1 : int and e2 : int
+e1 / e2                 : int      if e1 : int and e2 : int
+e1 % e2                 : int      if e1 : int and e2 : int
+e1 == e2                : bool     if e1 : int and e2 : int
+e1 != e2                : bool     if e1 : int and e2 : int
+e1 <  e2                : bool     if e1 : int and e2 : int
+e1 >  e2                : bool     if e1 : int and e2 : int
+e1 <= e2                : bool     if e1 : int and e2 : int
+e1 >= e2                : bool     if e1 : int and e2 : int
+e1 && e2                : bool     if e1 : bool and e2 : bool
+e1 || e2                : bool     if e1 : bool and e2 : bool
+! e                     : bool     if e : bool
+- e                     : int      if e : int
+s.f                     : T_f      if s : StructT { f: T_f, ... }
+a[i]                    : T        if a : ArrayT(T, N) and i : int
+StructVal { f: v, .. }  : StructT { f: T, .. }  if v : T for each field
 ArrayVal [v0, .., vN-1] : ArrayT(T, N)         if vi : T for all i
-f(e1, .., en)        : T        if f : (T1, .., Tn) -> T and ei : Ti
+[e; N]                  : ArrayT(T, N)         if e : T
+f(e1, .., en)           : T        if f : (T1, .., Tn) -> T and ei : Ti
+x = e                   : T        if x : T and e : T
+```
+
+Statements and declarations (0.1 §3.3):
+
+```
+let x : T = e;     introduces x : T    if e : T
+let x : T;         introduces x : T    uninitialized; a read before assignment is a compile error (MEM-SAFE-4)
+const x : T = e;   introduces x : T    if e : T
+if (e) { .. }      e : bool
+while (e) { .. }   e : bool
+for (x in a .. b) { .. }          a : int and b : int
+for (x : T = e; c; u) { .. }      e : T, c : bool, u : T
+return e;          e : T_ret          where T_ret is the enclosing function's return type
+return;            T_ret = void
+break; continue;   no type            only inside a loop (0.1 §3.3)
 ```
 
 ### 6.3 Theorems

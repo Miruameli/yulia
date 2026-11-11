@@ -116,6 +116,10 @@ development builds are identified by git commit hash
   lists now mark each item resolved/scoped (with the deciding document) or
   open (with its register id), matching the 0.1 §8 convention. Recorded as
   review-log finding F60.
+- `docs/specs/2026-11-09-yulia-operational-semantics.md` §6.2: the typing
+  rules are now exhaustive for the Phase 1 subset (all binary/unary operators,
+  assignment, `[e; N]`, and the statement/declaration forms) instead of the
+  previous 9 "selected" rules. Recorded as review-log finding F61.
 - `.editorconfig`: `*.{yml,yaml,json}` now use 2-space indentation, matching
   `.github/workflows/ci.yml`; TOML keeps 4 spaces (`deny.toml`). The previous
   rule lumped YAML in with TOML at 4 spaces.
