@@ -80,6 +80,10 @@ development builds are identified by git commit hash
   `kernels/k1.yl`, which cannot resolve because the harness runs each kernel
   with the repository root as the working directory. It now uses
   `benchmarks/kernels/k1.yl`, and the working-directory rule is stated.
+- `docs/specs/2026-11-09-yulia-error-panic-model.md` §2: removed
+  "assertion failure" from the Phase 1 runtime-error triggers — no Phase 1
+  construct produces one (0.1 §2.5/§3.3/§10, D1, D2). Recorded as review-log
+  finding F56.
 
 ### Removed
 

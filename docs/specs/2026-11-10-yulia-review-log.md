@@ -51,6 +51,7 @@ This log persists review findings that previously existed only in coord messages
 - **Phase 1 language/backend:** ✅ RESOLVED by user decision (2026-11-10): **Rust + LLVM backend** (inkwell enters in Phase 1b, codegen). License: **MPL-2.0**. Version pins verified 2026-11-10 (LLVM 23.1.x / Rust 1.99.x) — see Version-pin verification below. The Phase 1 plan document itself was lost on 2026-11-10.
 - **G7 (four-way Phase 1 subset/codegen conflict):** ✅ RESOLVED 2026-11-10 by D1 — Phase 1 = `int`/`bool`/structs/fixed-size arrays/functions/control flow, no `float`. **Superseded by user directive 2026-11-10: codegen is now a Phase 1 deliverable (staged 1a front-end / 1b codegen); K1 stays Phase 4 (it is `float`, Phase 2+).** See `2026-11-10-yulia-open-decisions.md` D1 (revised).
 - **G8 (Phase 3 / codegen phase naming):** ✅ RESOLVED 2026-11-10 by user directive — codegen lands in Phase 1 (staged 1a/1b). 'Phase 3' is not a phase; the plan is 1, 2, 4, 5, 6 with codegen inside Phase 1. Recorded as **D26** (resolved).
+- **F56 (0.5 §2 runtime-error taxonomy):** the Phase 1 runtime-error row listed "assertion failure", but no Phase 1 construct produces one (0.1 §2.5 keywords, §3.3 statements and §10 Phase 2 extensions have no `assert`; D1's IN/OUT lists and D2 omit it). ✅ addressed 2026-11-11 (A) — "assertion failure" removed from `0.5:21`.
 
 ## Version-pin verification (INV-2 / SOP-NET, retrieved 2026-11-10)
 

@@ -18,7 +18,7 @@ Yulia has two classes of errors:
 | Class | When | Recoverable? | Example |
 |---|---|---|---|
 | **Compile-time error** | Type checking, region inference | No (program rejected) | Type mismatch, dangling reference, uninitialized read |
-| **Runtime error** | Bounds check failure, integer overflow (if trapping), assertion failure | No (program aborts) | Array index out of bounds, division by zero |
+| **Runtime error** | Bounds check failure, integer overflow (if trapping) | No (program aborts) | Array index out of bounds, division by zero |
 | **Panic** | Explicit `panic()` call, or unrecoverable runtime error | No (program aborts) | `panic("unreachable")` |
 
 There is no exception mechanism. Yulia does not have `try`/`catch`/`throw`. Errors are either caught at compile time or abort the program.
