@@ -49,44 +49,86 @@ then the program aborts (`abort()`, SIGABRT/134) with no region cleanup (D2, §4
 
 ### 2.2 Phase 1 diagnostic catalog
 
-Codes are grouped by compiler phase. `E` = compile-time error, `R` = runtime error.
+Codes are grouped by compiler stage: `E0xx` lexer, `E1xx` parser, `E2xx` type checker, `E3xx` region inference (reserved, Phase 2+), `R0xx` runtime. Once a code ships it is stable (0.9 §4).
 
-| Code | Phase | Diagnostic |
-|---|---|---|
-| E0101 | lexer | unexpected character |
-| E0102 | lexer | unterminated string literal |
-| E0103 | lexer | invalid numeric literal |
-| E0104 | lexer | invalid escape sequence |
-| E0201 | parser | unexpected token |
-| E0202 | parser | unexpected end of file |
-| E0203 | parser | reserved keyword used as an identifier (0.1 §2.5) |
-| E0204 | parser | struct literal is missing fields (0.1 §3.4) |
-| E0205 | parser | empty array literal needs a type annotation (0.1 §3.4) |
-| E0301 | name resolution | undeclared name |
-| E0302 | name resolution | duplicate definition |
-| E0303 | name resolution | unknown type |
-| E0304 | name resolution | assignment to a `const` |
-| E0401 | type checker | type mismatch (expected vs found) |
-| E0402 | type checker | bad operand type for operator |
-| E0403 | type checker | `if`/`while` condition is not `bool` |
-| E0404 | type checker | `for` range bounds are not `int` |
-| E0405 | type checker | call arity mismatch |
-| E0406 | type checker | argument type mismatch |
-| E0407 | type checker | `return` type mismatch |
-| E0408 | type checker | `return` arity vs `void` |
-| E0409 | type checker | index is not `int` |
-| E0410 | type checker | field access on a non-struct |
-| E0411 | type checker | index on a non-array |
-| E0501 | control flow | `break` outside a loop (0.1 §3.3) |
-| E0502 | control flow | `continue` outside a loop (0.1 §3.3) |
-| E0503 | control flow | `return` outside a function (0.1 §3.3) |
-| E0504 | definite assignment | read before assignment (MEM-SAFE-4) |
-| E0601 | program structure | missing `main` |
-| E0602 | program structure | multiple `main` definitions |
-| E0603 | program structure | `main` must be `fn main() -> void` (0.1 §3.6) |
-| R0101 | runtime | array index out of bounds (MEM-SAFE-2, 0.2 §113) |
-| R0102 | runtime | division by zero |
-| R0103 | runtime | integer overflow trap (D2) |
+**Lexer (`E0xx`)**
+
+| Code | Diagnostic |
+|---|---|
+| E001 | unexpected character |
+| E002 | unterminated block comment |
+| E003 | unterminated string literal |
+| E004 | unterminated character literal |
+| E005 | invalid escape sequence |
+| E006 | invalid numeric literal |
+| E007 | invalid character literal |
+
+**Parser (`E1xx`)**
+
+| Code | Diagnostic |
+|---|---|
+| E101 | missing `module` declaration |
+| E102 | missing identifier |
+| E103 | missing `;` |
+| E104 | missing `{` |
+| E105 | missing `}` |
+| E106 | missing `(` |
+| E107 | missing `)` |
+| E108 | missing `[` |
+| E109 | missing `]` |
+| E110 | missing `:` |
+| E111 | missing `,` |
+| E112 | missing `.` |
+| E113 | missing `..` |
+| E114 | missing `->` |
+| E115 | missing `=` |
+| E116 | missing expression |
+| E117 | missing type |
+| E118 | missing statement |
+| E119 | missing integer literal |
+| E120 | missing string literal |
+| E121 | unexpected token |
+| E122 | missing `as` |
+| E123 | missing `in` |
+| E124 | missing keyword |
+
+**Type checker (`E2xx`)**
+
+| Code | Diagnostic |
+|---|---|
+| E201 | undefined name |
+| E202 | type mismatch |
+| E203 | call target is not a function |
+| E204 | argument count mismatch |
+| E205 | unknown struct |
+| E206 | unknown field |
+| E207 | struct literal missing field |
+| E208 | duplicate field initializer |
+| E209 | assignment target is not an lvalue |
+| E210 | condition is not `bool` |
+| E211 | return type mismatch |
+| E212 | `break` outside a loop |
+| E213 | `continue` outside a loop |
+| E214 | construct outside the Phase 1 subset |
+| E215 | duplicate definition |
+| E216 | unknown type |
+| E217 | array element type mismatch |
+| E218 | index is not `int` |
+| E219 | index on a non-array |
+| E220 | field access on a non-struct |
+| E221 | `void` value used in an expression |
+| E222 | read before assignment |
+| E223 | recursive struct |
+| E224 | bad array length |
+| E225 | duplicate parameter name |
+
+**Runtime (`R0xx`, Phase 1b)**
+
+| Code | Diagnostic |
+|---|---|
+| R0101 | array index out of bounds (MEM-SAFE-2, 0.2 §113) |
+| R0102 | division by zero |
+| R0103 | integer overflow trap (D2) |
 
 ## 3. Panic semantics
 
