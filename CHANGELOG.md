@@ -110,6 +110,12 @@ development builds are identified by git commit hash
   register id) — array bounds checking, integer overflow, and default
   initialization were already decided but still listed as open. Recorded as
   review-log finding F59.
+- `docs/specs/2026-11-09-yulia-operational-semantics.md` §7,
+  `docs/specs/2026-11-09-yulia-region-inference.md` §10, and
+  `docs/specs/2026-11-09-yulia-escape-analysis.md` §8: the "Open decisions"
+  lists now mark each item resolved/scoped (with the deciding document) or
+  open (with its register id), matching the 0.1 §8 convention. Recorded as
+  review-log finding F60.
 - `.editorconfig`: `*.{yml,yaml,json}` now use 2-space indentation, matching
   `.github/workflows/ci.yml`; TOML keeps 4 spaces (`deny.toml`). The previous
   rule lumped YAML in with TOML at 4 spaces.

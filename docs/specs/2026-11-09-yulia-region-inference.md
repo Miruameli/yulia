@@ -161,13 +161,13 @@ The design review identified three options. This specification recommends:
 
 ## 10. Open decisions
 
-See `docs/specs/2026-11-10-yulia-open-decisions.md` for owner + decision gate.
+See `docs/specs/2026-11-10-yulia-open-decisions.md` for owner + decision gate. Each item is marked **resolved** (with the deciding document) or **open** (with its register id).
 
-1. String ownership model (Q3).
-2. Growable array sharing rule.
-3. C FFI pinning rule.
-4. Concurrency model.
-5. Whether R.2 (global-region fallback) is acceptable. (Resolved by 0.4: user signed off on R.1 restrict + R.2 warned escape hatch on 2026-11-10. R.2 acceptable as explicit, warned escape hatch only.)
+1. String ownership model (Q3). — **open**, D4 (Phase 2 gate).
+2. Growable array sharing rule. — **open**, D5 (Phase 2 gate).
+3. C FFI pinning rule. — **scoped** 2026-11-10: `pin` is a region-lifetime extension (D6, 0.3a §4.3); rule adoption remains at the Phase 2 gate.
+4. Concurrency model. — **open**, D13 (Phase 5 gate).
+5. Whether R.2 (global-region fallback) is acceptable. — **resolved** 2026-11-10: user signed off on R.1 restrict + R.2 warned escape hatch (D20); R.2 acceptable as an explicit, warned escape hatch only.
 
 ---
 

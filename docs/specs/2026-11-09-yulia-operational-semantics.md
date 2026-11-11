@@ -170,11 +170,11 @@ f(e1, .., en)        : T        if f : (T1, .., Tn) -> T and ei : Ti
 
 ## 7. Open decisions
 
-See `docs/specs/2026-11-10-yulia-open-decisions.md` for owner + decision gate.
+See `docs/specs/2026-11-10-yulia-open-decisions.md` for owner + decision gate. Each item is marked **resolved** (with the deciding document) or **open** (with its register id).
 
-1. Panic/unwind semantics: how are regions reclaimed on unwind? (See Phase 0 deliverable 0.5.)
-2. Phase 2: how do strings and growable arrays extend the store?
-3. Concurrency: how do regions interact with threads?
+1. Panic/unwind semantics: how are regions reclaimed on unwind? — **resolved** by 0.5 §4 (region cleanup on unwind: normal return, panic, LIFO ordering; Phase 1 aborts, Phase 2+ explicit cleanup).
+2. Phase 2: how do strings and growable arrays extend the store? — **open**, D4 (string ownership) and D5 (growable array sharing), Phase 2 gate.
+3. Concurrency: how do regions interact with threads? — **open**, D13 (Phase 5 gate).
 
 ---
 

@@ -88,11 +88,11 @@ A `pin` construct (0.3 §5.3) **extends a value's region to the pin's scope**. A
 
 ## 8. Open decisions
 
-See `docs/specs/2026-11-10-yulia-open-decisions.md` for owner + decision gate.
+See `docs/specs/2026-11-10-yulia-open-decisions.md` for owner + decision gate. Each item is marked **resolved/scoped** (with the deciding document) or **open** (with its register id).
 
-1. Is E3 always a rejection, or is the global-region fallback (R.2) acceptable?
-2. How is `pin` represented in the analysis?
-3. Does escape analysis run before or after type checking?
+1. Is E3 always a rejection, or is the global-region fallback (R.2) acceptable? — **scoped** 2026-11-10: E3 promotes to the global region; reject if promotion is impossible (D9, 0.3a §5).
+2. How is `pin` represented in the analysis? — **scoped** 2026-11-10: `pin` is a region-lifetime extension, not a lattice level (D10, 0.3a §4.3).
+3. Does escape analysis run before or after type checking? — **open**, D11 (Phase 2 gate).
 
 ---
 
