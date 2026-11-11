@@ -1,4 +1,4 @@
-//! Input-path tests for the `yulia` driver: every failure path that reads a file.
+//! Input-path tests for the `yulia` driver: every path that reads a file.
 
 use std::ffi::OsStr;
 
@@ -41,17 +41,49 @@ fn extra_argument_fails() {
     assert!(err.contains("unexpected"), "stderr: {err}");
 }
 
-/// Pins the pre-Phase-1 stub: a readable input currently fails with a
-/// "not implemented" diagnostic instead of panicking. Replace this test when
-/// the pipeline lands (Phase 1a) — it must then assert real compilation.
 #[test]
-fn readable_input_fails_gracefully_without_panicking() {
-    let file = TempFile::new("valid", b"fn main() {}").expect("write temp file");
+fn a_valid_program_compiles() {
+    let file = TempFile::new(
+        "valid",
+        b"module app.main;\nfn main() -> void { let x: int = 1; }",
+    )
+    .expect("write temp file");
+    let output = run(&[file.path().as_os_str()]).expect("spawn yulia");
+    assert!(
+        output.status.success(),
+        "a valid program must compile; stderr: {}",
+        stderr(&output)
+    );
+    assert_eq!(stderr(&output), "", "success is silent");
+}
+
+#[test]
+fn a_type_error_is_reported_with_its_location() {
+    let file = TempFile::new(
+        "type-error",
+        b"module app.main;\nfn main() -> void { let x: int = true; }",
+    )
+    .expect("write temp file");
     let output = run(&[file.path().as_os_str()]).expect("spawn yulia");
     assert!(!output.status.success());
     let err = stderr(&output);
-    assert!(err.contains("not implemented"), "stderr: {err}");
-    assert!(!err.contains("panicked"), "stderr: {err}");
+    // `true` starts at line 2, column 34 of the file.
+    let name = file.path().to_string_lossy();
+    assert!(
+        err.contains(&format!("{name}:2:34: error[E202]")),
+        "stderr: {err}"
+    );
+}
+
+#[test]
+fn a_lexer_error_is_reported() {
+    let file = TempFile::new("lex-error", b"module app.main;\nfn main() -> void { @ }")
+        .expect("write temp file");
+    let output = run(&[file.path().as_os_str()]).expect("spawn yulia");
+    assert!(!output.status.success());
+    let err = stderr(&output);
+    assert!(err.contains("error[E001]"), "stderr: {err}");
+    assert!(err.contains(":2:"), "stderr: {err}");
 }
 
 /// A non-UTF-8 argument must be reported, not panicked on: the crate forbids

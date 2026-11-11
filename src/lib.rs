@@ -17,7 +17,7 @@
 //! `CONTRIBUTING.md` for the build, lint, and review workflow.
 
 pub mod ast;
-
+pub mod compile;
 pub mod diagnostics;
 pub mod lexer;
 pub mod parser;

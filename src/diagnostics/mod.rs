@@ -9,7 +9,9 @@
 
 pub mod code;
 pub mod diagnostic;
+pub mod location;
 pub mod span;
 
 pub use diagnostic::{Code, Diagnostic};
+pub use location::{Location, locate};
 pub use span::Span;

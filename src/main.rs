@@ -1,11 +1,13 @@
 //! `yulia` — the Yulia compiler driver.
 //!
-//! Phase 1 driver: it parses command-line arguments and reports the compiler
-//! version. Compilation proper is wired in as the pipeline lands.
+//! Phase 1a driver: it parses command-line arguments and runs the front-end
+//! pipeline (lex, parse, type check, region inference) over the input file,
+//! reporting diagnostics to stderr. Code generation lands in Phase 1b.
 
 use std::ffi::{OsStr, OsString};
 use std::process::ExitCode;
 
+use yulia::diagnostics::locate;
 use yulia::{LICENSE, VERSION};
 
 const USAGE: &str = "\
@@ -45,7 +47,7 @@ fn main() -> ExitCode {
                 eprintln!("yulia: unexpected argument: {}", extra.to_string_lossy());
                 return ExitCode::FAILURE;
             }
-            compile(input)
+            compile_file(input)
         }
         flag => {
             eprintln!("yulia: unknown option: {flag}");
@@ -58,7 +60,7 @@ fn main() -> ExitCode {
 /// Compiles the file at `input`, reporting diagnostics to stderr.
 ///
 /// Returns `ExitCode::FAILURE` when the input cannot be read or is rejected.
-fn compile(input: &OsStr) -> ExitCode {
+fn compile_file(input: &OsStr) -> ExitCode {
     let Ok(source) = std::fs::read_to_string(input) else {
         eprintln!("yulia: cannot read '{}'", input.to_string_lossy());
         return ExitCode::FAILURE;
@@ -67,7 +69,18 @@ fn compile(input: &OsStr) -> ExitCode {
         eprintln!("yulia: empty input: '{}'", input.to_string_lossy());
         return ExitCode::FAILURE;
     }
-    // The pipeline is not wired yet; Phase 1 lands it module by module.
-    eprintln!("yulia: compilation is not implemented yet");
-    ExitCode::FAILURE
+    match yulia::compile::compile(&source) {
+        Ok(_) => ExitCode::SUCCESS,
+        Err(diagnostics) => {
+            let path = input.to_string_lossy();
+            for diagnostic in &diagnostics {
+                let location = locate(&source, diagnostic.span.start);
+                eprintln!(
+                    "{}:{}:{}: error[{}]: {}",
+                    path, location.line, location.column, diagnostic.code.0, diagnostic.message
+                );
+            }
+            ExitCode::FAILURE
+        }
+    }
 }
