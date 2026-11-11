@@ -211,6 +211,7 @@ Architecture decision records live in [`docs/adr/`](docs/adr/):
 | Document | Contents |
 |---|---|
 | [`adr/0001-diagnostic-code-scheme.md`](docs/adr/0001-diagnostic-code-scheme.md) | Diagnostic code scheme (ADR 0001) |
+| [`adr/0002-token-kind-enum-size.md`](docs/adr/0002-token-kind-enum-size.md) | Token kind enum size exception (ADR 0002) |
 
 Operations and runbooks live in [`docs/operations/`](docs/operations/):
 
@@ -231,6 +232,11 @@ Developer runbooks live in [`docs/runbook/`](docs/runbook/):
 See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the development workflow, and
 [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) for the community rules. Security
 reports go through the process in [`SECURITY.md`](SECURITY.md).
+
+Questions and design discussion belong in
+[GitHub Discussions](https://github.com/Miruameli/yulia/discussions);
+defects and feature requests belong in
+[issues](https://github.com/Miruameli/yulia/issues).
 
 ## License
 

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Ask a question / discuss
+    url: https://github.com/Miruameli/yulia/discussions
+    about: Usage questions, design discussion, and ideas — not defects.
+  - name: Security report
+    url: https://github.com/Miruameli/yulia/security/advisories/new
+    about: Report a vulnerability privately (see SECURITY.md).

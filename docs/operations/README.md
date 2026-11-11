@@ -55,6 +55,23 @@ published.
 The repository holds no deployment secrets. CI uses only the implicit
 `GITHUB_TOKEN` (`contents: read`).
 
+## Repository settings
+
+- **Branch protection (`main`):** seven required status checks (Formatting,
+  Clippy, Tests, Build, Dependency audit, Spell check, Codegraph index) and
+  `strict=true` (the branch must be up to date). Verify with
+  `gh api repos/Miruameli/yulia/branches/main/protection` (SOP-GH.1).
+  `enforce_admins` is being enabled (2026-11-11) so that admins also go through
+  a pull request.
+- **Discussions:** enabled — usage questions, design discussion, and ideas
+  belong there, not in issues.
+- **Issue templates:** `.github/ISSUE_TEMPLATE/` (bug report, feature request,
+  documentation); `blank_issues_enabled: false`.
+- **CODEOWNERS:** `.github/CODEOWNERS` — `@Miruameli` owns the repository; the
+  spec and docs paths are called out explicitly.
+- **Labels:** the GitHub defaults plus `spec`, `security`, `tooling`, and
+  `codegen`.
+
 ## Observability
 
 The repository has no deployed service, so there is no runtime metrics

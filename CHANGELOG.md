@@ -42,6 +42,13 @@ development builds are identified by git commit hash
 - `docs/operations/threat-model.md` and `docs/operations/system-model.md`: the
   attacker model, threats, invariants under attack, and coordinated disclosure,
   and the compiler pipeline / crate layout / trust boundaries (SOP-DOC).
+- Phase 1a region inference (`src/region.rs`): the single lexical pass of
+  0.3 §3 — one region per function, every binding attributed to it, O(n)
+  (0.3 §8). The pass emits no diagnostics; the hard part of the model is
+  deferred to Phase 2 (0.3 §4).
+- Repository hygiene: GitHub Discussions enabled, issue templates
+  (`.github/ISSUE_TEMPLATE/`), `.github/CODEOWNERS`, and the project labels
+  `spec`, `security`, `tooling`, and `codegen`.
 
 ### Changed
 
@@ -97,6 +104,8 @@ development builds are identified by git commit hash
 - `docs/specs/2026-11-10-yulia-open-decisions.md` D28 records the CLI driver
   surface (no-args usage, `--help`, `--version`, unknown option, unreadable
   input), closing the spec gap flagged in review.
+- The oversized `src/` modules were split under the 150 SLOC cap (SOP-MOD);
+  `src/lexer/token/kind.rs` is a documented exception (ADR 0002).
 
 ### Fixed
 

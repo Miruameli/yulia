@@ -1,0 +1,9 @@
+# Default owner for the whole repository.
+* @Miruameli
+
+# Specification and documentation are reviewed by the spec owner.
+/docs/ @Miruameli
+*.md @Miruameli
+
+# CI and repository configuration.
+/.github/ @Miruameli
