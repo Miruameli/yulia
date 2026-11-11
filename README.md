@@ -63,7 +63,7 @@ explicitly ([R.1 / R.2](#the-memory-model)).
 | **Lifetime annotations** | None — `pin` is the sole explicit escape hatch |
 | **Implementation** | Rust → LLVM IR (inkwell, Phase 1b) |
 | **License** | MPL-2.0 |
-| **Status** | Phase 0 — specification complete, toolchain on hold |
+| **Status** | Phase 1 — front-end in progress; Phase 0 complete and accepted |
 
 ## Features
 
@@ -167,18 +167,19 @@ CI runs on every push to `main` and on every pull request. The compiler driver
 
 | Phase | Scope | Status |
 |---|---|---|
-| **0** | Language specification | Complete (drafts); exit sign-off pending review |
-| **1a** | Front-end: lexer, parser, AST, type checker, diagnostics | On hold |
-| **1b** | Codegen: LLVM IR via inkwell | On hold |
+| **0** | Language specification | Complete; gate accepted 2026-11-11 |
+| **1a** | Front-end: lexer, parser, AST, type checker, diagnostics | In progress |
+| **1b** | Codegen: LLVM IR via inkwell | Planned (after 1a) |
 | **2** | Region inference for the wider feature set (strings, growable arrays, FFI) | Open decisions D4–D11 |
 | **4** | Benchmark kernels K1–K5 + baseline data | Open (D12) |
 | **5** | Concurrency (threads), SoA, generics, soundness argument | Open (D13–D17) |
 | **6** | Async / await / coroutines | Open (D14) |
 
-Phase 1 is **on hold** until the Phase 0 gate passes strict review and
-theoretical soundness (user directive, 2026-11-10). Formal proofs (D17) and
-the benchmark suite (D12, Phase 4) remain open. The open decisions register is
-the single source of truth for what is still undecided:
+The Phase 0 gate was accepted on 2026-11-11: the specification passed strict
+review and theoretical soundness, so Phase 1 (toolchain) is unblocked and in
+progress. Formal proofs (D17) and the benchmark suite (D12, Phase 4) remain
+open. The open decisions register is the single source of truth for what is
+still undecided:
 [`docs/specs/2026-11-10-yulia-open-decisions.md`](docs/specs/2026-11-10-yulia-open-decisions.md).
 
 ## Documentation

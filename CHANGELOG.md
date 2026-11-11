@@ -75,6 +75,10 @@ development builds are identified by git commit hash
   (`CARGO_BUILD_JOBS=2`) and the test harness to 2 threads (SOP-RESLIM.2 / INV-35).
   The CI `test` job now passes `--test-threads=2` as well: it called `cargo test`
   directly, so the Makefile's bound did not apply to CI.
+- Phase 0 gate accepted (user, 2026-11-11): the specification passed strict
+  review and theoretical soundness, so Phase 1 (toolchain) is unblocked and in
+  progress. `README.md` status and roadmap updated; the earlier "on hold"
+  wording above is superseded.
 
 ### Fixed
 
