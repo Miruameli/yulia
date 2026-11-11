@@ -58,11 +58,14 @@ The repository holds no deployment secrets. CI uses only the implicit
 ## Repository settings
 
 - **Branch protection (`main`):** seven required status checks (Formatting,
-  Clippy, Tests, Build, Dependency audit, Spell check, Codegraph index) and
-  `strict=true` (the branch must be up to date). Verify with
+  Clippy, Tests, Build, Dependency audit, Spell check, Codegraph index),
+  `strict=true` (the branch must be up to date), and `enforce_admins=true` —
+  admins go through a pull request like everyone else. Verify with
   `gh api repos/Miruameli/yulia/branches/main/protection` (SOP-GH.1).
-  `enforce_admins=true` — admins go through a pull request like everyone
-  else, so every change to `main` is reviewed and passes the seven checks.
+  `required_approving_review_count` is **0**: the repository has a single
+  maintainer account, so a required review would deadlock every pull request
+  (an author cannot approve their own). The seven required checks are the gate;
+  review happens through `coord_send` and the pull request thread.
 - **Discussions:** enabled — usage questions, design discussion, and ideas
   belong there, not in issues.
 - **Issue templates:** `.github/ISSUE_TEMPLATE/` (bug report, feature request,
