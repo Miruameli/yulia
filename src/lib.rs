@@ -20,6 +20,7 @@ pub mod ast;
 
 pub mod diagnostics;
 pub mod lexer;
+pub mod parser;
 
 /// The compiler version, taken from `Cargo.toml` at compile time.
 ///

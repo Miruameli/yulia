@@ -154,12 +154,14 @@ pub enum TokenKind {
     Dot,
     /// `..`
     DotDot,
+    /// `->`
+    Arrow,
     /// End of input.
     Eof,
 }
 
 /// A single lexical token: its kind, its source text, and its span.
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Token<'a> {
     /// The lexical category.
     pub kind: TokenKind,

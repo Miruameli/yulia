@@ -9,10 +9,13 @@
 //! Phase 1a: the full lexical grammar is implemented, including keywords
 //! reserved for later phases.
 
+mod kind_name;
+
 mod literal;
 mod scan;
 mod token;
 
+pub(crate) use literal::{decode_char, decode_string};
 pub use token::{Token, TokenKind};
 
 /// Tokenizes Yulia source text (0.1 §2).

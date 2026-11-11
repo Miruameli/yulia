@@ -4,6 +4,9 @@ use yulia::diagnostics::Diagnostic;
 use yulia::lexer::{Lexer, TokenKind};
 
 /// Tokenizes `source` and returns the token kinds and diagnostics.
+///
+/// Shared by every test crate; only the lexer tests use it.
+#[allow(dead_code)]
 pub(crate) fn kinds(source: &str) -> (Vec<TokenKind>, Vec<Diagnostic>) {
     let (tokens, diagnostics) = Lexer::new(source).tokenize();
     (

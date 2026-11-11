@@ -1,8 +1,11 @@
 //! Literal scanning: numbers, characters, and strings (0.1 §2.6).
 
+mod decode;
+
 mod digits;
 mod escape;
 mod text;
+pub(crate) use decode::{decode_char, decode_string};
 
 use crate::diagnostics::Diagnostic;
 use crate::lexer::Lexer;

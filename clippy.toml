@@ -4,11 +4,12 @@
 # MSRV must match `rust-version` in Cargo.toml and the pinned toolchain.
 msrv = "1.99"
 
-# Tests are allowed to unwrap/expect/dbg: asserting on a `Result` is the
-# idiomatic way to write a failing test.
+# Tests are allowed to unwrap/expect/dbg/panic: asserting on a `Result` or an
+# `Option` is the idiomatic way to write a failing test.
 allow-unwrap-in-tests = true
 allow-expect-in-tests = true
 allow-dbg-in-tests = true
+allow-panic-in-tests = true
 
 # Complexity budgets. Deliberately generous for a compiler, where a large
 # match over token kinds or AST nodes is normal; they exist so a genuinely

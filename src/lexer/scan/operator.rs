@@ -14,6 +14,7 @@ const TWO_CHAR: &[(&str, TokenKind)] = &[
     ("&&", TokenKind::AndAnd),
     ("||", TokenKind::OrOr),
     ("..", TokenKind::DotDot),
+    ("->", TokenKind::Arrow),
 ];
 
 /// Single-character operators and delimiters.
