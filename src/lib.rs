@@ -24,3 +24,15 @@ pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 /// The crate's MPL-2.0 license identifier, as recorded in `Cargo.toml`.
 pub const LICENSE: &str = env!("CARGO_PKG_LICENSE");
+
+#[cfg(test)]
+mod tests {
+    use super::LICENSE;
+
+    /// The licence is a recorded project decision (D22, 2026-11-10); it must
+    /// not drift from `Cargo.toml` without a spec change.
+    #[test]
+    fn license_is_mpl_2_0() {
+        assert_eq!(LICENSE, "MPL-2.0");
+    }
+}

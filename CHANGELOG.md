@@ -28,6 +28,8 @@ development builds are identified by git commit hash
     and `.config/nextest.toml`.
 - Minimal compiler crate skeleton (`src/lib.rs`, `src/main.rs`) with a working
   `--help` / `--version` driver.
+- Driver test coverage: every branch of `src/main.rs` is exercised
+  (`tests/driver.rs`), plus a licence-invariant unit test in `src/lib.rs`.
 
 ### Changed
 
