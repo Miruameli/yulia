@@ -79,8 +79,8 @@ Configured in `Cargo.toml` (`[lints]`) and `clippy.toml`.
 ### 4.5 Errors
 
 - The compiler reports errors; it does not panic at the user.
-- Recoverable failures return `Result`; diagnostics carry file, line, and
-  column (`docs/specs/2026-11-09-yulia-error-panic-model.md`).
+- Recoverable failures return `Result`; diagnostics carry file, line, column,
+  and a stable code (`docs/specs/2026-11-09-yulia-error-panic-model.md` §2.1–2.2).
 - Runtime errors abort with a non-zero exit code.
 
 ### 4.6 Module limits
