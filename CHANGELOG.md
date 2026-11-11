@@ -123,6 +123,12 @@ development builds are identified by git commit hash
 - `README.md`: the status badge read "Phase 0 specification" while the status
   table and prose already report Phase 0 complete and Phase 1a in progress.
   The badge now reads "Phase 1a front-end".
+- `docs/specs/2026-11-09-yulia-error-panic-model.md` §2: added §2.1
+  (diagnostic format: `error[<code>]` / `runtime error[<code>]`; exit 1 /
+  abort 134) and §2.2 (the Phase 1 diagnostic catalog, E0101–E0603 and
+  R0101–R0103). `design.md` §R.1, `0.4` §9, and the D2 row in the open
+  decisions register now point at the catalog. Recorded as review-log
+  finding F62.
 - `.editorconfig`: `*.{yml,yaml,json}` now use 2-space indentation, matching
   `.github/workflows/ci.yml`; TOML keeps 4 spaces (`deny.toml`). The previous
   rule lumped YAML in with TOML at 4 spaces.

@@ -29,6 +29,65 @@ There is no exception mechanism. Yulia does not have `try`/`catch`/`throw`. Erro
 
 **Syntax note:** `panic(...)` is a reserved keyword in the 0.1 grammar (§2.5) and is documented in 0.1 §10.1. It is a Phase 2 feature.
 
+### 2.1 Diagnostic format and exit behavior
+
+Compile-time diagnostics are written to stderr as:
+
+```
+<file>:<line>:<col>: error[<code>]: <message>
+```
+
+`<file>` is the source path as given on the command line; `<line>` and `<col>` are 1-based. The compiler exits with status 1. The code is **stable**: a given diagnostic keeps its code across releases (0.9 §4); the message text may change.
+
+Runtime errors are written to stderr as:
+
+```
+<file>:<line>:<col>: runtime error[<code>]: <message>
+```
+
+then the program aborts (`abort()`, SIGABRT/134) with no region cleanup (D2, §4.4).
+
+### 2.2 Phase 1 diagnostic catalog
+
+Codes are grouped by compiler phase. `E` = compile-time error, `R` = runtime error.
+
+| Code | Phase | Diagnostic |
+|---|---|---|
+| E0101 | lexer | unexpected character |
+| E0102 | lexer | unterminated string literal |
+| E0103 | lexer | invalid numeric literal |
+| E0104 | lexer | invalid escape sequence |
+| E0201 | parser | unexpected token |
+| E0202 | parser | unexpected end of file |
+| E0203 | parser | reserved keyword used as an identifier (0.1 §2.5) |
+| E0204 | parser | struct literal is missing fields (0.1 §3.4) |
+| E0205 | parser | empty array literal needs a type annotation (0.1 §3.4) |
+| E0301 | name resolution | undeclared name |
+| E0302 | name resolution | duplicate definition |
+| E0303 | name resolution | unknown type |
+| E0304 | name resolution | assignment to a `const` |
+| E0401 | type checker | type mismatch (expected vs found) |
+| E0402 | type checker | bad operand type for operator |
+| E0403 | type checker | `if`/`while` condition is not `bool` |
+| E0404 | type checker | `for` range bounds are not `int` |
+| E0405 | type checker | call arity mismatch |
+| E0406 | type checker | argument type mismatch |
+| E0407 | type checker | `return` type mismatch |
+| E0408 | type checker | `return` arity vs `void` |
+| E0409 | type checker | index is not `int` |
+| E0410 | type checker | field access on a non-struct |
+| E0411 | type checker | index on a non-array |
+| E0501 | control flow | `break` outside a loop (0.1 §3.3) |
+| E0502 | control flow | `continue` outside a loop (0.1 §3.3) |
+| E0503 | control flow | `return` outside a function (0.1 §3.3) |
+| E0504 | definite assignment | read before assignment (MEM-SAFE-4) |
+| E0601 | program structure | missing `main` |
+| E0602 | program structure | multiple `main` definitions |
+| E0603 | program structure | `main` must be `fn main() -> void` (0.1 §3.6) |
+| R0101 | runtime | array index out of bounds (MEM-SAFE-2, 0.2 §113) |
+| R0102 | runtime | division by zero |
+| R0103 | runtime | integer overflow trap (D2) |
+
 ## 3. Panic semantics
 
 A panic immediately terminates the current function and propagates up the call stack. **(Phase 2+; in Phase 1, panic calls `abort()` — §4.4.)** No further statements in the current function are executed. The panic is not catchable.

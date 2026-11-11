@@ -86,7 +86,7 @@ This is a product-level decision. It is escalated to the user per SOP-HUMAN.
 ## 9. Acceptance / sign-off
 
 - [x] R.1+R.2 recommendation signed off by user (SOP-HUMAN, Q1). Decision: R.1 restrict + R.2 warned escape hatch. Approved 2026-11-10. Escalation Q1-2026-11-09-01 resolved.
-- [ ] Diagnostic naming rule agreed (§6).
+- [x] Diagnostic naming rule agreed — 0.5 §2.1 (format) and §2.2 (Phase 1 catalog).
 - [x] Fallback policy incorporated into 0.3 (region inference spec) — cross-reference verified. Updated 2026-11-10 after Q1 sign-off.
 - [ ] Escape hatch warning text reviewed for user-facing clarity.
 - [ ] Formal proof (Phase 5.4).

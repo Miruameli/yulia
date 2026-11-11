@@ -79,7 +79,7 @@ Mechanically:
 
 The memory-safety guarantee holds for a **decidable subset** of the language. Full region inference for arbitrary imperative programs is not generally decidable (see the design review §2); the language therefore bounds the claim and makes the boundary explicit.
 
-- **R.1 (restrict).** A program that the compiler cannot prove safe is **rejected at compile time**. The diagnostic names the specific rule violated (the naming rule is pending, 0.4 §6). The language's real semantics is this safe subset, not the full grammar.
+- **R.1 (restrict).** A program that the compiler cannot prove safe is **rejected at compile time**. The diagnostic names the specific rule violated (naming rule: 0.5 §2.2). The language's real semantics is this safe subset, not the full grammar.
 - **R.2 (warned escape hatch).** When a future feature cannot be made safe, the value is promoted to a **global region** (never reclaimed) and the compiler emits a **warning**. This is a documented, **unbounded** leak — not a tracing garbage collector. It is an explicit opt-in deviation, never silent. R.2 is reserved for future features; it is not available in Phase 1–2 (0.4 §5).
 - **No stronger inference is claimed.** A novel inference algorithm that removes the escape hatch is not asserted. The claim "compiler-inferred region-based memory, no lifetime annotations" holds within the safe subset; R.2 is a warned deviation from deterministic reclamation.
 
