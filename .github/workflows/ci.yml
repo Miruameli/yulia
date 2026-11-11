@@ -63,7 +63,8 @@ jobs:
       - name: Install pinned toolchain
         run: cargo --version
         timeout-minutes: 5
-      - run: cargo test --workspace --all-features
+      # SOP-RESLIM.2: bound the test harness too; libtest defaults to num_cpus.
+      - run: cargo test --workspace --all-features -- --test-threads=2
         timeout-minutes: 5
 
   build:

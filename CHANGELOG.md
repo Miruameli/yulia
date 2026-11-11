@@ -73,6 +73,8 @@ development builds are identified by git commit hash
   (SOP-RESLIM.2 / INV-35); `test-threads = "num-cpus"` used every core.
 - `Makefile` and CI bound cargo's parallel build jobs to `min(2, nproc/2)`
   (`CARGO_BUILD_JOBS=2`) and the test harness to 2 threads (SOP-RESLIM.2 / INV-35).
+  The CI `test` job now passes `--test-threads=2` as well: it called `cargo test`
+  directly, so the Makefile's bound did not apply to CI.
 
 ### Fixed
 
