@@ -42,7 +42,7 @@ so paths inside a kernel are repo-root-relative.
 
 | id | name | target | phase |
 |---|---|---|---|
-| K1 | matrix multiply, N=1024, float64 | within 5% of C | 4 |
+| K1 | matrix multiply, N=1024, float64 | within 10% of C (5% stretch, spec §3.1) | 4 |
 | K2 | linked list, 1,000,000 nodes | within 10% of C | 4 |
 | K3 | string processing, 10 MB file | within 15% of C | 4 |
 | K4 | region allocation, 1,000,000 × 16-byte structs | ≥ 2× faster than C | 4 |
