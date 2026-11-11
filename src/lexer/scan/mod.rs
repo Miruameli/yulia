@@ -1,6 +1,6 @@
 //! The token loop: `tokenize` and `next_token`.
 
-use crate::diagnostics::diagnostic::code;
+use crate::diagnostics::code;
 use crate::diagnostics::{Diagnostic, Span};
 use crate::lexer::Lexer;
 use crate::lexer::token::{Token, TokenKind};

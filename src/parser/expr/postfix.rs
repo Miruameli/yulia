@@ -1,7 +1,7 @@
 //! Postfix expressions (0.1 §3.4).
 
 use crate::ast::{Expr, ExprKind};
-use crate::diagnostics::diagnostic::code;
+use crate::diagnostics::code;
 use crate::lexer::TokenKind;
 use crate::parser::Parser;
 

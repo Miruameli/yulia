@@ -3,7 +3,7 @@
 mod common;
 
 use common::{assert_clean, kinds};
-use yulia::diagnostics::diagnostic::code;
+use yulia::diagnostics::code;
 use yulia::lexer::TokenKind;
 
 #[test]

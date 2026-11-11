@@ -7,6 +7,7 @@
 //!
 //! The authoritative language specification lives in `docs/specs/`.
 
+pub mod code;
 pub mod diagnostic;
 pub mod span;
 

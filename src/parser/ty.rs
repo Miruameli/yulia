@@ -1,7 +1,7 @@
 //! Type syntax (0.1 §3.2).
 
 use crate::ast::{Type, TypeKind};
-use crate::diagnostics::diagnostic::code;
+use crate::diagnostics::code;
 use crate::lexer::TokenKind;
 use crate::parser::Parser;
 

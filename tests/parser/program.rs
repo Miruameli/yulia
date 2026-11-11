@@ -3,7 +3,7 @@
 use crate::common::assert_clean;
 use crate::{only_fn, parse};
 use yulia::ast::DeclKind;
-use yulia::diagnostics::diagnostic::code;
+use yulia::diagnostics::code;
 
 #[test]
 fn a_full_program_parses() {

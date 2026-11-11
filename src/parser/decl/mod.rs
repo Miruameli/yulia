@@ -3,7 +3,7 @@
 mod func;
 
 use crate::ast::{ConstDecl, Decl, DeclKind, Field, StructDecl, Visibility};
-use crate::diagnostics::diagnostic::code;
+use crate::diagnostics::code;
 use crate::lexer::TokenKind;
 use crate::parser::{Parser, expr, ty};
 

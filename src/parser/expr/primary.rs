@@ -1,7 +1,7 @@
 //! Primary expressions (0.1 §3.4).
 
 use crate::ast::{Expr, ExprKind, FieldInit};
-use crate::diagnostics::diagnostic::code;
+use crate::diagnostics::code;
 use crate::lexer::{Token, TokenKind, decode_char, decode_string};
 use crate::parser::Parser;
 

@@ -1,6 +1,6 @@
 //! Whitespace, comments, and the character cursor.
 
-use crate::diagnostics::diagnostic::code;
+use crate::diagnostics::code;
 use crate::diagnostics::{Diagnostic, Span};
 use crate::lexer::Lexer;
 

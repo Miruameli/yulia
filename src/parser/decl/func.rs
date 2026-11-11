@@ -1,7 +1,7 @@
 //! Function declarations (0.1 §3.1).
 
 use crate::ast::{ExternDecl, FnDecl, Param, Type, TypeKind, Visibility};
-use crate::diagnostics::diagnostic::code;
+use crate::diagnostics::code;
 use crate::lexer::{TokenKind, decode_string};
 use crate::parser::{Parser, stmt, ty};
 

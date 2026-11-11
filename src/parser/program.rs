@@ -1,7 +1,7 @@
 //! Program, module, and import parsing (0.1 §3.1).
 
 use crate::ast::{ImportDecl, ModuleDecl, Program};
-use crate::diagnostics::diagnostic::code;
+use crate::diagnostics::code;
 use crate::lexer::TokenKind;
 use crate::parser::{Parser, decl};
 

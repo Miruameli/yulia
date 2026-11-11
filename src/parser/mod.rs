@@ -10,12 +10,13 @@
 
 mod decl;
 mod expr;
+mod navigation;
 mod program;
 mod stmt;
 mod ty;
 
 use crate::ast::Program;
-use crate::diagnostics::diagnostic::code;
+use crate::diagnostics::code;
 use crate::diagnostics::{Code, Diagnostic, Span};
 use crate::lexer::{Token, TokenKind};
 
@@ -71,6 +72,7 @@ impl<'a> Parser<'a> {
     pub(crate) fn text(&self) -> &'a str {
         self.tokens[self.pos].text
     }
+
     /// Returns `true` if the current token is the identifier `text`.
     pub(crate) fn at_ident(&self, text: &str) -> bool {
         self.at(TokenKind::Ident) && self.text() == text
@@ -85,80 +87,6 @@ impl<'a> Parser<'a> {
             false
         }
     }
-    /// Runs `f` with struct-literal parsing enabled, restoring the previous mode.
-    pub(crate) fn in_struct_scope<T>(&mut self, f: impl FnOnce(&mut Self) -> T) -> T {
-        let previous = self.struct_literals;
-        self.struct_literals = true;
-        let result = f(self);
-        self.struct_literals = previous;
-        result
-    }
-
-    /// Runs `f` with struct-literal parsing disabled, restoring the previous mode.
-    pub(crate) fn without_struct_literals<T>(&mut self, f: impl FnOnce(&mut Self) -> T) -> T {
-        let previous = self.struct_literals;
-        self.struct_literals = false;
-        let result = f(self);
-        self.struct_literals = previous;
-        result
-    }
-
-    /// Returns the span of the current token.
-    pub(crate) fn span(&self) -> Span {
-        self.tokens[self.pos].span
-    }
-
-    /// Returns the span from `start` to the end of the previous token.
-    pub(crate) fn span_since(&self, start: usize) -> Span {
-        Span::new(start, self.prev_end())
-    }
-
-    /// Returns the end offset of the previous token.
-    fn prev_end(&self) -> usize {
-        self.tokens[self.pos.saturating_sub(1)].span.end
-    }
-
-    /// Consumes and returns the current token.
-    pub(crate) fn bump(&mut self) -> Token<'a> {
-        let token = self.tokens[self.pos];
-        if self.pos + 1 < self.tokens.len() {
-            self.pos += 1;
-        }
-        token
-    }
-
-    /// Returns `true` if the current token is `kind`.
-    pub(crate) fn at(&self, kind: TokenKind) -> bool {
-        self.peek() == kind
-    }
-
-    /// Consumes the current token if it is `kind`.
-    pub(crate) fn eat(&mut self, kind: TokenKind) -> bool {
-        if self.at(kind) {
-            self.bump();
-            true
-        } else {
-            false
-        }
-    }
-
-    /// Consumes the current token if it is `kind`, otherwise reports `code`.
-    pub(crate) fn expect(&mut self, kind: TokenKind, code: Code) -> Option<Token<'a>> {
-        if self.at(kind) {
-            Some(self.bump())
-        } else {
-            self.error(code, format!("expected `{}`", kind.name()));
-            None
-        }
-    }
-
-    /// Consumes an identifier, reporting [`code::EXPECTED_IDENT`] when absent.
-    pub(crate) fn expect_ident(&mut self) -> String {
-        match self.expect(TokenKind::Ident, code::EXPECTED_IDENT) {
-            Some(token) => token.text.to_string(),
-            None => String::new(),
-        }
-    }
 
     /// Records a diagnostic at the current token.
     pub(crate) fn error(&mut self, code: Code, message: impl Into<String>) {
@@ -169,12 +97,5 @@ impl<'a> Parser<'a> {
     /// Records a diagnostic at `span`.
     pub(crate) fn error_at(&mut self, span: Span, code: Code, message: impl Into<String>) {
         self.diagnostics.push(Diagnostic::new(code, message, span));
-    }
-
-    /// Skips tokens until one of `stops` or the end of input.
-    pub(crate) fn recover_until(&mut self, stops: &[TokenKind]) {
-        while !self.at(TokenKind::Eof) && !stops.contains(&self.peek()) {
-            self.bump();
-        }
     }
 }

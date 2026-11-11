@@ -1,6 +1,6 @@
 //! Character and string literals (0.1 §2.6).
 
-use crate::diagnostics::diagnostic::code;
+use crate::diagnostics::code;
 use crate::diagnostics::{Diagnostic, Span};
 use crate::lexer::Lexer;
 
