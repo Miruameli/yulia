@@ -205,6 +205,12 @@ The specification lives in [`docs/specs/`](docs/specs/):
 | [`2026-11-10-yulia-open-decisions.md`](docs/specs/2026-11-10-yulia-open-decisions.md) | Open decisions register |
 | [`2026-11-10-yulia-review-log.md`](docs/specs/2026-11-10-yulia-review-log.md) | Review log |
 
+Architecture decision records live in [`docs/adr/`](docs/adr/):
+
+| Document | Contents |
+|---|---|
+| [`adr/0001-diagnostic-code-scheme.md`](docs/adr/0001-diagnostic-code-scheme.md) | Diagnostic code scheme (ADR 0001) |
+
 Operations and runbooks live in [`docs/operations/`](docs/operations/):
 
 | Document | Contents |

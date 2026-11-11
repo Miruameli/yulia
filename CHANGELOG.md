@@ -102,6 +102,10 @@ development builds are identified by git commit hash
   "modules/imports", which was ambiguous — the `module <path>;` header is
   required by 0.1 §3.1 and is IN, while `import` is OUT. Clarified at B's
   request (B implemented the split).
+- `docs/specs/2026-11-09-yulia-grammar-draft.md` §10.7: `import_decl` and
+  multi-module resolution are now listed as Phase 2 (D1); the `module <path>;`
+  header is required and `import` is rejected in Phase 1. `README.md` and
+  `CONTRIBUTING.md` §9 now name `docs/adr/` and `docs/operations/`.
 - `docs/specs/2026-11-09-yulia-error-panic-model.md` §2: removed
   "assertion failure" from the Phase 1 runtime-error triggers — no Phase 1
   construct produces one (0.1 §2.5/§3.3/§10, D1, D2). Recorded as review-log

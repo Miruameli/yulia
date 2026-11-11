@@ -931,6 +931,11 @@ type           ::= ... | "CPtr"
 - Concurrency constructs: `thread::spawn`, `async`, `await` (0.7).
 - Generics (`CPtr<T>`, `Result<T, E>`).
 
+### 10.7 Multi-module programs and imports
+
+`import_decl` and multi-module name resolution are Phase 2 (D1). The
+`module <path>;` header is required in every program (§3.1, §4.5); `import`
+is rejected in Phase 1.
 ---
 
 *This document is a draft. It requires review sign-off before implementation begins (Phase 0 exit criteria).*
