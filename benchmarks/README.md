@@ -24,8 +24,11 @@ capture (output is discarded).
 #!/usr/bin/env bash
 # K1: matrix multiply, N=1024, float64.
 set -euo pipefail
-./target/release/yulia kernels/k1.yl
+./target/release/yulia benchmarks/kernels/k1.yl
 ```
+
+The harness runs each kernel with the repository root as the working directory,
+so paths inside a kernel are repo-root-relative.
 
 ## Rules
 

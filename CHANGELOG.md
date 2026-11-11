@@ -70,6 +70,13 @@ development builds are identified by git commit hash
   (spec 0.8 §4.4), not Phase 1; the phase note now records that K1 requires
   `float` (Phase 2+).
 
+### Fixed
+
+- `benchmarks/README.md` kernel example: the sample invocation used
+  `kernels/k1.yl`, which cannot resolve because the harness runs each kernel
+  with the repository root as the working directory. It now uses
+  `benchmarks/kernels/k1.yl`, and the working-directory rule is stated.
+
 ### Removed
 
 - The previous repository history and `docs/plans/` were lost when the `.git`
