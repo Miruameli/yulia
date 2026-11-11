@@ -154,6 +154,9 @@ fn extra_argument_fails() {
     assert!(err.contains("unexpected"), "stderr: {err}");
 }
 
+/// Pins the pre-Phase-1 stub: a readable input currently fails with a
+/// "not implemented" diagnostic instead of panicking. Replace this test when
+/// the pipeline lands (Phase 1a) — it must then assert real compilation.
 #[test]
 fn readable_input_fails_gracefully_without_panicking() {
     let file = TempFile::new("valid", b"fn main() {}").expect("write temp file");
