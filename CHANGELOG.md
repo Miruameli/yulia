@@ -90,6 +90,10 @@ development builds are identified by git commit hash
   "assertion failure" from the Phase 1 runtime-error triggers — no Phase 1
   construct produces one (0.1 §2.5/§3.3/§10, D1, D2). Recorded as review-log
   finding F56.
+- `docs/specs/2026-11-09-yulia-benchmark-methodology.md` §2.2: the target
+  summary now matches the per-kernel sections §3.1–§3.5 (K1 within 5%, K4 at
+  least 2× faster than C, K5 at least 1.5× faster than rustc) and the stale
+  "(§3.3)" reference is corrected. Recorded as review-log finding F57.
 
 ### Removed
 

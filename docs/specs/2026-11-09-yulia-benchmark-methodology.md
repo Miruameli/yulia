@@ -21,7 +21,7 @@ The baseline is **C** (compiled with `gcc -O2` or `clang -O2`). C is the gold st
 
 ### 2.2 Target
 
-**Yulia must achieve C-class performance (within 10% of C) on K1, K2, K4, and K5, and within 15% on K3 (§3.3).** This is a hard requirement, not an aspiration.
+**Yulia must achieve C-class performance on the K1–K5 kernels (§3.1–§3.5).** The binding requirement is to match C: within 10% on K1 and K2, and within 15% on K3. K4 and K5 are differentiators with their own baselines — K4 must beat C's `malloc`/`free` by at least 2×, and K5 must compile at least 1.5× faster than rustc. This is a hard requirement, not an aspiration.
 
 ### 2.3 Comparison languages
 
