@@ -42,7 +42,7 @@ The baseline is **C** (compiled with `gcc -O2` or `clang -O2`). C is the gold st
 
 **Why:** Tests raw compute throughput and cache efficiency.
 
-**Expected:** Yulia should match C within 5% (SIMD auto-vectorization should be equivalent).
+**Expected:** Yulia should match C within 5% (SIMD auto-vectorization should be equivalent). The binding requirement is 10% (§2.2); 5% is the stretch expectation.
 
 ### 3.2 K2: Linked list traversal (memory-bound)
 

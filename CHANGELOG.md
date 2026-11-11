@@ -97,6 +97,9 @@ development builds are identified by git commit hash
   summary now matches the per-kernel sections §3.1–§3.5 (K1 within 5%, K4 at
   least 2× faster than C, K5 at least 1.5× faster than rustc) and the stale
   "(§3.3)" reference is corrected. Recorded as review-log finding F57.
+- `docs/specs/2026-11-09-yulia-benchmark-methodology.md` §3.1: the K1 entry now
+  states that the binding requirement is 10% (§2.2) and 5% is the stretch
+  expectation, closing the F57 open question (user delegation, 2026-11-11).
 - `.editorconfig`: `*.{yml,yaml,json}` now use 2-space indentation, matching
   `.github/workflows/ci.yml`; TOML keeps 4 spaces (`deny.toml`). The previous
   rule lumped YAML in with TOML at 4 spaces.
