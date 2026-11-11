@@ -30,6 +30,9 @@ development builds are identified by git commit hash
   `--help` / `--version` driver.
 - Driver test coverage: every branch of `src/main.rs` is exercised
   (`tests/driver.rs`), plus a licence-invariant unit test in `src/lib.rs`.
+- `docs/operations/README.md`: the operations runbook — CI jobs and timeouts,
+  resource limits, the OOM response procedure, the release process, and the
+  secrets posture (SOP-DOC).
 
 ### Changed
 
