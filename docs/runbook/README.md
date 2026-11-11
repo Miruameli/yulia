@@ -52,3 +52,8 @@ Heavy commands are bounded (see
 [`docs/operations/README.md`](../operations/README.md) §Resource limits):
 `CARGO_BUILD_JOBS=2`, `--test-threads=2`, and `timeout -k 5` on the Makefile
 targets.
+
+File defects and feature requests in
+[issues](https://github.com/Miruameli/yulia/issues) using a template; take
+questions and design discussion to
+[Discussions](https://github.com/Miruameli/yulia/discussions).

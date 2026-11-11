@@ -142,6 +142,16 @@ Every change receives **two independent review passes** before it is merged.
 - [ ] No secrets or generated files committed.
 - [ ] Specification references are current.
 
+### 8.2 Filing issues and discussions
+
+- Defects and feature requests go to
+  [issues](https://github.com/Miruameli/yulia/issues); use the template that
+  matches (bug report, feature request, documentation).
+- Usage questions, design discussion, and ideas go to
+  [Discussions](https://github.com/Miruameli/yulia/discussions).
+- Security reports go through [SECURITY.md](SECURITY.md), not a public issue.
+- Every `TODO`/`FIXME`/`HACK` must reference a tracked issue (§4.4).
+
 ## 9. Specification documents
 
 - Location: `docs/specs/` (language specification), `docs/adr/` (architecture
