@@ -858,15 +858,15 @@ The following constructs are **not** in this grammar but are reserved for later 
 
 ## 8. Open questions for review
 
-See `docs/specs/2026-11-10-yulia-open-decisions.md` for owner + decision gate.
+See `docs/specs/2026-11-10-yulia-open-decisions.md` for owner + decision gate. Each item below is marked **resolved** (with the deciding document) or **open** (with its register id).
 
-1. **String mutability:** Is `string` immutable (value type, copy-on-write) or mutable (in-place)? This affects the memory model and must be decided in 0.2.
-2. **Array bounds checking:** Compile-time (when provable) + runtime trap, or always runtime? Affects MEM-SAFE-2.
-3. **Integer overflow:** Wraparound (C-style) or trap (Rust-style)? Affects MEM-SAFE and performance.
-4. **Default initialization:** Are variables zero-initialized by default, or must they be explicitly initialized? MEM-SAFE-4 requires no uninitialized reads; the grammar allows `let x: int;` (uninitialized). The type checker must reject reads before assignment.
-5. **Module path separator:** Uses `.` (e.g., `std.io`). Is this consistent with file system paths? The build system must define the mapping.
-6. **Stdlib function overloading:** Program 18 uses `io.println_int` because no overloading is defined. Should the stdlib use type-suffixed names (`println_int`, `println_str`) or support overloading? This is a Phase 2 stdlib design decision.
-7. **Escape analysis integration:** The grammar has no reference/pointer syntax (by design). Escape analysis (0.3a) operates on compiler-internal references. The grammar does not need to change for escape analysis, but the type checker must track region membership.
+1. **String mutability:** Is `string` immutable (value type, copy-on-write) or mutable (in-place)? This affects the memory model and must be decided in 0.2. — **open**, D4 (Phase 2 gate).
+2. **Array bounds checking:** Compile-time (when provable) + runtime trap, or always runtime? — **resolved**: runtime check in Phase 1; compile-time where provable is a Phase 2 optimization (0.2 §113, MEM-SAFE-2).
+3. **Integer overflow:** Wraparound (C-style) or trap (Rust-style)? — **resolved**: trapping (D2).
+4. **Default initialization:** Are variables zero-initialized by default, or must they be explicitly initialized? — **resolved**: no uninitialized reads; reading a `let` before assignment is a compile error (MEM-SAFE-4; see the note on `let` in §3.3).
+5. **Module path separator:** Uses `.` (e.g., `std.io`). Is this consistent with file system paths? The build system must define the mapping. — **open**, decide with the build system (Phase 2).
+6. **Stdlib function overloading:** Program 18 uses `io.println_int` because no overloading is defined. Should the stdlib use type-suffixed names (`println_int`, `println_str`) or support overloading? — **open**, D18 (post-MVP).
+7. **Escape analysis integration:** The grammar has no reference/pointer syntax (by design). Escape analysis (0.3a) operates on compiler-internal references. The grammar does not need to change for escape analysis, but the type checker must track region membership. — **open**, D11 (Phase 2 gate).
 ---
 
 ## 9. Acceptance criteria for 0.1

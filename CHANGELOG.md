@@ -105,6 +105,11 @@ development builds are identified by git commit hash
   swallow the body), so struct-literal parsing is disabled in `if`/`while`
   conditions and `for` range bounds; such literals must be parenthesized.
   Recorded as review-log finding F58 (B's parser implementation, 2026-11-11).
+- `docs/specs/2026-11-09-yulia-grammar-draft.md` §8: the "Open questions" list
+  now marks each item resolved (with the deciding document) or open (with its
+  register id) — array bounds checking, integer overflow, and default
+  initialization were already decided but still listed as open. Recorded as
+  review-log finding F59.
 - `.editorconfig`: `*.{yml,yaml,json}` now use 2-space indentation, matching
   `.github/workflows/ci.yml`; TOML keeps 4 spaces (`deny.toml`). The previous
   rule lumped YAML in with TOML at 4 spaces.
