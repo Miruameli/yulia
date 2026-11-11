@@ -36,6 +36,9 @@ development builds are identified by git commit hash
 - `docs/adr/`: the ADR index and ADR 0001 (diagnostic code scheme) — the
   stage-based `E0xx`/`E1xx`/`E2xx`/`E3xx`/`R0xx` ranges and the `error[<code>]`
   format (SOP-DOC).
+- `docs/runbook/README.md`: the developer runbook — setup, the daily loop,
+  the spec-first workflow, the diagnostic code rule, and commit conventions
+  (SOP-DOC).
 
 ### Changed
 

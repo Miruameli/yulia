@@ -138,6 +138,7 @@ mechanism:
 | `docs/specs/` | The language specification — Phase 0 deliverables 0.1–0.9, 0.3a, design, design review, open decisions, review log |
 | `docs/operations/` | Operations runbook — CI, resource limits, OOM response |
 | `docs/adr/` | Architecture decision records |
+| `docs/runbook/` | Developer runbook — setup, build, test, spec workflow |
 | `.github/workflows/ci.yml` | CI: formatting, clippy, tests, build, dependency audit, spell check, codegraph |
 
 ## Getting started

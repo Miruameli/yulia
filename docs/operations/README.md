@@ -54,3 +54,25 @@ published.
 
 The repository holds no deployment secrets. CI uses only the implicit
 `GITHUB_TOKEN` (`contents: read`).
+
+## Observability
+
+The repository has no deployed service, so there is no runtime metrics
+surface. Build and test health is observed through GitHub Actions:
+`gh run list --branch main --limit 20` (SOP-GH.1). A red run on `main` is the
+signal; the run log is the diagnostic.
+
+## Rollback
+
+- **Commits:** `git revert <sha>` on `main`, then push. History is never
+  rewritten on `main`.
+- **Releases:** a bad tag is deleted and re-cut from the previous green
+  commit; no pre-releases are published (0.9 §3).
+- **CI:** a broken workflow is reverted the same way; `concurrency` cancels
+  superseded runs.
+
+## Deployment and backup
+
+Not applicable: the project ships a compiler crate and its documentation, not
+a deployed service. The git repository (with GitHub as the remote) is the
+backup; there is no state to restore.
