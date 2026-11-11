@@ -71,6 +71,8 @@ development builds are identified by git commit hash
   `float` (Phase 2+).
 - `.config/nextest.toml` bounds test parallelism to `min(2, nproc/2)`
   (SOP-RESLIM.2 / INV-35); `test-threads = "num-cpus"` used every core.
+- `Makefile` and CI bound cargo's parallel build jobs to `min(2, nproc/2)`
+  (`CARGO_BUILD_JOBS=2`) and the test harness to 2 threads (SOP-RESLIM.2 / INV-35).
 
 ### Fixed
 

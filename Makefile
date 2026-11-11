@@ -9,6 +9,9 @@ CARGO ?= cargo
 # Requires GNU coreutils (present on Linux CI; on macOS `brew install coreutils`
 # and pass `TIMEOUT=gtimeout`). Override per invocation, e.g. `make test TIMEOUT=`.
 TIMEOUT ?= timeout -k 5
+# SOP-RESLIM.2: bound cargo's parallel build jobs to min(2, nproc/2).
+CARGO_BUILD_JOBS ?= 2
+export CARGO_BUILD_JOBS
 
 .PHONY: help fmt fmt-check lint test test-nextest bench benchmark coverage codegraph codegraph-sync doc build deny typos ci ci-full clean
 
@@ -26,7 +29,7 @@ lint: ## Run clippy, denying warnings
 	$(TIMEOUT) 600 $(CARGO) clippy --workspace --all-targets --all-features -- -D warnings
 
 test: ## Run the test suite
-	$(TIMEOUT) 900 $(CARGO) test --workspace --all-features
+	$(TIMEOUT) 900 $(CARGO) test --workspace --all-features -- --test-threads=2
 
 test-nextest: ## Run the test suite with cargo-nextest
 	$(TIMEOUT) 900 $(CARGO) nextest run --workspace --all-features

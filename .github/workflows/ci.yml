@@ -14,6 +14,8 @@ concurrency:
 
 env:
   CARGO_TERM_COLOR: always
+  # SOP-RESLIM.2: bound cargo's parallel build jobs to min(2, nproc/2).
+  CARGO_BUILD_JOBS: 2
 
 # The repository's remote is https://github.com/Miruameli/yulia, so these jobs
 # run on every push to `main` and on every pull request.
