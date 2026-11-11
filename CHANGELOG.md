@@ -79,6 +79,9 @@ development builds are identified by git commit hash
   review and theoretical soundness, so Phase 1 (toolchain) is unblocked and in
   progress. `README.md` status and roadmap updated; the earlier "on hold"
   wording above is superseded.
+- `Cargo.toml` package description qualified: it stated "C-class performance,
+  Python-class simplicity" as fact, while `README.md` says the C-class target is
+  not yet measured (0.8 §2.2). It now reads "targeting C-class performance".
 
 ### Fixed
 
