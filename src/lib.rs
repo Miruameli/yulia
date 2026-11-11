@@ -16,6 +16,9 @@
 //! Phase 1 (lexer, parser, types, regions, codegen) is being implemented. See
 //! `CONTRIBUTING.md` for the build, lint, and review workflow.
 
+pub mod diagnostics;
+pub mod lexer;
+
 /// The compiler version, taken from `Cargo.toml` at compile time.
 ///
 /// Yulia follows `SemVer` (`docs/specs/2026-11-09-yulia-versioning-policy.md`);
