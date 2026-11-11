@@ -18,7 +18,7 @@ No `malloc`/`free` for Yulia values.
 [![CI](https://github.com/Miruameli/yulia/actions/workflows/ci.yml/badge.svg)](https://github.com/Miruameli/yulia/actions/workflows/ci.yml)
 [![License: MPL-2.0](https://img.shields.io/badge/license-MPL--2.0-blue.svg)](LICENSE)
 [![Rust 1.99.1](https://img.shields.io/badge/rust-1.99.1-ed4b32.svg)](rust-toolchain.toml)
-[![Status](https://img.shields.io/badge/status-Phase%201a%20front--end-blue.svg)](docs/specs/)
+[![Status](https://img.shields.io/badge/status-Phase%201a%20complete-blue.svg)](docs/specs/)
 
 </div>
 
@@ -160,23 +160,31 @@ make help        # list every target
 | `make build` | Release build |
 | `make benchmark` | Benchmark suite (spec §4.3) |
 | `make ci` | The fast checks CI runs — format, lint, test, build |
-| `make ci-full` | Everything CI runs, locally (needs `cargo-deny`, `typos-cli`) |
+| `make ci-full` | Everything CI runs, locally (needs `cargo-deny`, `typos-cli`, `codegraph`) |
 
-CI runs on every push to `main` and on every pull request. The compiler driver
-(`src/main.rs`) currently supports `--help` and `--version`; the pipeline
-(lexer, parser, type checker, region inference, LLVM codegen) is Phase 1 work.
+CI runs on every push to `main` and on every pull request. The driver
+(`src/main.rs`) runs the front-end pipeline: `yulia <file>.yl` lexes, parses,
+type-checks, and assigns regions, reporting `file:line:col: error[code]:
+message` on stderr and exiting 1 on a rejected program. LLVM codegen is
+Phase 1b.
 
 ## Status and roadmap
 
 | Phase | Scope | Status |
 |---|---|---|
 | **0** | Language specification | Complete; gate accepted 2026-11-11 |
-| **1a** | Front-end: lexer, parser, AST, type checker, diagnostics | In progress |
-| **1b** | Codegen: LLVM IR via inkwell | Planned (after 1a) |
+| **1a** | Front-end: lexer, parser, AST, type checker, region inference, diagnostics, driver | Complete (2026-11-11) |
+| **1b** | Codegen: LLVM IR via inkwell | Planned (next) |
 | **2** | Region inference for the wider feature set (strings, growable arrays, FFI) | Open decisions D4–D11 |
 | **4** | Benchmark kernels K1–K5 + baseline data | Open (D12) |
 | **5** | Concurrency (threads), SoA, generics, soundness argument | Open (D13–D17) |
 | **6** | Async / await / coroutines | Open (D14) |
+
+Phase 1a delivers the whole front end for the Phase 1 subset (`int`, `bool`,
+structs, fixed-size arrays `[T; N]`, functions, and control flow): the lexer,
+parser, AST, type checker, the region-inference pass of 0.3 §3, and the
+diagnostic renderer, all driven by `yulia <file>.yl`. A program inside the
+subset compiles; one outside it is rejected with the subset diagnostic.
 
 The Phase 0 gate was accepted on 2026-11-11: the specification passed strict
 review and theoretical soundness, so Phase 1 (toolchain) is unblocked and in
