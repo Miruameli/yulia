@@ -217,6 +217,14 @@ Operations and runbooks live in [`docs/operations/`](docs/operations/):
 | Document | Contents |
 |---|---|
 | [`operations/README.md`](docs/operations/README.md) | CI, resource limits, OOM response, release, secrets |
+| [`operations/threat-model.md`](docs/operations/threat-model.md) | Attacker model, threats, invariants, disclosure |
+| [`operations/system-model.md`](docs/operations/system-model.md) | Compiler pipeline, crate layout, trust boundaries |
+
+Developer runbooks live in [`docs/runbook/`](docs/runbook/):
+
+| Document | Contents |
+|---|---|
+| [`runbook/README.md`](docs/runbook/README.md) | Setup, daily loop, spec workflow, commit conventions |
 
 ## Contributing
 

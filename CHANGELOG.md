@@ -39,6 +39,9 @@ development builds are identified by git commit hash
 - `docs/runbook/README.md`: the developer runbook — setup, the daily loop,
   the spec-first workflow, the diagnostic code rule, and commit conventions
   (SOP-DOC).
+- `docs/operations/threat-model.md` and `docs/operations/system-model.md`: the
+  attacker model, threats, invariants under attack, and coordinated disclosure,
+  and the compiler pipeline / crate layout / trust boundaries (SOP-DOC).
 
 ### Changed
 
@@ -91,6 +94,9 @@ development builds are identified by git commit hash
 - `Cargo.toml` package description qualified: it stated "C-class performance,
   Python-class simplicity" as fact, while `README.md` says the C-class target is
   not yet measured (0.8 §2.2). It now reads "targeting C-class performance".
+- `docs/specs/2026-11-10-yulia-open-decisions.md` D28 records the CLI driver
+  surface (no-args usage, `--help`, `--version`, unknown option, unreadable
+  input), closing the spec gap flagged in review.
 
 ### Fixed
 

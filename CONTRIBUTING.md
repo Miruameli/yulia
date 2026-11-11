@@ -145,7 +145,8 @@ Every change receives **two independent review passes** before it is merged.
 ## 9. Specification documents
 
 - Location: `docs/specs/` (language specification), `docs/adr/` (architecture
-  decision records), `docs/operations/` (operations runbook).
+  decision records), `docs/operations/` (operations runbook), `docs/runbook/`
+  (developer runbook).
 - Naming: `YYYY-MM-DD-yulia-<slug>.md`.
 - Required header fields: `Date`, `Status`, `Depends on`, `Plan ref`.
 - Every spec ends with an `## N. Acceptance` checklist and, for deliverables
