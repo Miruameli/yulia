@@ -3,123 +3,69 @@
 use crate::lexer::Lexer;
 use crate::lexer::token::TokenKind;
 
+/// Two-character operators and delimiters.
+///
+/// Checked before [`ONE_CHAR`] so that `==` wins over `=`.
+const TWO_CHAR: &[(&str, TokenKind)] = &[
+    ("==", TokenKind::EqEq),
+    ("!=", TokenKind::NotEq),
+    ("<=", TokenKind::Le),
+    (">=", TokenKind::Ge),
+    ("&&", TokenKind::AndAnd),
+    ("||", TokenKind::OrOr),
+    ("..", TokenKind::DotDot),
+];
+
+/// Single-character operators and delimiters.
+const ONE_CHAR: &[(char, TokenKind)] = &[
+    ('+', TokenKind::Plus),
+    ('-', TokenKind::Minus),
+    ('*', TokenKind::Star),
+    ('/', TokenKind::Slash),
+    ('%', TokenKind::Percent),
+    ('<', TokenKind::Lt),
+    ('>', TokenKind::Gt),
+    ('!', TokenKind::Not),
+    ('=', TokenKind::Eq),
+    ('(', TokenKind::LParen),
+    (')', TokenKind::RParen),
+    ('{', TokenKind::LBrace),
+    ('}', TokenKind::RBrace),
+    ('[', TokenKind::LBracket),
+    (']', TokenKind::RBracket),
+    (';', TokenKind::Semi),
+    (',', TokenKind::Comma),
+    (':', TokenKind::Colon),
+    ('.', TokenKind::Dot),
+];
+
 impl Lexer<'_> {
     /// Lexes an operator or delimiter (0.1 §2.5).
     pub(in crate::lexer) fn lex_operator(&mut self) -> Option<TokenKind> {
-        let kind = match self.peek()? {
-            '+' => {
-                self.bump();
-                TokenKind::Plus
-            }
-            '-' => {
-                self.bump();
-                TokenKind::Minus
-            }
-            '*' => {
-                self.bump();
-                TokenKind::Star
-            }
-            '/' => {
-                self.bump();
-                TokenKind::Slash
-            }
-            '%' => {
-                self.bump();
-                TokenKind::Percent
-            }
-            '=' if self.peek_at(1) == Some('=') => {
-                self.bump();
-                self.bump();
-                TokenKind::EqEq
-            }
-            '!' if self.peek_at(1) == Some('=') => {
-                self.bump();
-                self.bump();
-                TokenKind::NotEq
-            }
-            '<' if self.peek_at(1) == Some('=') => {
-                self.bump();
-                self.bump();
-                TokenKind::Le
-            }
-            '>' if self.peek_at(1) == Some('=') => {
-                self.bump();
-                self.bump();
-                TokenKind::Ge
-            }
-            '&' if self.peek_at(1) == Some('&') => {
-                self.bump();
-                self.bump();
-                TokenKind::AndAnd
-            }
-            '|' if self.peek_at(1) == Some('|') => {
-                self.bump();
-                self.bump();
-                TokenKind::OrOr
-            }
-            '<' => {
-                self.bump();
-                TokenKind::Lt
-            }
-            '>' => {
-                self.bump();
-                TokenKind::Gt
-            }
-            '!' => {
-                self.bump();
-                TokenKind::Not
-            }
-            '=' => {
-                self.bump();
-                TokenKind::Eq
-            }
-            '(' => {
-                self.bump();
-                TokenKind::LParen
-            }
-            ')' => {
-                self.bump();
-                TokenKind::RParen
-            }
-            '{' => {
-                self.bump();
-                TokenKind::LBrace
-            }
-            '}' => {
-                self.bump();
-                TokenKind::RBrace
-            }
-            '[' => {
-                self.bump();
-                TokenKind::LBracket
-            }
-            ']' => {
-                self.bump();
-                TokenKind::RBracket
-            }
-            ';' => {
-                self.bump();
-                TokenKind::Semi
-            }
-            ',' => {
-                self.bump();
-                TokenKind::Comma
-            }
-            ':' => {
-                self.bump();
-                TokenKind::Colon
-            }
-            '.' if self.peek_at(1) == Some('.') => {
-                self.bump();
-                self.bump();
-                TokenKind::DotDot
-            }
-            '.' => {
-                self.bump();
-                TokenKind::Dot
-            }
-            _ => return None,
-        };
+        if let Some(kind) = two_char(&self.source[self.pos..]) {
+            self.bump();
+            self.bump();
+            return Some(kind);
+        }
+        let kind = one_char(self.peek()?)?;
+        self.bump();
         Some(kind)
     }
+}
+
+/// Looks up a two-character operator at the start of `rest`.
+fn two_char(rest: &str) -> Option<TokenKind> {
+    let pair = rest.get(..2)?;
+    TWO_CHAR
+        .iter()
+        .find(|(text, _)| *text == pair)
+        .map(|(_, kind)| *kind)
+}
+
+/// Looks up a single-character operator.
+fn one_char(c: char) -> Option<TokenKind> {
+    ONE_CHAR
+        .iter()
+        .find(|(text, _)| *text == c)
+        .map(|(_, kind)| *kind)
 }

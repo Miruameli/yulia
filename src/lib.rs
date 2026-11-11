@@ -16,6 +16,8 @@
 //! Phase 1 (lexer, parser, types, regions, codegen) is being implemented. See
 //! `CONTRIBUTING.md` for the build, lint, and review workflow.
 
+pub mod ast;
+
 pub mod diagnostics;
 pub mod lexer;
 
