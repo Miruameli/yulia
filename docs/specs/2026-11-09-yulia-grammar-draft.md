@@ -231,6 +231,9 @@ expr_stmt       ::= expr ";"
 - `break` and `continue` are only valid inside a `while` or `for` loop. Using them elsewhere is a compile error.
 - `return` with a value is only valid in a function with a non-`void` return type. `return` without a value is only valid in a `void` function. Arity mismatch is a compile error.
 - `return` outside a function is a compile error.
+
+**Note on condition disambiguation:** `if a { }` is ambiguous — `a { }` could read as a struct literal, leaving the `if` without a body. The grammar resolves it by position: in an `if`/`while` condition or a `for` range bound, a `{` begins the branch/loop body, not a struct literal. A struct literal in one of those positions must be parenthesized: `if (p == Point { x: 1, y: 2 }) { ... }`. Struct literals remain available everywhere else, including inside parentheses, array elements, and argument lists.
+
 ### 3.4 Expressions
 
 ```

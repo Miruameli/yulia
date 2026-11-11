@@ -100,6 +100,11 @@ development builds are identified by git commit hash
 - `docs/specs/2026-11-09-yulia-benchmark-methodology.md` §3.1: the K1 entry now
   states that the binding requirement is 10% (§2.2) and 5% is the stretch
   expectation, closing the F57 open question (user delegation, 2026-11-11).
+- `docs/specs/2026-11-09-yulia-grammar-draft.md` §3.3: added a "Note on
+  condition disambiguation" — `if a { }` is ambiguous (a struct literal could
+  swallow the body), so struct-literal parsing is disabled in `if`/`while`
+  conditions and `for` range bounds; such literals must be parenthesized.
+  Recorded as review-log finding F58 (B's parser implementation, 2026-11-11).
 - `.editorconfig`: `*.{yml,yaml,json}` now use 2-space indentation, matching
   `.github/workflows/ci.yml`; TOML keeps 4 spaces (`deny.toml`). The previous
   rule lumped YAML in with TOML at 4 spaces.
