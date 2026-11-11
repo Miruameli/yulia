@@ -203,6 +203,12 @@ The specification lives in [`docs/specs/`](docs/specs/):
 | [`2026-11-10-yulia-open-decisions.md`](docs/specs/2026-11-10-yulia-open-decisions.md) | Open decisions register |
 | [`2026-11-10-yulia-review-log.md`](docs/specs/2026-11-10-yulia-review-log.md) | Review log |
 
+Operations and runbooks live in [`docs/operations/`](docs/operations/):
+
+| Document | Contents |
+|---|---|
+| [`operations/README.md`](docs/operations/README.md) | CI, resource limits, OOM response, release, secrets |
+
 ## Contributing
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the development workflow, and

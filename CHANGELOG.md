@@ -33,6 +33,9 @@ development builds are identified by git commit hash
 - `docs/operations/README.md`: the operations runbook — CI jobs and timeouts,
   resource limits, the OOM response procedure, the release process, and the
   secrets posture (SOP-DOC).
+- `docs/adr/`: the ADR index and ADR 0001 (diagnostic code scheme) — the
+  stage-based `E0xx`/`E1xx`/`E2xx`/`E3xx`/`R0xx` ranges and the `error[<code>]`
+  format (SOP-DOC).
 
 ### Changed
 
