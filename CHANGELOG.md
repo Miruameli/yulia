@@ -97,6 +97,11 @@ development builds are identified by git commit hash
   summary now matches the per-kernel sections §3.1–§3.5 (K1 within 5%, K4 at
   least 2× faster than C, K5 at least 1.5× faster than rustc) and the stale
   "(§3.3)" reference is corrected. Recorded as review-log finding F57.
+- `.editorconfig`: `*.{yml,yaml,json}` now use 2-space indentation, matching
+  `.github/workflows/ci.yml`; TOML keeps 4 spaces (`deny.toml`). The previous
+  rule lumped YAML in with TOML at 4 spaces.
+- `benchmarks/run.sh`: a failing warm-up run now reports the kernel and exits,
+  instead of dying silently under `set -e`.
 
 ### Removed
 

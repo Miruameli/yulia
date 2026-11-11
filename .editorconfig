@@ -14,10 +14,16 @@ indent_size = 4
 [*.rs]
 indent_size = 4
 
-# Data / config formats use 4 spaces, matching `rustfmt.toml` `tab_spaces` and
-# the existing TOML files in this repository.
-[*.{toml,json,yml,yaml}]
+# Data / config formats. TOML uses 4 spaces, matching `rustfmt.toml`
+# `tab_spaces` and the existing TOML files in this repository (e.g.
+# `deny.toml`).
+[*.toml]
 indent_size = 4
+
+# YAML (and JSON, if ever added) use 2 spaces, matching
+# `.github/workflows/ci.yml`.
+[*.{yml,yaml,json}]
+indent_size = 2
 
 # JavaScript / TypeScript tooling, if ever added.
 [*.{js,ts,jsx,tsx}]

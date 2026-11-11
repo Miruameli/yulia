@@ -115,7 +115,10 @@ for kernel in "${kernels[@]}"; do
     fi
 
     for ((i = 0; i < WARMUP; i++)); do
-        timeout -k 5 "$KERNEL_TIMEOUT" bash "$kernel_dir/$kernel.sh" >/dev/null 2>&1
+        if ! timeout -k 5 "$KERNEL_TIMEOUT" bash "$kernel_dir/$kernel.sh" >/dev/null 2>&1; then
+            echo "benchmark: kernel '$kernel' failed or exceeded ${KERNEL_TIMEOUT}s" >&2
+            exit 1
+        fi
     done
 
     samples=()
