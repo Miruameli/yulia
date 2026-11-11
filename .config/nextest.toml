@@ -2,7 +2,8 @@
 # Install: `cargo install cargo-nextest`
 
 [profile.default]
-test-threads = "num-cpus"
+# SOP-RESLIM.2: bound test parallelism to min(2, nproc/2); "num-cpus" used every core.
+test-threads = "2"
 fail-fast = false
 # A test that hangs is killed after two 60s periods rather than stalling CI.
 slow-timeout = { period = "60s", terminate-after = 2 }

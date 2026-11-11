@@ -69,6 +69,8 @@ development builds are identified by git commit hash
 - `benchmarks/README.md` kernel table corrected: K1 is a Phase 4 benchmark
   (spec 0.8 §4.4), not Phase 1; the phase note now records that K1 requires
   `float` (Phase 2+).
+- `.config/nextest.toml` bounds test parallelism to `min(2, nproc/2)`
+  (SOP-RESLIM.2 / INV-35); `test-threads = "num-cpus"` used every core.
 
 ### Fixed
 
