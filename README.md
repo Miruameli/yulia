@@ -18,7 +18,7 @@ No `malloc`/`free` for Yulia values.
 [![CI](https://github.com/Miruameli/yulia/actions/workflows/ci.yml/badge.svg)](https://github.com/Miruameli/yulia/actions/workflows/ci.yml)
 [![License: MPL-2.0](https://img.shields.io/badge/license-MPL--2.0-blue.svg)](LICENSE)
 [![Rust 1.99.1](https://img.shields.io/badge/rust-1.99.1-ed4b32.svg)](rust-toolchain.toml)
-[![Status](https://img.shields.io/badge/status-Phase%200%20specification-yellow.svg)](docs/specs/)
+[![Status](https://img.shields.io/badge/status-Phase%201a%20front--end-blue.svg)](docs/specs/)
 
 </div>
 

@@ -120,6 +120,9 @@ development builds are identified by git commit hash
   rules are now exhaustive for the Phase 1 subset (all binary/unary operators,
   assignment, `[e; N]`, and the statement/declaration forms) instead of the
   previous 9 "selected" rules. Recorded as review-log finding F61.
+- `README.md`: the status badge read "Phase 0 specification" while the status
+  table and prose already report Phase 0 complete and Phase 1a in progress.
+  The badge now reads "Phase 1a front-end".
 - `.editorconfig`: `*.{yml,yaml,json}` now use 2-space indentation, matching
   `.github/workflows/ci.yml`; TOML keeps 4 spaces (`deny.toml`). The previous
   rule lumped YAML in with TOML at 4 spaces.
