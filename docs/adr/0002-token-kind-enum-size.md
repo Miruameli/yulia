@@ -10,11 +10,12 @@
 
 SOP-MOD caps a file at 150 SLOC. `src/lexer/token/kind.rs` holds the
 `TokenKind` enum, which is the closed set of lexical categories defined by the
-grammar: 40 keywords (§2.5), 6 literal forms (§2.6), 15 operators and 13
-delimiters (§2.7), plus `Eof` — 74 variants. The crate denies `missing_docs`, so
+grammar: 39 keywords (§2.5), 6 literal forms (§2.6), 15 operators and 13
+delimiters (§2.7), plus `Eof` — 73 variants. The crate denies `missing_docs`, so
 every variant carries a one-line doc comment giving its exact source spelling.
-The enum is therefore 157 lines: 148 for the documented variants, 3 for the
-`derive`/header/close, and 6 for the module and type documentation.
+The enum is therefore 159 lines: 146 for the documented variants (73 variants
+plus one doc line each), 3 for the derive/header/close, and 10 for the module
+doc, the type doc, the four section comments, and the blank line.
 
 Every other oversized file was split without changing its API. This one cannot
 be: the variants are one closed set, and the lexer, parser, and tests all match
