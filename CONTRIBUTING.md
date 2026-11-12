@@ -142,7 +142,7 @@ gh pr merge <n> --squash --delete-branch
 Fill the pull request template (Summary, Type of change, Checklist,
 Verification). `required_approving_review_count` is 0 because the repository has
 a single maintainer account; the seven checks are the gate, and review happens in
-the pull request thread and over `coord_send`.
+the pull request thread and over `pi_messenger` (`send`/`broadcast`).
 
 ## 8. Review
 
@@ -224,4 +224,4 @@ defect.
   exceeds `KERNEL_TIMEOUT` (default 300 s).
 - Before running anything heavier than the above (a long build, a large test
   run, a network fetch), set a timeout and coordinate with peers on a shared
-  host (`coord_send`). Network calls: 30 s.
+  host (`pi_messenger` `send`). Network calls: 30 s.
