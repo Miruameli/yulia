@@ -90,6 +90,7 @@ fn emit_obj_writes_an_object_file() {
     #[cfg(target_os = "linux")]
     assert!(bytes.starts_with(b"\x7fELF"), "not an ELF object");
 }
+
 #[test]
 fn division_by_zero_aborts_with_r0102() {
     let (exe, compiled) = compile(
