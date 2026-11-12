@@ -15,6 +15,15 @@ development builds are identified by git commit hash
 - `docs/peers/decisions.md`: the v6.0 decisions mirror — the durable audit trail of
   `team.memory` decisions for PR review and human audit (SOP-TEMPLATES.19). v6.0
   replaces the v5.0 `docs/peers/claims.md` with enforced `pi_messenger` reservations.
+- Phase 1b driver CLI (`src/main.rs`): `-o/--output` selects the artifact and
+  `--emit` picks its kind (`exe` default, `obj`, `ir`); without `-o` the driver
+  stays compile-check-only. `exe` writes an object file and links it with `cc`.
+- `src/compile.rs`: the front-end pipeline as a reusable entry point returning
+  the program, its type map, and its region assignment.
+- End-to-end codegen tests (`tests/codegen/`): compile a program to an
+  executable and assert its exit status, plus the R0101/R0102/R0103 runtime
+  abort contract.
+- CI installs LLVM 20 (`.github/actions/install-llvm20/`) for the inkwell build.
 - Repository infrastructure for long-term development:
   - Pinned Rust toolchain (`rust-toolchain.toml`), `rustfmt.toml`,
     `clippy.toml`, and a crate-level lint policy in `Cargo.toml`.

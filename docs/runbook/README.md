@@ -41,6 +41,28 @@ errors, `runtime error[<code>]` for runtime errors. The Phase 1 catalog is
 Add a new code to the catalog and to `src/diagnostics/` in the same change —
 never one without the other.
 
+## Compiling and running a program
+
+```sh
+cargo build --release
+./target/release/yulia hello.yl          # check only; silent on success
+./target/release/yulia hello.yl -o hello # write an object file and link it
+./target/release/yulia hello.yl -o hello.o --emit obj
+./target/release/yulia hello.yl -o hello.ll --emit ir
+```
+
+`-o/--output` selects the artifact; without it the driver only checks the
+program. `--emit` picks the kind (`exe` default, `obj`, `ir`).
+
+## Runtime errors
+
+A program that violates a runtime invariant prints
+`<file>:<line>:<col>: runtime error[<code>]: <message>` on stderr and aborts
+(`abort()`, SIGABRT, exit 134). Phase 1 codes: R0101 array index out of bounds,
+R0102 division by zero, R0103 integer overflow. The catalog is
+[`docs/specs/2026-11-09-yulia-error-panic-model.md`](../specs/2026-11-09-yulia-error-panic-model.md)
+§2.2.
+
 ## Commit conventions
 
 Conventional Commits: subject ≤72 characters, imperative mood. The body

@@ -1,13 +1,18 @@
 //! `yulia` — the Yulia compiler driver.
 //!
-//! Phase 1a driver: it parses command-line arguments and runs the front-end
-//! pipeline (lex, parse, type check, region inference) over the input file,
-//! reporting diagnostics to stderr. Code generation lands in Phase 1b.
+//! Phase 1b driver: it parses command-line arguments, runs the front-end
+//! pipeline (lex, parse, type check, region inference) and, when an output
+//! path is given, lowers the accepted program through the LLVM code generator
+//! (`src/codegen`). With no output path it stays a compile-check-only tool.
 
-use std::ffi::{OsStr, OsString};
-use std::process::ExitCode;
+use std::ffi::OsString;
+use std::path::{Path, PathBuf};
+use std::process::{Command, ExitCode};
 
-use yulia::diagnostics::locate;
+use inkwell::context::Context;
+use yulia::codegen;
+use yulia::compile::Compilation;
+use yulia::diagnostics::{Diagnostic, locate};
 use yulia::{LICENSE, VERSION};
 
 const USAGE: &str = "\
@@ -17,51 +22,129 @@ Arguments:
   [INPUT]  Yulia source file to compile
 
 Options:
-  -h, --help       Print help
-  -V, --version    Print version
+  -h, --help           Print help
+  -V, --version        Print version
+  -o, --output <FILE>  Write the compiled artifact to FILE
+      --emit <KIND>    Artifact kind: exe (default), obj, or ir
 ";
+
+/// The artifact kind selected by `--emit`.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+enum EmitKind {
+    /// Write an object file.
+    Obj,
+    /// Write LLVM IR.
+    Ir,
+    /// Link an executable.
+    #[default]
+    Exe,
+}
+
+/// The parsed command line.
+#[derive(Debug)]
+struct Options {
+    /// The input source file.
+    input: Option<OsString>,
+    /// The artifact to write; `None` keeps compile-check-only behaviour.
+    output: Option<OsString>,
+    /// The artifact kind.
+    emit: EmitKind,
+}
+
+/// The outcome of parsing the command line.
+#[derive(Debug)]
+enum Parsed {
+    /// `--help` was given.
+    Help,
+    /// `--version` was given.
+    Version,
+    /// The driver should run.
+    Run(Options),
+}
 
 fn main() -> ExitCode {
     // `args_os`, not `args`: a non-UTF-8 argument must be reported, not
     // panicked on.
     let args: Vec<OsString> = std::env::args_os().skip(1).collect();
-
-    let Some(input) = args.first() else {
-        print!("{USAGE}");
-        return ExitCode::SUCCESS;
-    };
-
-    // Flags are matched on the lossy text; the original `OsStr` is kept for the
-    // input path so a non-UTF-8 filename still reaches the filesystem intact.
-    match input.to_string_lossy().as_ref() {
-        "-h" | "--help" => {
+    match parse_args(&args) {
+        Ok(Parsed::Help) => {
             print!("{USAGE}");
             ExitCode::SUCCESS
         }
-        "-V" | "--version" => {
+        Ok(Parsed::Version) => {
             println!("yulia {VERSION} (license: {LICENSE})");
             ExitCode::SUCCESS
         }
-        flag if !flag.starts_with('-') => {
-            if let Some(extra) = args.get(1) {
-                eprintln!("yulia: unexpected argument: {}", extra.to_string_lossy());
-                return ExitCode::FAILURE;
-            }
-            compile_file(input)
-        }
-        flag => {
-            eprintln!("yulia: unknown option: {flag}");
+        Ok(Parsed::Run(options)) => run(options),
+        Err(message) => {
+            eprintln!("yulia: {message}");
             eprintln!("try 'yulia --help'");
             ExitCode::FAILURE
         }
     }
 }
 
-/// Compiles the file at `input`, reporting diagnostics to stderr.
-///
-/// Returns `ExitCode::FAILURE` when the input cannot be read or is rejected.
-fn compile_file(input: &OsStr) -> ExitCode {
-    let Ok(source) = std::fs::read_to_string(input) else {
+/// Parses the command line, reporting the first problem as a message.
+fn parse_args(args: &[OsString]) -> Result<Parsed, String> {
+    let mut options = Options {
+        input: None,
+        output: None,
+        emit: EmitKind::default(),
+    };
+    let mut index = 0;
+    while index < args.len() {
+        let arg = args[index].to_string_lossy();
+        match arg.as_ref() {
+            "-h" | "--help" => return Ok(Parsed::Help),
+            "-V" | "--version" => return Ok(Parsed::Version),
+            "-o" | "--output" => {
+                index += 1;
+                let value = args
+                    .get(index)
+                    .ok_or_else(|| format!("missing value for {arg}"))?;
+                options.output = Some(value.clone());
+            }
+            "--emit" => {
+                index += 1;
+                let value = args
+                    .get(index)
+                    .ok_or_else(|| "missing value for --emit".to_string())?;
+                options.emit = parse_emit(&value.to_string_lossy())?;
+            }
+            _ if arg.starts_with('-') => return Err(format!("unknown option: {arg}")),
+            _ => {
+                if options.input.is_some() {
+                    return Err(format!("unexpected argument: {arg}"));
+                }
+                options.input = Some(args[index].clone());
+            }
+        }
+        index += 1;
+    }
+    Ok(Parsed::Run(options))
+}
+
+/// Parses the `--emit` value.
+fn parse_emit(value: &str) -> Result<EmitKind, String> {
+    match value {
+        "exe" => Ok(EmitKind::Exe),
+        "obj" => Ok(EmitKind::Obj),
+        "ir" => Ok(EmitKind::Ir),
+        other => Err(format!(
+            "unknown emit kind: {other} (expected exe, obj, or ir)"
+        )),
+    }
+}
+
+/// Compiles the input file, then writes the requested artifact.
+fn run(options: Options) -> ExitCode {
+    let Some(input) = options.input else {
+        print!("{USAGE}");
+        return ExitCode::SUCCESS;
+    };
+    // The original `OsStr` is kept for the input path so a non-UTF-8 filename
+    // still reaches the filesystem intact.
+    let Ok(source) = std::fs::read_to_string(&input) else {
         eprintln!("yulia: cannot read '{}'", input.to_string_lossy());
         return ExitCode::FAILURE;
     };
@@ -69,18 +152,83 @@ fn compile_file(input: &OsStr) -> ExitCode {
         eprintln!("yulia: empty input: '{}'", input.to_string_lossy());
         return ExitCode::FAILURE;
     }
-    match yulia::compile::compile(&source) {
-        Ok(_) => ExitCode::SUCCESS,
+    let compilation = match yulia::compile::compile(&source) {
+        Ok(compilation) => compilation,
         Err(diagnostics) => {
-            let path = input.to_string_lossy();
-            for diagnostic in &diagnostics {
-                let location = locate(&source, diagnostic.span.start);
-                eprintln!(
-                    "{}:{}:{}: error[{}]: {}",
-                    path, location.line, location.column, diagnostic.code.0, diagnostic.message
-                );
-            }
+            report(&source, &input.to_string_lossy(), &diagnostics);
+            return ExitCode::FAILURE;
+        }
+    };
+    let Some(output) = options.output else {
+        return ExitCode::SUCCESS;
+    };
+    emit(&compilation, Path::new(&output), options.emit)
+}
+
+/// Prints every diagnostic as `file:line:col: error[code]: message`.
+fn report(source: &str, path: &str, diagnostics: &[Diagnostic]) {
+    for diagnostic in diagnostics {
+        let location = locate(source, diagnostic.span.start);
+        eprintln!(
+            "{}:{}:{}: error[{}]: {}",
+            path, location.line, location.column, diagnostic.code.0, diagnostic.message
+        );
+    }
+}
+
+/// Lowers `compilation` and writes the artifact selected by `emit`.
+fn emit(compilation: &Compilation, output: &Path, emit: EmitKind) -> ExitCode {
+    let context = Context::create();
+    let module = match codegen::generate(
+        &context,
+        &compilation.program,
+        &compilation.types,
+        &compilation.regions,
+    ) {
+        Ok(module) => module,
+        Err(error) => {
+            eprintln!("yulia: codegen failed: {error}");
+            return ExitCode::FAILURE;
+        }
+    };
+    let result = match emit {
+        EmitKind::Ir => codegen::write_ir(&module, output).map_err(|error| error.to_string()),
+        EmitKind::Obj => codegen::write_object(&module, output).map_err(|error| error.to_string()),
+        EmitKind::Exe => {
+            let object = object_path();
+            let result = match codegen::write_object(&module, &object) {
+                Ok(()) => link(&object, output),
+                Err(error) => Err(error.to_string()),
+            };
+            let _ = std::fs::remove_file(&object);
+            result
+        }
+    };
+    match result {
+        Ok(()) => ExitCode::SUCCESS,
+        Err(message) => {
+            eprintln!("yulia: {message}");
             ExitCode::FAILURE
         }
     }
+}
+
+/// Links an object file into an executable with `cc`.
+fn link(object: &Path, output: &Path) -> Result<(), String> {
+    let status = Command::new("cc")
+        .arg(object)
+        .arg("-o")
+        .arg(output)
+        .status()
+        .map_err(|error| format!("cannot run the linker 'cc': {error}"))?;
+    if status.success() {
+        Ok(())
+    } else {
+        Err(format!("linker failed: {status}"))
+    }
+}
+
+/// A unique temporary object path for the link step.
+fn object_path() -> PathBuf {
+    std::env::temp_dir().join(format!("yulia-{}.o", std::process::id()))
 }

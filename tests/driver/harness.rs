@@ -16,8 +16,10 @@ Arguments:
   [INPUT]  Yulia source file to compile
 
 Options:
-  -h, --help       Print help
-  -V, --version    Print version
+  -h, --help           Print help
+  -V, --version        Print version
+  -o, --output <FILE>  Write the compiled artifact to FILE
+      --emit <KIND>    Artifact kind: exe (default), obj, or ir
 ";
 
 /// Runs the driver with `args`.
