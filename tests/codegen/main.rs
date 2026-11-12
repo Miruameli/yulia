@@ -75,6 +75,21 @@ fn emit_ir_writes_llvm_ir() {
         ir.chars().take(400).collect::<String>()
     );
 }
+
+#[test]
+fn emit_obj_writes_an_object_file() {
+    let (artifact, compiled) =
+        compile_with("obj", SUCCESS, &["--emit", "obj"]).expect("spawn yulia");
+    assert!(
+        compiled.status.success(),
+        "compile failed: {}",
+        stderr(&compiled)
+    );
+    let bytes = std::fs::read(artifact.path()).expect("read the object file");
+    assert!(!bytes.is_empty(), "the object file is empty");
+    #[cfg(target_os = "linux")]
+    assert!(bytes.starts_with(b"\x7fELF"), "not an ELF object");
+}
 #[test]
 fn division_by_zero_aborts_with_r0102() {
     let (exe, compiled) = compile(
