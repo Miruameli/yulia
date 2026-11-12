@@ -7,7 +7,7 @@
 
 mod harness;
 
-use harness::{assert_aborted, compile, stderr, stdout};
+use harness::{assert_aborted, compile, compile_with, stderr, stdout};
 
 /// A program whose `main` returns normally.
 const SUCCESS: &str = r"module app.main;
@@ -60,6 +60,21 @@ fn main() -> void {
     assert!(err.contains("runtime error[R0101]"), "stderr: {err}");
 }
 
+#[test]
+fn emit_ir_writes_llvm_ir() {
+    let (artifact, compiled) = compile_with("ir", SUCCESS, &["--emit", "ir"]).expect("spawn yulia");
+    assert!(
+        compiled.status.success(),
+        "compile failed: {}",
+        stderr(&compiled)
+    );
+    let ir = std::fs::read_to_string(artifact.path()).expect("read the IR");
+    assert!(
+        ir.contains("define i32 @main()"),
+        "unexpected IR: {}",
+        ir.chars().take(400).collect::<String>()
+    );
+}
 #[test]
 fn division_by_zero_aborts_with_r0102() {
     let (exe, compiled) = compile(
