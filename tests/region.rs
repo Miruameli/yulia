@@ -1,4 +1,4 @@
-//! Region inference tests (0.7 §3).
+//! Region inference tests (0.3 §3).
 //!
 //! Phase 1 is by value with no references, so the whole model reduces to one
 //! rule: a binding lives in its enclosing function's region. These tests pin
