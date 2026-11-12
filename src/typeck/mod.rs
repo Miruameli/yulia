@@ -20,6 +20,29 @@ use crate::diagnostics::{Code, Diagnostic, Span};
 pub(crate) use ty::compatible;
 pub use ty::{FieldSig, FnSig, ResolveError, StructSig, Ty};
 
+/// The resolved type of every expression and type annotation (0.2 §6).
+///
+/// The code generator consumes this map so it never re-derives a type: each
+/// expression's [`Ty`] is recorded as the checker resolves it, and each type
+/// annotation is recorded under its own [`Span`].
+#[derive(Debug, Clone, Default)]
+pub struct TypeMap {
+    types: HashMap<Span, Ty>,
+}
+
+impl TypeMap {
+    /// Returns the resolved type recorded at `span`.
+    #[must_use]
+    pub fn ty(&self, span: Span) -> Option<&Ty> {
+        self.types.get(&span)
+    }
+
+    /// Records `ty` at `span`.
+    pub(crate) fn insert(&mut self, span: Span, ty: Ty) {
+        self.types.insert(span, ty);
+    }
+}
+
 /// Type checks a whole program.
 #[derive(Debug)]
 pub struct Checker<'a> {
@@ -31,6 +54,7 @@ pub struct Checker<'a> {
     scopes: Vec<HashMap<String, VarState>>,
     ret: Ty,
     loops: usize,
+    types: TypeMap,
 }
 
 /// A local binding and its definite-assignment state.
@@ -53,15 +77,25 @@ impl<'a> Checker<'a> {
             scopes: Vec::new(),
             ret: Ty::Void,
             loops: 0,
+            types: TypeMap::default(),
         }
     }
 
     /// Checks the program and returns its diagnostics.
-    pub fn check(mut self) -> Vec<Diagnostic> {
+    ///
+    /// The checker is borrowed rather than consumed so the caller can read the
+    /// resolved [`TypeMap`] afterwards via [`Checker::types`].
+    pub fn check(&mut self) -> Vec<Diagnostic> {
         let program = self.program;
-        decl::collect(&mut self, program);
-        decl::check(&mut self, program);
-        self.diagnostics
+        decl::collect(self, program);
+        decl::check(self, program);
+        std::mem::take(&mut self.diagnostics)
+    }
+
+    /// Returns the resolved type of every expression and type annotation.
+    #[must_use]
+    pub fn types(&self) -> &TypeMap {
+        &self.types
     }
 
     /// Reports a diagnostic at `span`.
@@ -69,9 +103,14 @@ impl<'a> Checker<'a> {
         self.diagnostics.push(Diagnostic::new(code, message, span));
     }
 
+    /// Records the resolved type of `span`.
+    pub(crate) fn record(&mut self, span: Span, ty: Ty) {
+        self.types.insert(span, ty);
+    }
+
     /// Resolves a type annotation, reporting why it failed.
     pub(crate) fn resolve(&mut self, ty: &Type) -> Ty {
-        match Ty::resolve(ty, &self.structs) {
+        let resolved = match Ty::resolve(ty, &self.structs) {
             Ok(ty) => ty,
             Err(ResolveError::Unknown(name)) => {
                 self.error(
@@ -97,6 +136,8 @@ impl<'a> Checker<'a> {
                 );
                 Ty::Error
             }
-        }
+        };
+        self.types.insert(ty.span, resolved.clone());
+        resolved
     }
 }
