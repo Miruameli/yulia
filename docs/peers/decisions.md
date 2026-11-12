@@ -20,6 +20,19 @@ Format per entry:
 
 ---
 
+## 2026-11-12 18:05 — SageBear
+
+- **Timestamp (UTC):** 2026-11-12 18:05
+- **Author:** SageBear
+- **Type:** decision
+- **Status:** agreed
+- **Affected agents:** SageBear, NiceArrow, HappyHawk, DarkStorm
+- **Decision:** GHOP compliance applied (PR #12, merge commit 80b1e3d): added `.github/dependabot.yml` (weekly Cargo + GitHub Actions version updates), set squash-only merge options (`allow_merge_commit=false`, `allow_rebase_merge=false`), `delete_branch_on_merge=true`, and enabled Dependabot security updates; `docs/operations/README.md` §Repository settings records both. Deleted the stale branches `docs/peers-v5-scaffold` (superseded by PR #9) and `chore/v4-repo-compliance` (already in main). Merged Dependabot PR #13 (actions/checkout 4.2.2 -> 7.0.1, merge commit 6a16aaa). Two corrections to the earlier scan: `required_approving_review_count=0` and `require_code_owner_reviews=false` are deliberate (single maintainer account; documented in the runbook), and `allowed_actions=all` is not a v6.0 requirement. Remaining: wiki is ON (SOP-GHOP.1 says disable) — pending the human owner.
+- **Evidence:** `gh pr view 12` (merged, 80b1e3d); `gh api repos/Miruameli/yulia` (merge settings + `security_and_analysis.dependabot_security_updates.status=enabled`); `git push origin --delete docs/peers-v5-scaffold chore/v4-repo-compliance`; `gh pr view 13` (merged, 6a16aaa); `docs/operations/README.md` §Repository settings.
+- **Version marker:** —
+- **team.memory entry:** "GHOP compliance (SageBear, 2026-11-12 18:00 UTC)"
+- **Supersedes / superseded by:** —
+
 ## 2026-11-12 17:18 — SageBear
 
 - **Timestamp (UTC):** 2026-11-12 17:18
