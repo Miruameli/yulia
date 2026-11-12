@@ -16,6 +16,7 @@ mod scan;
 mod token;
 
 pub(crate) use literal::{decode_char, decode_string};
+pub use scan::is_keyword_text;
 pub use token::{Token, TokenKind};
 
 /// Tokenizes Yulia source text (0.1 §2).

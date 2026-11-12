@@ -69,6 +69,15 @@ fn keyword(text: &str) -> Option<TokenKind> {
         .map(|(_, kind)| *kind)
 }
 
+/// Returns `true` if `text` is a reserved keyword (0.1 §2.5).
+///
+/// The parser uses this to accept a keyword as a module-path component, which
+/// 0.1 §4.2 permits (`import std.string as str;`).
+#[must_use]
+pub fn is_keyword_text(text: &str) -> bool {
+    keyword(text).is_some()
+}
+
 /// Returns `true` if `c` can start an identifier (0.1 §2.4).
 pub(in crate::lexer) fn is_ident_start(c: char) -> bool {
     c == '_' || c.is_alphabetic()

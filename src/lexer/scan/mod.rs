@@ -9,6 +9,8 @@ mod ident;
 mod operator;
 mod trivia;
 
+pub use ident::is_keyword_text;
+
 impl<'a> Lexer<'a> {
     /// Creates a lexer over `source`.
     #[must_use]

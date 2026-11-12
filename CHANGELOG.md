@@ -46,6 +46,13 @@ development builds are identified by git commit hash
   0.3 §3 — one region per function, every binding attributed to it, O(n)
   (0.3 §8). The pass emits no diagnostics; the hard part of the model is
   deferred to Phase 2 (0.3 §4).
+- The front-end pipeline is wired into the driver (`src/compile.rs`): lex ->
+  parse -> type check -> region inference, stopping at the first stage that
+  reports a diagnostic. `src/main.rs` renders `file:line:col: error[code]:
+  message` (0.5 §2.1) on stderr and exits 1; a clean compile is silent.
+- End-to-end tests over the 24 illustrative programs of 0.1 §6
+  (`tests/programs.rs`): every program inside the Phase 1 subset must compile,
+  and every one outside it must be rejected with the subset diagnostic.
 - Repository hygiene: GitHub Discussions enabled, issue templates
   (`.github/ISSUE_TEMPLATE/`), `.github/CODEOWNERS`, and the project labels
   `spec`, `security`, `tooling`, and `codegen`.
@@ -109,6 +116,11 @@ development builds are identified by git commit hash
 
 ### Fixed
 
+- The parser rejected a reserved keyword as a module-path component, so the
+  spec's own example `import std.string as str;` (0.1 §4.2) failed with E102
+  instead of reaching the type checker's E214. `parse_module_path` now accepts
+  `IDENT` or a keyword per component and reports E122 (missing `as`) when an
+  import ends in a keyword without an alias.
 - `benchmarks/README.md` kernel example: the sample invocation used
   `kernels/k1.yl`, which cannot resolve because the harness runs each kernel
   with the repository root as the working directory. It now uses
