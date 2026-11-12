@@ -59,6 +59,11 @@ development builds are identified by git commit hash
 
 ### Changed
 
+- `KONTRAK.md` updated from AI Operating Contract v3.9 to v4.0
+  (human-supplied). v4.0 adds INV-36/37/38 (GHOP / TOOL / TEMPLATES
+  compliance), the expanded SOP-GHOP (§12), new SOP-TOOL (§13), new
+  SOP-TEMPLATES (§14), §50 verification commands, and §59 examples.
+
 - The toolchain implementation language is Rust with an LLVM backend
   (user decision, 2026-11-10). `docs/specs/2026-11-09-yulia-design.md`
   §Constraints, §Toolchain, and §Restrictions and fallback now state Rust,
