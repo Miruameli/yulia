@@ -124,6 +124,26 @@ Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`,
 
 Never commit secrets, credentials, or generated artifacts.
 
+### 7.1 Pull request workflow
+
+`main` is protected: seven required status checks, `strict=true`, and
+`enforce_admins=true`. Direct pushes to `main` are rejected.
+
+```sh
+git checkout -b <branch>
+git add <explicit paths>          # never `git add -A`
+git commit -m '<type>(<scope>): <subject>'
+git push -u origin <branch>
+gh pr create --base main --head <branch> --title '...' --body '...'
+# wait for the seven checks, then:
+gh pr merge <n> --squash --delete-branch
+```
+
+Fill the pull request template (Summary, Type of change, Checklist,
+Verification). `required_approving_review_count` is 0 because the repository has
+a single maintainer account; the seven checks are the gate, and review happens in
+the pull request thread and over `coord_send`.
+
 ## 8. Review
 
 Every change receives **two independent review passes** before it is merged.
