@@ -12,6 +12,9 @@ development builds are identified by git commit hash
 
 ### Added
 
+- `docs/peers/decisions.md`: the v6.0 decisions mirror — the durable audit trail of
+  `team.memory` decisions for PR review and human audit (SOP-TEMPLATES.19). v6.0
+  replaces the v5.0 `docs/peers/claims.md` with enforced `pi_messenger` reservations.
 - Repository infrastructure for long-term development:
   - Pinned Rust toolchain (`rust-toolchain.toml`), `rustfmt.toml`,
     `clippy.toml`, and a crate-level lint policy in `Cargo.toml`.
