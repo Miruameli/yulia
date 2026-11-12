@@ -1,4 +1,4 @@
-//! Region inference (0.7 §3).
+//! Region inference (0.3 §3).
 //!
 //! Phase 1 has no pointers or references: every value is passed by value, so
 //! each local's region is its enclosing function's region, and each call gets a
@@ -8,11 +8,11 @@
 //!
 //! Rule 3.1's interprocedural mutation proof — the pass-by-value optimization —
 //! is a separate obligation and is not part of this walk. The hard part of the
-//! model is deferred to Phase 2 (0.7 §4).
+//! model is deferred to Phase 2 (0.3 §4).
 
 use crate::ast::{Block, DeclKind, ElseBranch, Program, Stmt, StmtKind};
 
-/// A function-bound allocation arena (0.7 §2.1).
+/// A function-bound allocation arena (0.3 §2.1).
 ///
 /// A region is created on function entry and reclaimed on return, so a region
 /// is identified by the function that owns it.

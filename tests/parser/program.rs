@@ -61,3 +61,28 @@ fn empty_program_reports_missing_module() {
     assert_eq!(diags[0].code, code::EXPECTED_MODULE);
     assert_eq!(program.decls.len(), 0);
 }
+
+#[test]
+fn a_keyword_can_be_a_module_path_component() {
+    let (program, diags) = parse("module app.main;\nimport std.string as str;\nfn main() { }");
+    assert_clean(&diags);
+    assert_eq!(program.imports.len(), 1);
+    assert_eq!(program.imports[0].path.join("."), "std.string");
+    assert_eq!(program.imports[0].alias.as_deref(), Some("str"));
+}
+
+#[test]
+fn an_import_ending_in_a_keyword_requires_an_alias() {
+    let (program, diags) = parse("module app.main;\nimport std.string;\nfn main() { }");
+    assert_eq!(diags.len(), 1);
+    assert_eq!(diags[0].code, code::EXPECTED_AS);
+    assert_eq!(program.imports[0].path.join("."), "std.string");
+    assert!(program.imports[0].alias.is_none());
+}
+
+#[test]
+fn a_keyword_module_declaration_parses() {
+    let (program, diags) = parse("module app.string;\nfn main() { }");
+    assert_clean(&diags);
+    assert_eq!(program.module.path.join("."), "app.string");
+}
