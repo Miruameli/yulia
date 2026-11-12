@@ -6,8 +6,12 @@ How to work on the Yulia compiler: setup, the daily loop, and the spec workflow.
 
 1. Install the pinned toolchain — `rustup` reads `rust-toolchain.toml` and
    installs the pinned Rust automatically on the first `cargo` invocation.
-2. `cargo build` — the crate is `yulia` (see `Cargo.toml`).
-3. `cargo test` — unit tests plus the integration tests in `tests/`.
+2. Install LLVM 20 — the Phase 1b backend links through inkwell, which needs
+   `llvm-config`. CI installs it with `.github/actions/install-llvm20/`;
+   locally, `sudo apt-get install llvm-20-dev` (Debian/Ubuntu) and export
+   `LLVM_SYS_20_PREFIX` if it is not on the default path.
+3. `cargo build` — the crate is `yulia` (see `Cargo.toml`).
+4. `cargo test` — unit tests plus the integration tests in `tests/`.
 
 `make` wraps the common targets; `make help` lists them.
 
