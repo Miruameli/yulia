@@ -122,6 +122,13 @@ development builds are identified by git commit hash
   input), closing the spec gap flagged in review.
 - The oversized `src/` modules were split under the 150 SLOC cap (SOP-MOD);
   `src/lexer/token/kind.rs` is a documented exception (ADR 0002).
+- `KONTRAK.md` updated from AI Operating Contract v4.0 to v6.0
+  (human-supplied, 2026-11-12). v6.0 moves coordination from the unmounted
+  `coord_*` tools to `pi-messenger` (`join`/`list`/`feed`/`send`/`broadcast`/
+  `reserve`/`release`/`team.memory`) and adds INV-39/40/41 (presence check
+  before send, interrupt cost, enforced reservations), SOP-COMMS.8 (pi-messenger
+  addressing discipline), SOP-TOOL.8, and SOP-TEMPLATES.18/19 (team memory and
+  the decisions mirror).
 
 ### Fixed
 
