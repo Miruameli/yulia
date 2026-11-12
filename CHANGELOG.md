@@ -64,6 +64,10 @@ development builds are identified by git commit hash
   compliance), the expanded SOP-GHOP (§12), new SOP-TOOL (§13), new
   SOP-TEMPLATES (§14), §50 verification commands, and §59 examples.
 
+- `src/region.rs` split into `src/region/mod.rs` (types and module doc) and
+  `src/region/assign.rs` (the `Assignment` impl) to satisfy the SOP-MOD
+  150 SLOC/file cap. Pure file split; no behaviour change.
+
 - The toolchain implementation language is Rust with an LLVM backend
   (user decision, 2026-11-10). `docs/specs/2026-11-09-yulia-design.md`
   §Constraints, §Toolchain, and §Restrictions and fallback now state Rust,
