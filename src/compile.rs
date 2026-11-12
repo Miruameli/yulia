@@ -40,9 +40,13 @@ pub fn compile(source: &str) -> Result<Compilation, Vec<Diagnostic>> {
     if !diagnostics.is_empty() {
         return Err(diagnostics);
     }
+    // The checker borrows `program`, so its type map is taken before the
+    // program is moved into the result.
+    let types = checker.types().clone();
+    let regions = Assignment::new(&program);
     Ok(Compilation {
         program,
-        types: checker.types().clone(),
-        regions: Assignment::new(&program),
+        types,
+        regions,
     })
 }

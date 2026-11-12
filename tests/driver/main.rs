@@ -99,7 +99,8 @@ fn emit_without_output_is_compile_check_only() {
         b"module app.main;\nfn main() -> void { }\n",
     )
     .expect("write source");
-    let output = run(&[source.path(), "--emit", "ir"]).expect("spawn yulia");
+    let input = source.path().to_str().expect("utf-8 path");
+    let output = run(&[input, "--emit", "ir"]).expect("spawn yulia");
     assert!(
         output.status.success(),
         "stderr: {}",
