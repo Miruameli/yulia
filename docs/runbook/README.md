@@ -60,10 +60,10 @@ program. `--emit` picks the kind (`exe` default, `obj`, `ir`).
 
 ## Runtime errors
 
-A program that violates a runtime invariant prints
-`<file>:<line>:<col>: runtime error[<code>]: <message>` on stderr and aborts
-(`abort()`, SIGABRT, exit 134). Phase 1 codes: R0101 array index out of bounds,
-R0102 division by zero, R0103 integer overflow. The catalog is
+A program that violates a runtime invariant prints `runtime error[<code>]` on
+stderr and aborts (`abort()`, SIGABRT, exit 134). Phase 1 codes: R0101 array
+index out of bounds, R0102 division by zero, R0103 integer overflow. The
+catalog is
 [`docs/specs/2026-11-09-yulia-error-panic-model.md`](../specs/2026-11-09-yulia-error-panic-model.md)
 §2.2.
 
