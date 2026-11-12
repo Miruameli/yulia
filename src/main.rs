@@ -5,6 +5,8 @@
 //! path is given, lowers the accepted program through the LLVM code generator
 //! (`src/codegen`). With no output path it stays a compile-check-only tool.
 
+mod cli;
+
 use std::ffi::OsString;
 use std::path::{Path, PathBuf};
 use std::process::{Command, ExitCode};
@@ -15,52 +17,7 @@ use yulia::compile::Compilation;
 use yulia::diagnostics::{Diagnostic, locate};
 use yulia::{LICENSE, VERSION};
 
-const USAGE: &str = "\
-Usage: yulia [OPTIONS] [INPUT]
-
-Arguments:
-  [INPUT]  Yulia source file to compile
-
-Options:
-  -h, --help           Print help
-  -V, --version        Print version
-  -o, --output <FILE>  Write the compiled artifact to FILE
-      --emit <KIND>    Artifact kind: exe (default), obj, or ir
-";
-
-/// The artifact kind selected by `--emit`.
-#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
-enum EmitKind {
-    /// Write an object file.
-    Obj,
-    /// Write LLVM IR.
-    Ir,
-    /// Link an executable.
-    #[default]
-    Exe,
-}
-
-/// The parsed command line.
-#[derive(Debug)]
-struct Options {
-    /// The input source file.
-    input: Option<OsString>,
-    /// The artifact to write; `None` keeps compile-check-only behaviour.
-    output: Option<OsString>,
-    /// The artifact kind.
-    emit: EmitKind,
-}
-
-/// The outcome of parsing the command line.
-#[derive(Debug)]
-enum Parsed {
-    /// `--help` was given.
-    Help,
-    /// `--version` was given.
-    Version,
-    /// The driver should run.
-    Run(Options),
-}
+use crate::cli::{EmitKind, Options, Parsed, USAGE, parse_args};
 
 fn main() -> ExitCode {
     // `args_os`, not `args`: a non-UTF-8 argument must be reported, not
@@ -81,58 +38,6 @@ fn main() -> ExitCode {
             eprintln!("try 'yulia --help'");
             ExitCode::FAILURE
         }
-    }
-}
-
-/// Parses the command line, reporting the first problem as a message.
-fn parse_args(args: &[OsString]) -> Result<Parsed, String> {
-    let mut options = Options {
-        input: None,
-        output: None,
-        emit: EmitKind::default(),
-    };
-    let mut index = 0;
-    while index < args.len() {
-        let arg = args[index].to_string_lossy();
-        match arg.as_ref() {
-            "-h" | "--help" => return Ok(Parsed::Help),
-            "-V" | "--version" => return Ok(Parsed::Version),
-            "-o" | "--output" => {
-                index += 1;
-                let value = args
-                    .get(index)
-                    .ok_or_else(|| format!("missing value for {arg}"))?;
-                options.output = Some(value.clone());
-            }
-            "--emit" => {
-                index += 1;
-                let value = args
-                    .get(index)
-                    .ok_or_else(|| "missing value for --emit".to_string())?;
-                options.emit = parse_emit(&value.to_string_lossy())?;
-            }
-            _ if arg.starts_with('-') => return Err(format!("unknown option: {arg}")),
-            _ => {
-                if options.input.is_some() {
-                    return Err(format!("unexpected argument: {arg}"));
-                }
-                options.input = Some(args[index].clone());
-            }
-        }
-        index += 1;
-    }
-    Ok(Parsed::Run(options))
-}
-
-/// Parses the `--emit` value.
-fn parse_emit(value: &str) -> Result<EmitKind, String> {
-    match value {
-        "exe" => Ok(EmitKind::Exe),
-        "obj" => Ok(EmitKind::Obj),
-        "ir" => Ok(EmitKind::Ir),
-        other => Err(format!(
-            "unknown emit kind: {other} (expected exe, obj, or ir)"
-        )),
     }
 }
 
