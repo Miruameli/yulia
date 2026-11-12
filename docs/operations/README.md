@@ -41,7 +41,7 @@ with no test output.
 3. **Reduce.** Lower parallelism (`CARGO_BUILD_JOBS=1`, `--test-threads=1`),
    split the work, or run it on a larger runner.
 4. **Guard.** Add a timeout or a memory bound so the failure stays bounded.
-5. **Notify peers** if the host is shared (`coord_send`).
+5. **Notify peers** if the host is shared (`pi_messenger` `send`).
 
 ## Release
 
