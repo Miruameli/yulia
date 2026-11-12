@@ -65,7 +65,13 @@ The repository holds no deployment secrets. CI uses only the implicit
   `required_approving_review_count` is **0**: the repository has a single
   maintainer account, so a required review would deadlock every pull request
   (an author cannot approve their own). The seven required checks are the gate;
-  review happens through `coord_send` and the pull request thread.
+  review happens through `pi_messenger` (`send`/`broadcast`) and the pull request thread.
+- **Merge options:** squash-only (`allow_merge_commit` and `allow_rebase_merge`
+  are disabled) with `delete_branch_on_merge=true`. Pull requests are squashed
+  into `main` with a Conventional Commit message (SOP-GHOP.2).
+- **Dependabot:** `.github/dependabot.yml` schedules weekly version updates for
+  Cargo and GitHub Actions; security updates are enabled at the repository level
+  (SOP-GHOP.9). Verify with `gh api repos/Miruameli/yulia/dependabot/alerts`.
 - **Discussions:** enabled — usage questions, design discussion, and ideas
   belong there, not in issues.
 - **Issue templates:** `.github/ISSUE_TEMPLATE/` (bug report, feature request,

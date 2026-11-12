@@ -1,0 +1,22 @@
+# Dependabot configuration (SOP-GHOP.9).
+#
+# Version updates run weekly for Cargo and GitHub Actions. Security updates are
+# enabled at the repository level (dependabot_security_updates) and are not
+# scheduled here. Keep open-pull-requests-limit bounded so the backlog stays
+# reviewable.
+version: 2
+updates:
+  - package-ecosystem: "cargo"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: "chore(deps)"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: "chore(deps)"

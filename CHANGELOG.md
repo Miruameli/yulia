@@ -61,6 +61,12 @@ development builds are identified by git commit hash
   `spec`, `security`, `tooling`, and `codegen`.
 
 ### Changed
+- Repository hygiene (SOP-GHOP): `.github/dependabot.yml` added (weekly Cargo and
+  GitHub Actions version updates; security updates enabled at the repository
+  level), merge options set to squash-only with `delete_branch_on_merge=true`,
+  and `docs/operations/README.md` §Repository settings records both. The
+  `required_approving_review_count=0` and `require_code_owner_reviews=false`
+  settings are deliberate (single maintainer account; see the runbook).
 
 - `KONTRAK.md` updated from AI Operating Contract v3.9 to v4.0
   (human-supplied). v4.0 adds INV-36/37/38 (GHOP / TOOL / TEMPLATES
