@@ -85,10 +85,10 @@ impl<'ctx> Lower<'ctx, '_> {
         let function = self.function()?;
         self.push_scope();
         self.stmt(init)?;
-        let cond_block = self.context.append_basic_block(function, "cfor.cond");
-        let body_block = self.context.append_basic_block(function, "cfor.body");
-        let step_block = self.context.append_basic_block(function, "cfor.step");
-        let done = self.context.append_basic_block(function, "cfor.done");
+        let cond_block = self.context.append_basic_block(function, "c_for.cond");
+        let body_block = self.context.append_basic_block(function, "c_for.body");
+        let step_block = self.context.append_basic_block(function, "c_for.step");
+        let done = self.context.append_basic_block(function, "c_for.done");
         self.builder
             .build_unconditional_branch(cond_block)
             .map_err(builder_error)?;
