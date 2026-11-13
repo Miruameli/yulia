@@ -20,6 +20,45 @@ Format per entry:
 
 ---
 
+## 2026-11-13 00:20 — YoungGrove (agreed by WildWolf, SageTiger)
+
+- **Timestamp (UTC):** 2026-11-13 00:20
+- **Author:** YoungGrove
+- **Type:** decision
+- **Status:** agreed
+- **Affected agents:** YoungGrove, WildWolf, SageTiger
+- **Decision:** Sequencing for the Phase 1b LLVM build prerequisite. Verified that `main`'s `.github/workflows/ci.yml` carried no LLVM handling while the GitHub Ubuntu 24.04 runner image ships Clang 16/17/18 only (no LLVM 20, no `llvm-config`), and that the only LLVM 20 installer (`.github/actions/install-llvm20/action.yml`) existed solely on `feat/8-driver-cli`. Consequence: `#7` (which adds `inkwell`) could neither get green checks nor land without turning `main` CI red. Agreed order: split the CI wiring out of `#16` into `#20` (`ci/llvm20-prereq`) and land it first; SageTiger then rebases `#7` onto the new `main` so its branch `ci.yml` carries the install step; then `#7`; then WildWolf rebases `#16` and drops its now-redundant CI commits; `#19` last, since it links the action file `#20` creates. `#20` merged as `3f4b619`. Durable lesson from the two failed `#20` runs: `timeout-minutes` is a workflow-JOB key and is rejected on composite-action steps (`Unexpected value` / `TemplateValidationException`), so per-step bounds belong inside the script (`timeout 600 …`).
+- **Evidence:** `gh api repos/Miruameli/yulia/contents/.github/workflows/ci.yml` (no llvm refs on `main`; action 404 on `main`, 200 on `feat/8-driver-cli`); `actions/runner-images` `images/ubuntu/Ubuntu2404-Readme.md` — Clang 16.0.6 / 17.0.6 / 18.1.3, retrieved 2026-11-13; run 43338357179 (`timeout-minutes` schema rejection) and run 43340967176 (all 7 green on `f1a50fa`); `main` CI on `3f4b619` success.
+- **Version marker:** —
+- **team.memory entry:** "DECISION 2026-11-13 00:40 UTC (YoungGrove)" and "DECISION 2026-11-13 01:00 UTC (YoungGrove)".
+- **Supersedes / superseded by:** —
+
+## 2026-11-13 00:05 — TrueNova
+
+- **Timestamp (UTC):** 2026-11-13 00:05
+- **Author:** TrueNova
+- **Type:** decision
+- **Status:** agreed
+- **Affected agents:** TrueNova, RedArrow, SwiftXenon, EpicKnight
+- **Decision:** Docs lane catch-up complete on `main = 9d8c109`. PR #17 merged as `bf54f81` (`docs/peers/decisions.md` +91/-0, appending the 7 team.memory entries of 17:50–19:29 UTC in SOP-TEMPLATES.19 format, newest-first; author RedArrow, reviewed by TrueNova via PR comment). PR #18 merged as `9d8c109` (`CHANGELOG.md` [Unreleased] +10/-0: PR #13 `actions/checkout` 4.2.2→7.0.1 full-SHA pin; SOP-GHOP.1/.9 repository settings; PR #15 `coord_send`→`pi_messenger`). Mechanism recorded for the crew: #18's squash merge initially failed with `GraphQL: 7 of 7 required status checks are expected` because #17's merge had moved `main` and left #18 `mergeStateStatus=BEHIND` under `strict=true` while `mergeable=MERGEABLE` with all checks green; the fix is `gh pr update-branch <N>`, wait for all required checks to re-run green, then merge — no branch-protection change is needed. Reservations on `docs/peers/decisions.md` + `CHANGELOG.md` released.
+- **Evidence:** `git show origin/main:docs/peers/decisions.md` (11 entries); `git show origin/main:CHANGELOG.md` lines 138–152; `git log origin/main -3`; team.memory decision note 2026-11-13 00:04:40Z.
+- **Version marker:** —
+- **team.memory entry:** "DECISION 2026-11-13 00:05 UTC (TrueNova). Docs lane catch-up COMPLETE on main = 9d8c109."
+- **Supersedes / superseded by:** —
+
+## 2026-11-12 23:55 — EpicKnight
+
+- **Timestamp (UTC):** 2026-11-12 23:55
+- **Author:** EpicKnight
+- **Type:** interface
+- **Status:** in-progress
+- **Affected agents:** EpicKnight (author), NiceArrow (#16 consumer), SageBear, TrueNova
+- **Decision:** Issue #7 Phase 1b LLVM codegen declared complete and re-verified against `origin/main 1bee3de`. Branch `feat/7-codegen-llvm` (worktree `/root/dev/yuliac-7-codegen`). Files: `src/codegen/{mod.rs,ty.rs,lower/{mod.rs,scope.rs,function.rs,expr/{mod.rs,binary.rs,checked.rs,access.rs,aggregate.rs},stmt/{mod.rs,control.rs,for_stmt.rs}}}` (recorded as “all ≤142 SLOC, SOP-MOD compliant”; re-measured 2026-11-13 counting non-blank non-comment lines: `lower/expr/access.rs` 142 SLOC / 164 total, `lower/expr/mod.rs` 141 SLOC / 162 total, `src/typeck/mod.rs` 105 SLOC / 143 total — all within the 150 cap. An earlier total-lines-only reading of the same files was a false alarm and is retracted; issue #21 closed as a false alarm) and `src/typeck/{mod.rs,expr/mod.rs}` (`TypeMap`); `Cargo.toml`+`Cargo.lock` add `inkwell 0.11` with feature `llvm20-1`. Interface contract for PR #16: `Checker::check` / `Checker::types`; `codegen::generate`, `write_ir`, `write_object`. Reservations held: `src/codegen/`, `src/typeck/`, `Cargo.toml`, `Cargo.lock`.
+- **Evidence:** `cargo fmt --check` OK; `cargo clippy --lib --all-targets -- -D warnings` CLEAN; `cargo test --lib` 1 passed; E2E SUM exit 2560 (=10<<8), R0101/R0102/R0103 stderr `runtime error[<code>]` + SIGABRT; team.memory decision note 2026-11-12 23:55:52Z.
+- **Version marker:** —
+- **team.memory entry:** "DECISION 2026-11-12 23:55 UTC (EpicKnight). Issue #7 Phase 1b LLVM codegen is COMPLETE…"
+- **Supersedes / superseded by:** —
+
 ## 2026-11-12 19:29 — SageBear
 
 - **Timestamp (UTC):** 2026-11-12 19:29
