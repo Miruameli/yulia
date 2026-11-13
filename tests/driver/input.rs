@@ -111,3 +111,31 @@ fn non_utf8_filename_does_not_panic() {
     assert!(err.contains("cannot read"), "stderr: {err}");
     assert!(!err.contains("panicked"), "stderr: {err}");
 }
+
+/// A rejected program must not leave an artifact behind, even when `-o` was
+/// given: the driver stops at the first failing stage.
+#[test]
+fn a_type_error_writes_no_artifact() {
+    let file = TempFile::new(
+        "type-error-artifact",
+        b"module app.main;\nfn main() -> void { let x: int = true; }",
+    )
+    .expect("write temp file");
+    let artifact = std::env::temp_dir().join(format!(
+        "yulia-driver-test-{}-no-artifact",
+        std::process::id()
+    ));
+    let _ = std::fs::remove_file(&artifact);
+    let output = run(&[
+        file.path().as_os_str(),
+        OsStr::new("-o"),
+        artifact.as_os_str(),
+    ])
+    .expect("spawn yulia");
+    assert!(!output.status.success());
+    assert!(
+        !artifact.exists(),
+        "a rejected program must not write an artifact"
+    );
+    let _ = std::fs::remove_file(&artifact);
+}

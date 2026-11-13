@@ -28,7 +28,7 @@ SOP-RESLIM bounds every heavy command:
 - Test harness: `--test-threads=2`.
 - Makefile targets wrap heavy work in `timeout -k 5 <seconds>` (`make test`
   900 s, `make lint` 600 s, `make benchmark` 1800 s).
-- CI runners: `ubuntu-latest` (4 vCPU / 7 GB).
+- CI runners: `ubuntu-24.04` (4 vCPU / 7 GB).
 
 ## OOM response
 

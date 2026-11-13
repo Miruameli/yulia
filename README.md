@@ -167,8 +167,22 @@ make help        # list every target
 CI runs on every push to `main` and on every pull request. The driver
 (`src/main.rs`) runs the front-end pipeline: `yulia <file>.yl` lexes, parses,
 type-checks, and assigns regions, reporting `file:line:col: error[code]:
-message` on stderr and exiting 1 on a rejected program. LLVM codegen is
-Phase 1b.
+message` on stderr and exiting 1 on a rejected program.
+
+### Compiling a program
+
+```sh
+yulia hello.yl                         # compile check only; silent on success
+yulia hello.yl -o hello                # write an object file and link an executable
+yulia hello.yl -o hello.o --emit obj   # write an object file
+yulia hello.yl -o hello.ll --emit ir   # write LLVM IR
+```
+
+`-o/--output` selects the artifact; without it the driver only checks the
+program. `--emit` picks the kind (`exe` default, `obj`, `ir`). A program that
+violates a runtime invariant prints `runtime error[<code>]` on stderr and
+aborts (SIGABRT, exit 134): R0101 array index out of bounds, R0102 division by
+zero, R0103 integer overflow.
 
 ## Status and roadmap
 
@@ -176,7 +190,7 @@ Phase 1b.
 |---|---|---|
 | **0** | Language specification | Complete; gate accepted 2026-11-11 |
 | **1a** | Front-end: lexer, parser, AST, type checker, region inference, diagnostics, driver | Complete (2026-11-11) |
-| **1b** | Codegen: LLVM IR via inkwell | Planned (next) |
+| **1b** | Codegen: LLVM IR via inkwell | In progress (#7, #8) |
 | **2** | Region inference for the wider feature set (strings, growable arrays, FFI) | Open decisions D4–D11 |
 | **4** | Benchmark kernels K1–K5 + baseline data | Open (D12) |
 | **5** | Concurrency (threads), SoA, generics, soundness argument | Open (D13–D17) |

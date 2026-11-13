@@ -6,8 +6,12 @@ How to work on the Yulia compiler: setup, the daily loop, and the spec workflow.
 
 1. Install the pinned toolchain — `rustup` reads `rust-toolchain.toml` and
    installs the pinned Rust automatically on the first `cargo` invocation.
-2. `cargo build` — the crate is `yulia` (see `Cargo.toml`).
-3. `cargo test` — unit tests plus the integration tests in `tests/`.
+2. Install LLVM 20 — the Phase 1b backend links through inkwell, which needs
+   `llvm-config`. `.github/actions/install-llvm20/action.yml` is the reference
+   procedure (apt.llvm.org, then `llvm-20-dev` and `libpolly-20-dev`); export
+   `LLVM_SYS_201_PREFIX` if `llvm-config` is not on the default path.
+3. `cargo build` — the crate is `yulia` (see `Cargo.toml`).
+4. `cargo test` — unit tests plus the integration tests in `tests/`.
 
 `make` wraps the common targets; `make help` lists them.
 
@@ -40,6 +44,28 @@ errors, `runtime error[<code>]` for runtime errors. The Phase 1 catalog is
 [`docs/adr/0001-diagnostic-code-scheme.md`](../adr/0001-diagnostic-code-scheme.md).
 Add a new code to the catalog and to `src/diagnostics/` in the same change —
 never one without the other.
+
+## Compiling and running a program
+
+```sh
+cargo build --release
+./target/release/yulia hello.yl          # check only; silent on success
+./target/release/yulia hello.yl -o hello # write an object file and link it
+./target/release/yulia hello.yl -o hello.o --emit obj
+./target/release/yulia hello.yl -o hello.ll --emit ir
+```
+
+`-o/--output` selects the artifact; without it the driver only checks the
+program. `--emit` picks the kind (`exe` default, `obj`, `ir`).
+
+## Runtime errors
+
+A program that violates a runtime invariant prints `runtime error[<code>]` on
+stderr and aborts (`abort()`, SIGABRT, exit 134). Phase 1 codes: R0101 array
+index out of bounds, R0102 division by zero, R0103 integer overflow. The
+catalog is
+[`docs/specs/2026-11-09-yulia-error-panic-model.md`](../specs/2026-11-09-yulia-error-panic-model.md)
+§2.2.
 
 ## Commit conventions
 

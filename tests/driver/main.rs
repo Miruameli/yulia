@@ -55,3 +55,55 @@ fn unknown_option_fails_with_a_hint() {
     assert!(err.contains("unknown option"), "stderr: {err}");
     assert!(err.contains("try 'yulia --help'"), "stderr: {err}");
 }
+
+#[test]
+fn output_flag_without_a_value_fails() {
+    let output = run(&["-o"]).expect("spawn yulia");
+    assert!(!output.status.success());
+    let err = harness::stderr(&output);
+    assert!(err.contains("missing value for -o"), "stderr: {err}");
+}
+
+#[test]
+fn emit_flag_without_a_value_fails() {
+    let output = run(&["--emit"]).expect("spawn yulia");
+    assert!(!output.status.success());
+    let err = harness::stderr(&output);
+    assert!(err.contains("missing value for --emit"), "stderr: {err}");
+}
+
+#[test]
+fn unknown_emit_kind_fails() {
+    let output = run(&["--emit", "binary"]).expect("spawn yulia");
+    assert!(!output.status.success());
+    let err = harness::stderr(&output);
+    assert!(err.contains("unknown emit kind"), "stderr: {err}");
+}
+
+#[test]
+fn a_second_input_argument_fails() {
+    let first = harness::TempFile::new("extra-a", b"module app.main;\nfn main() -> void { }\n")
+        .expect("write source");
+    let second = harness::TempFile::new("extra-b", b"module app.main;\nfn main() -> void { }\n")
+        .expect("write source");
+    let output = run(&[first.path(), second.path()]).expect("spawn yulia");
+    assert!(!output.status.success());
+    let err = harness::stderr(&output);
+    assert!(err.contains("unexpected argument"), "stderr: {err}");
+}
+
+#[test]
+fn emit_without_output_is_compile_check_only() {
+    let source = harness::TempFile::new(
+        "emit-no-output",
+        b"module app.main;\nfn main() -> void { }\n",
+    )
+    .expect("write source");
+    let input = source.path().to_str().expect("utf-8 path");
+    let output = run(&[input, "--emit", "ir"]).expect("spawn yulia");
+    assert!(
+        output.status.success(),
+        "stderr: {}",
+        harness::stderr(&output)
+    );
+}
