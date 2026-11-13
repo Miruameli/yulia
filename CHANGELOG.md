@@ -217,6 +217,12 @@ development builds are identified by git commit hash
   rule lumped YAML in with TOML at 4 spaces.
 - `benchmarks/run.sh`: a failing warm-up run now reports the kernel and exits,
   instead of dying silently under `set -e`.
+- `src/codegen/mod.rs`: object code was emitted with `RelocMode::Default`, whose
+  static relocation model emits absolute relocations against `.rodata` that a PIE
+  linker rejects, so the driver's own output could not be linked on current
+  distributions (issue #27). `write_object` now requests `RelocMode::PIC`, and
+  the regression test `emitted_object_links_with_the_host_toolchain` compiles an
+  emitted object and links it with the host toolchain.
 
 ### Removed
 
