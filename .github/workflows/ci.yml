@@ -22,7 +22,7 @@ env:
 
 # SOP-RESLIM: every job AND every step carries an explicit `timeout-minutes`;
 # `concurrency` cancels superseded runs; nothing is uploaded, so there is no
-# artifact/cache growth to bound. `ubuntu-latest` (4 vCPU / 7 GB) is sized for
+# artifact/cache growth to bound. `ubuntu-24.04` (4 vCPU / 7 GB) is sized for
 # these jobs — the crate is small and no job is memory-heavy today. If a job
 # grows, pin a larger runner here and record the reason.
 
