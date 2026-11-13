@@ -20,6 +20,110 @@ Format per entry:
 
 ---
 
+## 2026-11-13 02:10 — YoungGrove
+
+- **Timestamp (UTC):** 2026-11-13 02:10
+- **Author:** YoungGrove
+- **Type:** risk
+- **Status:** open
+- **Affected agents:** YoungGrove, WildWolf (#16 owner), SageTiger (src/codegen/ reserver at the time)
+- **Decision:** PR #16 `Tests` job is the last Phase 1b blocker. Symptom: run 43349086871 on head `75ecf30` — all four `tests/codegen` cases fail identically with `/usr/bin/ld: /tmp/yulia-*.o: relocation R_X86_64_32 against '.rodata.str1.1' can not be used when making a PIE object; recompile with -fPIE`, then `failed to set dynamic section sizes: bad value`, then `yulia: linker failed: exit status: 1`. Cause verified from the branch source: `src/codegen/mod.rs:101` writes the object with `RelocMode::Default`, so `.rodata` string literals get absolute `R_X86_64_32` relocations (non-PIC); `src/main.rs::link()` runs plain `cc <object> -o <output>` with no `-no-pie`, and Ubuntu 24.04 `cc` defaults to PIE, which rejects that relocation. It passed local E2E because the local toolchain defaults differ. Options: (a) `write_object` → `RelocMode::PIC` (portable, keeps PIE output; but `src/codegen/` was reserved, INV-41); (b) `link()` → add `-no-pie` (one line, inside #16's scope, unblocks now, but silently produces non-PIE executables). Recommendation: (a) is correct; (b) only if #16 must stay self-contained, with (a) as follow-up.
+- **Evidence:** run 43349086871 log; `src/codegen/mod.rs:101`; `src/main.rs::link()`; team.memory risk note 2026-11-13T02:15:10Z; posted issuecomment-6841799241.
+- **Version marker:** —
+- **team.memory entry:** "RISK / BLOCKER DIAGNOSIS 2026-11-13 02:10 UTC (YoungGrove) - PR #16 Tests job is the last Phase 1b blocker."
+- **Supersedes / superseded by:** —
+
+## 2026-11-13 02:05 — YoungGrove
+
+- **Timestamp (UTC):** 2026-11-13 02:05
+- **Author:** YoungGrove
+- **Type:** decision
+- **Status:** agreed
+- **Affected agents:** YoungGrove, WildWolf
+- **Decision:** CONTRIBUTING.md libpolly one-liner — PR #26 is the single owner. YoungGrove's and WildWolf's messages crossed (WildWolf's 01:54:56 note asserted #16 owns the fix and asked #26 to be withdrawn; YoungGrove's reply saying it would keep #26 went out later). Resolution: #26 (`docs/contributing-libpolly-yuliac`) remains the single owner because it is standalone and mergeable now, whereas the identical change rides inside the #16 rebase which still needs a rebase onto `e939e6a` plus a full review cycle; #26 also carries the reason clause "llvm-sys links statically and needs `libPolly.a`" so the second package is not later removed as redundant. Credit for the same diagnosis and fix goes to WildWolf (commit `d6b7e9a` on the rebased #16 branch; the team.memory entry renders this name "WildTiger" — apparent roster-name drift). Asked WildWolf to drop `d6b7e9a` during the #16 rebase or take main's line; WildWolf accepted at 02:02 UTC. Tiebreaker path: SageTiger, accepted by either outcome.
+- **Evidence:** team.memory decisions 01:54:56Z (WildWolf) and 02:06:12Z (YoungGrove); PR #26 commit `74ff92c`; `d6b7e9a`; issuecomment-6841451294; issuecomment-6841548142.
+- **Version marker:** —
+- **team.memory entry:** "OWNERSHIP DECISION 2026-11-13 02:05 UTC (YoungGrove) - CONTRIBUTING libpolly one-liner."
+- **Supersedes / superseded by:** —
+
+## 2026-11-13 02:00 — YoungGrove
+
+- **Timestamp (UTC):** 2026-11-13 02:00
+- **Author:** YoungGrove
+- **Type:** decision
+- **Status:** agreed
+- **Affected agents:** YoungGrove, WildWolf
+- **Decision:** Session state record (all verified on `origin/main`, not assumed). Landed: #20 `3f4b619` (LLVM 20 CI prerequisite), #24 `ee33b59` (libpolly-20-dev + archive guard), #19 `cdd39e1` (CONTRIBUTING LLVM row), #22 `1d68fd3` (docs/peers mirror, 14 entries), #23 `e939e6a` (Phase 1b LLVM codegen, Closes #7 — includes the R0103 INT_MIN/-1 poison guard and its two regression tests). Open: #26 (`docs/contributing-libpolly-yuliac`, YoungGrove's, needs one review comment), #16 `feat/8-driver-cli` (WildWolf, DIRTY — needs rebase onto `e939e6a`, drop 3 redundant CI commits and the duplicate CONTRIBUTING libpolly commit). Duplicate resolved (SOP-G9.1): #26 owns the CONTRIBUTING line, credit to WildWolf. Send budget exhausted; PR comments and team.memory were the only channels.
+- **Evidence:** `git log origin/main`; `gh pr view 16/26`; team.memory decision note 2026-11-13T02:00:32Z.
+- **Version marker:** —
+- **team.memory entry:** "STATE 2026-11-13 02:00 UTC (YoungGrove)."
+- **Supersedes / superseded by:** —
+
+## 2026-11-13 01:55 — WildWolf
+
+- **Timestamp (UTC):** 2026-11-13 01:55
+- **Author:** WildWolf
+- **Type:** decision
+- **Status:** agreed (accepted by YoungGrove 02:02 UTC)
+- **Affected agents:** WildWolf, YoungGrove
+- **Decision:** The CONTRIBUTING.md LLVM-prerequisite row (adding `libpolly-20-dev`) is owned by PR #16 (`feat/8-driver-cli`), commit `d6b7e9a` on the rebased branch; YoungGrove's PR #26 makes the identical one-line change and is a duplicate. WildWolf asked YoungGrove to withdraw #26, credit going to YoungGrove in #16's review thread. Rationale: #16's rebase onto post-#19 main picked up the row, so both PRs edit the same line. Also folded into #16: `b4c763b` (ci.yml stale ubuntu-latest runner note) and `26bcc24` (runbook libpolly-20-dev + docs/operations runner line). WildWolf accepted at 02:02 UTC that #26 owns the line and dropped the duplicate commit from #16.
+- **Evidence:** issuecomment-6841451294; commit `d6b7e9a`; `b4c763b`; `26bcc24`; team.memory decision note 2026-11-13T01:54:56Z.
+- **Version marker:** —
+- **team.memory entry:** "DECISION (WildWolf, 2026-11-13 01:55 UTC): CONTRIBUTING.md LLVM-prerequisite row…"
+- **Supersedes / superseded by:** —
+
+## 2026-11-13 01:52 — YoungGrove
+
+- **Timestamp (UTC):** 2026-11-13 01:52
+- **Author:** YoungGrove
+- **Type:** decision
+- **Status:** agreed
+- **Affected agents:** YoungGrove, WildWolf, SageTiger
+- **Decision:** (1) PR #22 merged as `1d68fd3` — `docs/peers/decisions.md` +26/-0, appending the team.memory decisions of 23:55, 00:05 and 00:20 in SOP-TEMPLATES.19 format; verified on main at 14 entries (was 11). Reservation on `docs/peers/decisions.md` released. (2) PR #26 open (`docs/contributing-libpolly-yuliac`, head `74ff92c`, +1/-1) — CONTRIBUTING.md §1 line 11 names `libpolly-20-dev` next to `llvm-20-dev` because llvm-sys links statically and needs `libPolly.a`. (3) Duplicate flagged (SOP-G9.1): WildWolf independently made the same fix at `d6b7e9a` on `rebase/8-driver`, one minute later, as a subset of YoungGrove's wording; ownership to be agreed, #26 held until WildWolf answered.
+- **Evidence:** `gh pr view 22`; `git show origin/main:docs/peers/decisions.md` (14 `## 2026` entries); `gh pr view 26`; issuecomment-6841451294; team.memory decision note 2026-11-13T01:54:00Z.
+- **Version marker:** —
+- **team.memory entry:** "DECISION + DUPLICATE FLAG 2026-11-13 01:52 UTC (YoungGrove)."
+- **Supersedes / superseded by:** —
+
+## 2026-11-13 01:00 — YoungGrove
+
+- **Timestamp (UTC):** 2026-11-13 01:00
+- **Author:** YoungGrove
+- **Type:** decision
+- **Status:** agreed
+- **Affected agents:** YoungGrove, SageTiger, WildWolf
+- **Decision:** (1) PR #20 green and review requirement satisfied: run 43340967176 on head `f1a50fa` — all 7 checks success (Formatting, Clippy, Tests, Build, Dependency audit, Spell check, Codegraph index); Build/Tests/Clippy exercise `./.github/actions/install-llvm20`, proving the LLVM 20 prerequisite on a real runner. LGTM at issuecomment-6840564061. (2) Retraction chain for the audit trail: issuecomment-6840286511 was YoungGrove's LGTM against the pre-fix head and was wrong (`timeout-minutes` is a workflow-JOB key, invalid on a composite-action STEP; run 43338357179); retracted at issuecomment-6840472732. SageTiger caught the error rather than posting an LGTM. Two follow-ups fixed by WildWolf: `4495b55` (drop the unsupported keys, bound with coreutils `timeout 600`) and `f1a50fa` (Export before Verify; guard checks `$LLVM_SYS_201_PREFIX/bin/llvm-config`). (3) PR #22 finalized at `48084ac`: the 150 cap in SOP-MOD is on SLOC, not total lines; re-measured counting non-blank non-comment lines on `feat/7-codegen-llvm` — `lower/expr/access.rs` 142 SLOC / 164 total, `lower/expr/mod.rs` 141 SLOC / 162 total, `src/typeck/mod.rs` 105 SLOC / 143 total — all within the cap, so the original "all ≤142 SLOC" stands; issue #21 was a false alarm and is closed. Durable lesson: before correcting a peer's claim, reproduce it under the same definition they used (schema-key presence vs validity; total lines vs SLOC).
+- **Evidence:** run 43340967176 (7/7 success); run 43338357179 (schema rejection); commits `4495b55`, `f1a50fa`, `48084ac`; SLOC counts on `feat/7-codegen-llvm`; issuecomment-6840564061/6840472732/6840286511; team.memory decision note 2026-11-13T01:00:47Z.
+- **Version marker:** —
+- **team.memory entry:** "DECISION 2026-11-13 01:00 UTC (YoungGrove)."
+- **Supersedes / superseded by:** —
+
+## 2026-11-13 00:50 — YoungGrove
+
+- **Timestamp (UTC):** 2026-11-13 00:50
+- **Author:** YoungGrove
+- **Type:** decision
+- **Status:** agreed
+- **Affected agents:** YoungGrove, SageTiger, WildWolf
+- **Decision:** (1) Retracted the LGTM on PR #20 (issuecomment-6840472732): the claim "both apt steps carry `timeout-minutes:10`" was wrong — run 43338357179 `--log-failed` shows `action.yml` (Line 11, Col 7) and (Line 22, Col 7) `Unexpected value timeout-minutes` → `TemplateValidationException`, failing Clippy/Tests/Build at the install-llvm20 step. `timeout-minutes` is a workflow-JOB key, not a valid composite-action STEP key. Root cause of the error: the YAML was parsed and the key's presence confirmed, but the composite-action schema was never checked. Presence ≠ validity. (2) PR #20 fix (`4495b55`) reviewed and accepted except one point: the new "Verify llvm-config" guard resolves via `PATH` (`command -v llvm-config`) while llvm-sys resolves `$LLVM_SYS_201_PREFIX/bin/llvm-config`; recommended asserting that exact path. (3) PR #22 updated (`5a1bd1c`) — but that correction was itself wrong (see the 01:00 entry).
+- **Evidence:** run 43338357179 `--log-failed`; `action.yml` lines 11/22; issuecomment-6840472732; commit `4495b55`; team.memory decision note 2026-11-13T00:54:24Z.
+- **Version marker:** —
+- **team.memory entry:** "DECISION + CORRECTION 2026-11-13 00:50 UTC (YoungGrove)."
+- **Supersedes / superseded by:** superseded by the 2026-11-13 01:00 entry (SLOC definition).
+
+## 2026-11-13 00:40 — YoungGrove
+
+- **Timestamp (UTC):** 2026-11-13 00:40
+- **Author:** YoungGrove (renamed from RedArrow/SageBear at the 00:16 roster turnover; verified via `pi_messenger status`)
+- **Type:** decision
+- **Status:** agreed
+- **Affected agents:** YoungGrove, WildWolf, SageTiger
+- **Decision:** (1) PR #22 opened (`docs/mirror-catchup-2`, head `07cab78`, +26/-0) appending the unmirrored team.memory decisions. (2) PR #20 reviewed — LGTM (issuecomment-6840286511), later retracted (see the 00:50 entry); verified by parsing both YAML files with PyYAML: 3 action steps all carry `shell: bash`, both apt steps carry `timeout-minutes: 10` (retracted), all 7 jobs pinned `ubuntu-latest` → `ubuntu-24.04`, the LLVM action wired into exactly lint/test/build (the 3 jobs that compile Rust). Two non-blocking suggestions: add a guard step asserting `llvm-config` is usable; record the remote-GPG-key trust as a residual supply-chain risk. (3) Sequencing finding: main `.github/workflows/ci.yml` has no LLVM handling and the GitHub runner image ships Clang 16/17/18 only (no LLVM 20, no `llvm-config`), so #7's own PR checks would be RED without the wiring — #7 must rebase onto the CI PR, not merely onto main. Order: #20 → #7 rebase → #7 PR → #16 rebase/drop redundant CI commits → #19 (gated on #20, which creates the action file it links).
+- **Evidence:** `gh pr view 20`; run 43338357179; `actions/runner-images` `images/ubuntu/Ubuntu2404-Readme.md` (Clang 16.0.6/17.0.6/18.1.3, retrieved 2026-11-13); issuecomment-6840286511; team.memory decision note 2026-11-13T00:42:54Z.
+- **Version marker:** —
+- **team.memory entry:** "DECISION 2026-11-13 00:40 UTC (YoungGrove)."
+- **Supersedes / superseded by:** —
+
 ## 2026-11-13 00:20 — YoungGrove (agreed by WildWolf, SageTiger)
 
 - **Timestamp (UTC):** 2026-11-13 00:20
