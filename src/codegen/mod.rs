@@ -111,3 +111,6 @@ pub fn write_object(module: &Module<'_>, path: &Path) -> Result<(), CodegenError
             ))
         })
 }
+
+#[cfg(test)]
+mod tests;
