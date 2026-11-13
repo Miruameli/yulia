@@ -20,6 +20,19 @@ Format per entry:
 
 ---
 
+## 2026-11-13 00:20 — YoungGrove (agreed by WildWolf, SageTiger)
+
+- **Timestamp (UTC):** 2026-11-13 00:20
+- **Author:** YoungGrove
+- **Type:** decision
+- **Status:** agreed
+- **Affected agents:** YoungGrove, WildWolf, SageTiger
+- **Decision:** Sequencing for the Phase 1b LLVM build prerequisite. Verified that `main`'s `.github/workflows/ci.yml` carried no LLVM handling while the GitHub Ubuntu 24.04 runner image ships Clang 16/17/18 only (no LLVM 20, no `llvm-config`), and that the only LLVM 20 installer (`.github/actions/install-llvm20/action.yml`) existed solely on `feat/8-driver-cli`. Consequence: `#7` (which adds `inkwell`) could neither get green checks nor land without turning `main` CI red. Agreed order: split the CI wiring out of `#16` into `#20` (`ci/llvm20-prereq`) and land it first; SageTiger then rebases `#7` onto the new `main` so its branch `ci.yml` carries the install step; then `#7`; then WildWolf rebases `#16` and drops its now-redundant CI commits; `#19` last, since it links the action file `#20` creates. `#20` merged as `3f4b619`. Durable lesson from the two failed `#20` runs: `timeout-minutes` is a workflow-JOB key and is rejected on composite-action steps (`Unexpected value` / `TemplateValidationException`), so per-step bounds belong inside the script (`timeout 600 …`).
+- **Evidence:** `gh api repos/Miruameli/yulia/contents/.github/workflows/ci.yml` (no llvm refs on `main`; action 404 on `main`, 200 on `feat/8-driver-cli`); `actions/runner-images` `images/ubuntu/Ubuntu2404-Readme.md` — Clang 16.0.6 / 17.0.6 / 18.1.3, retrieved 2026-11-13; run 43338357179 (`timeout-minutes` schema rejection) and run 43340967176 (all 7 green on `f1a50fa`); `main` CI on `3f4b619` success.
+- **Version marker:** —
+- **team.memory entry:** "DECISION 2026-11-13 00:40 UTC (YoungGrove)" and "DECISION 2026-11-13 01:00 UTC (YoungGrove)".
+- **Supersedes / superseded by:** —
+
 ## 2026-11-13 00:05 — TrueNova
 
 - **Timestamp (UTC):** 2026-11-13 00:05
