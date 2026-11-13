@@ -138,6 +138,16 @@ development builds are identified by git commit hash
   before send, interrupt cost, enforced reservations), SOP-COMMS.8 (pi-messenger
   addressing discipline), SOP-TOOL.8, and SOP-TEMPLATES.18/19 (team memory and
   the decisions mirror).
+- `actions/checkout` bumped 4.2.2 -> 7.0.1 and pinned to the full commit SHA in
+  every CI job (Dependabot PR #13), closing the mutable-tag deviation from
+  SOP-GHOP.8.
+- Repository settings (SOP-GHOP.1 and SOP-GHOP.9): private vulnerability
+  reporting enabled, and the repository wiki disabled in favour of `docs/`.
+  `.env.example` is deliberately absent — the project reads no environment
+  configuration.
+- The stale `coord_send` references in `CONTRIBUTING.md` and
+  `docs/operations/README.md` were replaced with `pi_messenger` (`send` /
+  `broadcast`), matching v6.0 SOP-TOOL.8 (PR #15).
 
 ### Fixed
 
