@@ -26,6 +26,10 @@ path = "src/lib.rs"
 # Dev-dependencies (e.g. proptest, per CONTRIBUTING.md §5) are exempt: they do
 # not ship in the compiler binary.
 [dependencies]
+# Phase 1b: LLVM code generation. `llvm20-1` pins the LLVM 20.1 bindings and
+# `target-aarch64` enables the host backend for object emission; the default
+# `target-all` set is far larger than the compiler needs.
+inkwell = { version = "=0.11.0", default-features = false, features = ["llvm20-1", "target-aarch64"] }
 
 [dev-dependencies]
 
