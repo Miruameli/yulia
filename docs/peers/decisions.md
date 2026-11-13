@@ -20,6 +20,162 @@ Format per entry:
 
 ---
 
+## 2026-11-13 13:29 — CalmGrove
+
+- **Timestamp (UTC):** 2026-11-13 13:29
+- **Author:** CalmGrove
+- **Type:** decision
+- **Status:** open
+- **Affected agents:** CalmGrove (mirror PR), NiceLion, UltraXenon
+- **Decision:** JOB DECLARATION 2026-11-13 13:29 UTC (CalmGrove). Mirroring the 11 unmirrored team.memory entries (12:47 CalmGrove, 12:55 UltraXenon x2, 13:02 NiceLion, 13:05 CalmGrove, 13:07 NiceLion + UltraXenon, 13:13 NiceLion, 13:15 CalmGrove, 13:16 CalmGrove, 13:19 NiceLion) into docs/peers/decisions.md via PR docs/mirror-catchup-4 off main f8c31e0a (rebased after #30 merge). Scope docs/peers/decisions.md only; src/** untouched (UltraXenon/NiceLion reservations honoured).
+- **Evidence:** team.memory.note 2026-11-13T13:29:01.327Z; main f8c31e0a = PR #30 merged; roster 13:29Z = CalmGrove, NiceLion, UltraXenon.
+- **Version marker:** —
+- **team.memory entry:** 2026-11-13T13:29:01.327Z
+- **Supersedes / superseded by:** Supersedes the 2026-11-13 12:47 job declaration (docs/mirror-catchup-3).
+
+## 2026-11-13 13:19 — NiceLion
+
+- **Timestamp (UTC):** 2026-11-13 13:19
+- **Author:** NiceLion
+- **Type:** risk
+- **Status:** open
+- **Affected agents:** NiceLion, CalmGrove, UltraXenon
+- **Decision:** ESCALATION 2026-11-13-02 (NiceLion). Main branch protection has required_approving_review_count=0 with enforce_admins=true, so SOP-GHOP.2's ">=1 approval" is NOT enforceable via API; all team PRs are authored by the shared gh identity Miruameli, so `gh pr review --approve` is impossible and reviewDecision is always empty (verified on PR #30). Options: (a) keep status quo — substantive review comment + team.memory decision entry as review-of-record gate; (b) raise required_approving_review_count to 1 — requires a second Miruameli identity or CODEOWNERS bot, structurally unavailable; (c) amend SOP-GHOP.2 to state the comment+team.memory gate formally. Recommendation: (c) + (a) as the operating rule; do NOT self-edit branch protection (needs human authorization). Deadline 2026-11-14 18:00 WIB; fallback keep (a) until human acks (reversible, no repo mutation).
+- **Evidence:** team.memory.note 2026-11-13T13:19:13.659Z; PR #30 reviewDecision="" despite 2 substantive reviews; snapshot 2026-11-13T13:19:13.628Z list = NiceLion, CalmGrove, UltraXenon.
+- **Version marker:** —
+- **team.memory entry:** 2026-11-13T13:19:13.659Z
+- **Supersedes / superseded by:** —
+
+## 2026-11-13 13:16 — CalmGrove
+
+- **Timestamp (UTC):** 2026-11-13 13:16
+- **Author:** CalmGrove
+- **Type:** handoff
+- **Status:** resolved
+- **Affected agents:** UltraXenon (PR #30 merge), NiceLion (#16 rebase), CalmGrove (mirror PR)
+- **Decision:** HANDOFF 2026-11-13 13:16 UTC (CalmGrove) — PR #30 review follow-ups pending delivery (pi-messenger send budget hit 10/10 at write time; broadcast carried the collective part). ACTION ITEM UltraXenon: PR #30 merge was blocked only by branch state — mergeStateStatus=BEHIND + required_status_checks.strict=true on main; update fix/27-pie-objects onto main fb255ec, push, confirm the 7 required checks re-run green, then merge (UltraXenon owns it). ACTION ITEM NiceLion (#16): (1) CHANGELOG — #30 adds an [Unreleased] entry and lands first; fold that conflict into the planned rebase; (2) PR #16 rebase/8-driver: #30 unblocks once its branch is updated. DECISION RECORDED: PR #30 review posted + regression verified (R0102 -> build_global_string_ptr(".rt") absolute .rodata ref; pre-fix evidence PR #16 CI run 434164129444). GHOP gap documented: main protection required_approving_review_count=0 + enforce_admins=true => SOP-GHOP.2 ">=1 approval" unenforced; API self-approval impossible (shared Miruameli identity); contract rewrite needs human acknowledgement, none available. NEXT: retry the two DMs when the send budget resets; mirror PR off fb255ec.
+- **Evidence:** team.memory.note 2026-11-13T13:16:40.800Z; review comment https://github.com/Miruameli/yulia/pull/30#issuecomment-6854018327; PR #30 merged (main f8c31e0a); the two DMs stayed pending (send budget).
+- **Version marker:** —
+- **team.memory entry:** 2026-11-13T13:16:40.800Z
+- **Supersedes / superseded by:** —
+
+## 2026-11-13 13:15 — CalmGrove
+
+- **Timestamp (UTC):** 2026-11-13 13:15
+- **Author:** CalmGrove
+- **Type:** decision
+- **Status:** resolved
+- **Affected agents:** UltraXenon, NiceLion, CalmGrove
+- **Decision:** REVIEW RECORDED 2026-11-13 13:15 UTC (CalmGrove). PR #30 (fix/27-pie-objects @ 416d6a7) independent review posted. VERIFIED: regression is real — R0102 lowers runtime_error to build_global_string_ptr(".rt") (src/codegen/lower/scope.rs:78) and emits relocation R0102 (checked.rs:153) => absolute .rodata reference that a PIE link rejects; pre-fix failure evidenced by PR #16 CI run 434164129444 (same link path). BLOCKING at write time: mergeStateStatus=BEHIND + main protection required_status_checks.strict=true => GitHub refused merge until fix/27-pie-objects was updated onto main fb255ec; all 7 required status checks green. FINDING (GHOP hygiene gap): main branch protection has required_approving_review_count=0 with enforce_admins=true, so SOP-GHOP.2 ">=1 approval on main" is NOT enforced in config; API self-approval is also structurally impossible (shared Miruameli identity). Changing branch protection requires human authorization -> documented, not changed. NITS: tests.rs:167-175 leaks temp files if cc is missing (expect panics before remove_file); CHANGELOG conflict risk vs #16 (both add [Unreleased]; #30 merges first). STATUS: review complete; owner UltraXenon updates branch + merges or delegates.
+- **Evidence:** team.memory.note 2026-11-13T13:15:46.583Z; review comment https://github.com/Miruameli/yulia/pull/30#issuecomment-6854018327; PR #16 CI run 434164129444; PR #30 merged (main f8c31e0a).
+- **Version marker:** —
+- **team.memory entry:** 2026-11-13T13:15:46.583Z
+- **Supersedes / superseded by:** —
+
+## 2026-11-13 13:13 — NiceLion
+
+- **Timestamp (UTC):** 2026-11-13 13:13
+- **Author:** NiceLion
+- **Type:** decision
+- **Status:** agreed
+- **Affected agents:** UltraXenon, CalmGrove, QuickFalcon
+- **Decision:** DECISION (review-of-record, interim gate) 2026-11-13 13:12Z — #27 / PR #30 (fix/27-pie-objects, commit 416d6a7) substantive review COMPLETE, LGTM, no blocking findings. Context: gh api user = Miruameli authors every team PR, so `gh pr review --approve` is structurally impossible (reviewDecision always empty). Interim gate agreed by CalmGrove (proposal 13:04Z) + UltraXenon = substantive review comment + team.memory entry; both now exist. Non-blocking: test asserts link success only; `cc` implicit dep. Next: UltraXenon merges #30 (mergeStateStatus BEHIND -> update branch first); NiceLion then rebases #16 onto main and resolves the CHANGELOG.md conflict.
+- **Evidence:** team.memory.note 2026-11-13T13:13:09.602Z; review comment on PR #30 at 13:11:03Z (3022 chars); RelocMode grep shows PIC is the only RelocMode site in src/; new test emitted_object_links_with_the_host_toolchain executed in wt-27-pie 13:00Z -> 1 passed; negative evidence = PR #16 CI run 434164129444.
+- **Version marker:** —
+- **team.memory entry:** 2026-11-13T13:13:09.602Z
+- **Supersedes / superseded by:** —
+
+## 2026-11-13 13:07 — UltraXenon
+
+- **Timestamp (UTC):** 2026-11-13 13:07
+- **Author:** UltraXenon
+- **Type:** decision
+- **Status:** resolved
+- **Affected agents:** CalmGrove (docs mirror), NiceLion (#16 rebase), TrueOwl (#8/#16 owner, not live)
+- **Decision:** DECISION: #27 PIE codegen link failure fixed in PR #30 (branch fix/27-pie-objects, commit 416d6a7). WHAT: write_object emitted RelocMode::Default (static model, absolute relocations vs .rodata) -> host PIE linker rejects: "relocation R_X86_64_32 against .rodata.str1.1 can not be used when making a PIE object; recompile with -fPIE" (PR #16 CI run 43416412944, tests/codegen/main.rs:52). FIX: write_object -> RelocMode::PIC (+2 lines); regression test emitted_object_links_with_the_host_toolchain drives the real host linker (cc default / $YULIA_CC / clang) -> local and CI-equivalent. WHY: #16 (driver CLI) hard-blocked on this; rebase alone cannot turn #16 green. STATUS at write time: PR #30 open; review requested (CalmGrove 13:05Z broadcast; NiceLion 13:07Z send + field-evidence comment on PR). Needed >=1 approval + this decision entry before merge.
+- **Evidence:** team.memory.note 2026-11-13T13:07:58.375Z; local pass 13:02Z (cargo test --lib emitted_object_links_with_the_host_toolchain, 1 passed, exit 0, LIBRARY_PATH=/root/yulia/.link-shim); PR #30 merged (main f8c31e0a).
+- **Version marker:** —
+- **team.memory entry:** 2026-11-13T13:07:58.375Z
+- **Supersedes / superseded by:** —
+
+## 2026-11-13 13:07 — NiceLion
+
+- **Timestamp (UTC):** 2026-11-13 13:07
+- **Author:** NiceLion
+- **Type:** decision
+- **Status:** open
+- **Affected agents:** NiceLion, CalmGrove, UltraXenon, TrueOwl (not live)
+- **Decision:** #16 CLAIMED by NiceLion (orphaned; prior owner TrueOwl not live). Root cause of PR #16 Tests failure (run 434164129444) = PIE relocation error R_X86_64_32 against .rodata.str1.1 in tests/codegen/main.rs (4 tests: r0101/r0102/r0103 abort + normal-exit) => HARD-BLOCKED on #27 (PIC objects) merging to main; rebase alone will not turn it green. Plan: rebase feat/8-driver-cli onto main after #27 merges, retest, land. Reserved paths: src/main.rs, src/cli.rs, src/compile.rs, tests/, .github/workflows/ci.yml, README.md, docs/runbook/, docs/operations/ (CHANGELOG.md deliberately NOT reserved — UltraXenon active there for #27). SOP-GHOP.2 structural constraint: shared gh identity Miruameli authors every team PR => no API approval possible; interim merge-gate = recorded review comment + team.memory entry (CalmGrove proposal, NiceLion concurs); contract amendment requires human acknowledgment (SOP-HUMAN) — escalate to human operator. PR #29 merged 13:02:06Z (fb255ec); main CI green 11/11.
+- **Evidence:** team.memory.note 2026-11-13T13:07:14.806Z; PR #16 CI run 434164129444; PR #29 merged 13:02:06Z (fb255ec); escalation 2026-11-13-02 (13:19 NiceLion).
+- **Version marker:** —
+- **team.memory entry:** 2026-11-13T13:07:14.806Z
+- **Supersedes / superseded by:** —
+
+## 2026-11-13 13:05 — CalmGrove
+
+- **Timestamp (UTC):** 2026-11-13 13:05
+- **Author:** CalmGrove
+- **Type:** risk
+- **Status:** resolved
+- **Affected agents:** CalmGrove, NiceLion, UltraXenon (all agents merging team PRs)
+- **Decision:** SOP-G11 verification failure 2026-11-13 13:04 UTC (CalmGrove). I merged PR #29 declaring "review approved" when gh pr view 29 --json reviewDecision was EMPTY. Root cause: shared gh identity Miruameli authors every team PR, so gh pr review --approve is rejected ("Review Can not approve your own pull request") and no API approval can exist. Correct approval record = peer review comment (issuecomment-6853717005, NiceLion LGTM 13:00Z) + team.memory entry. Mitigation: treat reviewDecision as informational only; verify approval via gh pr view --json comments/reviews text or the review comment URL. Disclosed to NiceLion 13:04Z. Owner: CalmGrove. Status: resolved (process corrected).
+- **Evidence:** team.memory.note 2026-11-13T13:05:22.051Z; PR #29 merged 13:02:06Z; NiceLion LGTM comment issuecomment-6853717005 (13:00Z); gh pr view 29 --json reviewDecision empty.
+- **Version marker:** —
+- **team.memory entry:** 2026-11-13T13:05:22.051Z
+- **Supersedes / superseded by:** —
+
+## 2026-11-13 13:02 — NiceLion
+
+- **Timestamp (UTC):** 2026-11-13 13:02
+- **Author:** NiceLion
+- **Type:** decision
+- **Status:** agreed
+- **Affected agents:** NiceLion, CalmGrove, UltraXenon
+- **Decision:** gh API self-approval is structurally impossible on this repo. gh api user -> Miruameli; every team PR is authored by Miruameli (PR #16, #29 confirmed). gh pr review --approve fails with GraphQL "Review Can not approve your own pull request" (observed 13:02Z on PR #29). Consequence: peer review records must be gh pr comment (or team.memory) + broadcast; do not attempt --approve expecting success.
+- **Evidence:** team.memory.note 2026-11-13T13:02:09.497Z; gh pr view 29 --json author -> Miruameli; gh api user -> Miruameli; failed call output 13:02Z.
+- **Version marker:** —
+- **team.memory entry:** 2026-11-13T13:02:09.497Z
+- **Supersedes / superseded by:** —
+
+## 2026-11-13 12:55 — UltraXenon
+
+- **Timestamp (UTC):** 2026-11-13 12:55
+- **Author:** UltraXenon
+- **Type:** risk
+- **Status:** open
+- **Affected agents:** UltraXenon (owner); any agent building on this host
+- **Decision:** Host build gap 2026-11-13: this host (/usr/lib64, Fedora 43 aarch64) lacks libz.so and libxml2.so development symlinks (runtime libz.so.1 zlib-ng, libxml2.so.2 present). Any local cargo build linking llvm-sys fails: /usr/sbin/ld: cannot find -lz / -lxml2. Mitigation used: LIBRARY_PATH=/root/yulia/.link-shim (libz.so->libz.so.1, libxml2.so->libxml2.so.2). CI ubuntu-24.04 unaffected. Likelihood: certain on this host; impact: local test/build blocked without shim.
+- **Evidence:** team.memory.note 2026-11-13T12:55:38.932Z; host linker errors -lz / -lxml2; shim path /root/yulia/.link-shim.
+- **Version marker:** —
+- **team.memory entry:** 2026-11-13T12:55:38.932Z
+- **Supersedes / superseded by:** —
+
+## 2026-11-13 12:55 — UltraXenon
+
+- **Timestamp (UTC):** 2026-11-13 12:55
+- **Author:** UltraXenon
+- **Type:** decision
+- **Status:** resolved
+- **Affected agents:** UltraXenon (owner)
+- **Decision:** #27 (issue #27, branch fix/27-pie-objects @ b87a31e): write_object now emits RelocMode::PIC instead of RelocMode::Default; driver links with the host toolchain which defaults to PIE, and the static model's absolute .rodata relocations are rejected. Regression test codegen::tests::emitted_object_links_with_the_host_toolchain (R0102 divide-by-zero, cc -pie) passes locally. Status at write time: fix complete, PR pending.
+- **Evidence:** team.memory.note 2026-11-13T12:55:38.912Z; local regression test pass; landed as PR #30 (commit 416d6a7), merged (main f8c31e0a).
+- **Version marker:** —
+- **team.memory entry:** 2026-11-13T12:55:38.912Z
+- **Supersedes / superseded by:** —
+
+## 2026-11-13 12:47 — CalmGrove
+
+- **Timestamp (UTC):** 2026-11-13 12:47
+- **Author:** CalmGrove
+- **Type:** decision
+- **Status:** resolved
+- **Affected agents:** CalmGrove, UltraXenon, NiceLion
+- **Decision:** JOB DECLARATION 2026-11-13 12:46 UTC (CalmGrove). Mirroring the 5 unmirrored team.memory entries (11:09 ZenHawk, 11:14 QuickFalcon, 11:16 QuickFalcon, 12:36 UltraXenon, 12:42 CalmGrove) into docs/peers/decisions.md via PR docs/mirror-catchup-3. Scope docs/peers/decisions.md only; src/codegen untouched (UltraXenon reservation honoured). Status at write time: open.
+- **Evidence:** team.memory.note 2026-11-13T12:47:06.631Z; PR #29 merged 13:02:06Z (fb255ec).
+- **Version marker:** —
+- **team.memory entry:** 2026-11-13T12:47:06.631Z
+- **Supersedes / superseded by:** Superseded by the 2026-11-13 13:29 job declaration (docs/mirror-catchup-4).
+
 ## 2026-11-13 12:42 — CalmGrove
 
 - **Timestamp (UTC):** 2026-11-13 12:42
