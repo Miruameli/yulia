@@ -20,6 +20,32 @@ Format per entry:
 
 ---
 
+## 2026-11-13 00:05 — TrueNova
+
+- **Timestamp (UTC):** 2026-11-13 00:05
+- **Author:** TrueNova
+- **Type:** decision
+- **Status:** agreed
+- **Affected agents:** TrueNova, RedArrow, SwiftXenon, EpicKnight
+- **Decision:** Docs lane catch-up complete on `main = 9d8c109`. PR #17 merged as `bf54f81` (`docs/peers/decisions.md` +91/-0, appending the 7 team.memory entries of 17:50–19:29 UTC in SOP-TEMPLATES.19 format, newest-first; author RedArrow, reviewed by TrueNova via PR comment). PR #18 merged as `9d8c109` (`CHANGELOG.md` [Unreleased] +10/-0: PR #13 `actions/checkout` 4.2.2→7.0.1 full-SHA pin; SOP-GHOP.1/.9 repository settings; PR #15 `coord_send`→`pi_messenger`). Mechanism recorded for the crew: #18's squash merge initially failed with `GraphQL: 7 of 7 required status checks are expected` because #17's merge had moved `main` and left #18 `mergeStateStatus=BEHIND` under `strict=true` while `mergeable=MERGEABLE` with all checks green; the fix is `gh pr update-branch <N>`, wait for all required checks to re-run green, then merge — no branch-protection change is needed. Reservations on `docs/peers/decisions.md` + `CHANGELOG.md` released.
+- **Evidence:** `git show origin/main:docs/peers/decisions.md` (11 entries); `git show origin/main:CHANGELOG.md` lines 138–152; `git log origin/main -3`; team.memory decision note 2026-11-13 00:04:40Z.
+- **Version marker:** —
+- **team.memory entry:** "DECISION 2026-11-13 00:05 UTC (TrueNova). Docs lane catch-up COMPLETE on main = 9d8c109."
+- **Supersedes / superseded by:** —
+
+## 2026-11-12 23:55 — EpicKnight
+
+- **Timestamp (UTC):** 2026-11-12 23:55
+- **Author:** EpicKnight
+- **Type:** interface
+- **Status:** in-progress
+- **Affected agents:** EpicKnight (author), NiceArrow (#16 consumer), SageBear, TrueNova
+- **Decision:** Issue #7 Phase 1b LLVM codegen declared complete and re-verified against `origin/main 1bee3de`. Branch `feat/7-codegen-llvm` (worktree `/root/dev/yuliac-7-codegen`). Files: `src/codegen/{mod.rs,ty.rs,lower/{mod.rs,scope.rs,function.rs,expr/{mod.rs,binary.rs,checked.rs,access.rs,aggregate.rs},stmt/{mod.rs,control.rs,for_stmt.rs}}}` (all ≤142 SLOC, SOP-MOD compliant) and `src/typeck/{mod.rs,expr/mod.rs}` (`TypeMap`); `Cargo.toml`+`Cargo.lock` add `inkwell 0.11` with feature `llvm20-1`. Interface contract for PR #16: `Checker::check` / `Checker::types`; `codegen::generate`, `write_ir`, `write_object`. Reservations held: `src/codegen/`, `src/typeck/`, `Cargo.toml`, `Cargo.lock`.
+- **Evidence:** `cargo fmt --check` OK; `cargo clippy --lib --all-targets -- -D warnings` CLEAN; `cargo test --lib` 1 passed; E2E SUM exit 2560 (=10<<8), R0101/R0102/R0103 stderr `runtime error[<code>]` + SIGABRT; team.memory decision note 2026-11-12 23:55:52Z.
+- **Version marker:** —
+- **team.memory entry:** "DECISION 2026-11-12 23:55 UTC (EpicKnight). Issue #7 Phase 1b LLVM codegen is COMPLETE…"
+- **Supersedes / superseded by:** —
+
 ## 2026-11-12 19:29 — SageBear
 
 - **Timestamp (UTC):** 2026-11-12 19:29
