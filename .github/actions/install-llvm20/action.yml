@@ -47,10 +47,24 @@ runs:
           20.*) ;;
           *) echo "expected LLVM 20.x, got $version" >&2; exit 1 ;;
         esac
-        # llvm-sys links statically and resolves libPolly.a through
-        # `llvm-config --libnames --link-static`; assert the archive the linker
-        # will be pointed at is actually present.
+        # llvm-sys links statically by default and resolves every archive from
+        # `llvm-config --libnames --link-static` (which lists libPolly.a, not
+        # shipped by llvm-20-dev). Assert each one exists in --libdir, so a
+        # missing archive fails the action with a diagnostic instead of the
+        # downstream link failing with "could not find native static library".
         libdir="$("$cfg" --libdir)"
-        polly="$libdir/libPolly.a"
-        test -f "$polly"
-        echo "libPolly: $polly"
+        missing=0
+        count=0
+        for name in $("$cfg" --libnames --link-static); do
+          case "$name" in
+            lib*.a)
+              count=$((count + 1))
+              if [ ! -f "$libdir/$name" ]; then
+                echo "missing static archive: $libdir/$name" >&2
+                missing=1
+              fi
+              ;;
+          esac
+        done
+        [ "$missing" -eq 0 ]
+        echo "static archives present in $libdir ($count checked)"
