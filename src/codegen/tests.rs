@@ -169,9 +169,9 @@ fn emitted_object_links_with_the_host_toolchain() {
         .arg(&object)
         .arg("-o")
         .arg(&executable)
-        .status()
-        .expect("run the host linker 'cc'");
+        .status();
     let _ = std::fs::remove_file(&object);
     let _ = std::fs::remove_file(&executable);
+    let status = status.expect("run the host linker 'cc'");
     assert!(status.success(), "the emitted object did not link");
 }
