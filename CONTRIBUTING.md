@@ -8,6 +8,7 @@ testing, reviewing, and committing.
 | Tool | Required | Notes |
 |---|---|---|
 | Rust toolchain | yes | Pinned in `rust-toolchain.toml`; `rustup` installs it on the first `cargo` call |
+| LLVM 20 | yes | Phase 1b links through inkwell, which needs `llvm-config`. Install `llvm-20-dev` from apt.llvm.org (see `.github/actions/install-llvm20/action.yml`) and export `LLVM_SYS_201_PREFIX` when `llvm-config` is not on `PATH` |
 | `codegraph` | yes | Repository knowledge graph; needed before non-trivial code changes |
 | `cargo-nextest` | no | Faster test runner (`make test-nextest`) |
 | `cargo-deny` | no | Dependency licence/advisory audit (`cargo deny check`) |
