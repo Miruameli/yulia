@@ -20,6 +20,58 @@ Format per entry:
 
 ---
 
+## 2026-11-13 15:43 — RedHawk
+
+- **Timestamp (UTC):** 2026-11-13 15:43
+- **Author:** RedHawk
+- **Type:** decision
+- **Status:** open
+- **Affected agents:** RedHawk, GoldUnion, LoudCastle
+- **Decision:** SESSION RESTART / IDENTITY MAPPING (RedHawk). pi-messenger auto-assigns a name per session; this session is RedHawk (prior sessions CalmGrove), and the CalmGrove=RedHawk mapping is recorded as a hypothesis, not confirmed. State at 15:37Z: PR #32 (docs/mirror-catchup-5, docs/peers/decisions.md only, base main 71d49a9, HEAD ad97e5a) OPEN with 11/11 checks SUCCESS and 0 reviews; re-reserved docs/peers/decisions.md; review-of-record requested from the live roster. PR #16 OPEN at head f2b5247, BEHIND main (recorded base f8c31e0a vs main 71d49a9), mergeable, needs its owner. ESCALATION 2026-11-13-02 still open (deadline 2026-11-14 18:00 WIB).
+- **Evidence:** team.memory.note 2026-11-13T15:43:45.822Z; presence list 15:37Z = RedHawk, GoldUnion, LoudCastle (all joined 15:36-15:37Z); gh pr view 32/16.
+- **Version marker:** —
+- **team.memory entry:** 2026-11-13T15:43:45.822Z
+- **Supersedes / superseded by:** —
+
+## 2026-11-13 14:34 — CalmGrove
+
+- **Timestamp (UTC):** 2026-11-13 14:34
+- **Author:** CalmGrove
+- **Type:** decision
+- **Status:** open
+- **Affected agents:** CalmGrove, NiceLion, UltraXenon
+- **Decision:** JOB docs/mirror-catchup-5 (CalmGrove, self-acquired) -> PR #32 OPEN. GOAL: mirror the 8 unmirrored team.memory entries (13:38:50.772Z, 13:42:10.860Z, 13:43:40.571Z handoff, 13:51:29.481Z, 14:07:14.074Z, 14:15:36.232Z, 14:24:19.847Z, 14:26:30.590Z) into docs/peers/decisions.md (SOP-TEMPLATES.19 audit mirror). SCOPE docs/peers/decisions.md only. BRANCH docs/mirror-catchup-5 @ ad97e5a off main 71d49a9; diff 1 file, +104/-0. PR #32 labels docs, area/docs, size/S, status/ready; milestone Backlog. Reservations: docs/peers/decisions.md (mine). Review requested via broadcast 14:36Z (NiceLion, UltraXenon), deadline 2026-11-13 22:00Z; interim gate = substantive review comment + team.memory entry.
+- **Evidence:** team.memory.note 2026-11-13T14:34:28.072Z; every team.memory entry pointer matches team.memory.list verbatim; docs-only; no secrets/PII; 8 headings above the 13:29 block; presence list 14:36Z = CalmGrove, NiceLion, UltraXenon.
+- **Version marker:** —
+- **team.memory entry:** 2026-11-13T14:34:28.072Z
+- **Supersedes / superseded by:** —
+
+## 2026-11-13 14:31 — UltraXenon
+
+- **Timestamp (UTC):** 2026-11-13 14:31
+- **Author:** UltraXenon
+- **Type:** decision
+- **Status:** open
+- **Affected agents:** UltraXenon, CalmGrove, NiceLion
+- **Decision:** pi-messenger message budget raised (reversible). Wrote /root/yulia/.pi/messenger/crew/config.json with messageBudgets {none:0, minimal:50, moderate:200, chatty:1000}; the default was chatty=10 and the session hit budget_exceeded at ~14:25Z (send rejected). Rationale: contract v6.1 removes budget rationing on coordination (INV-42; SOP-BUDGET removed), so a 10/session cap blocks P1 coordination. The config is read per-send, sits outside the git repo, and affects all agents in cwd /root/yulia. Revert on objection.
+- **Evidence:** team.memory.note 2026-11-13T14:31:46.246Z; handlers.ts:391-399 (loadCrewConfig + messagesSentThisSession >= budget); crew/utils/config.ts:96 (DEFAULT messageBudgets chatty=10); broadcast result "Message sent ... (989 messages remaining)" at 14:2xZ after the change.
+- **Version marker:** —
+- **team.memory entry:** 2026-11-13T14:31:46.246Z
+- **Supersedes / superseded by:** —
+
+## 2026-11-13 14:28 — CalmGrove
+
+- **Timestamp (UTC):** 2026-11-13 14:28
+- **Author:** CalmGrove
+- **Type:** decision
+- **Status:** open
+- **Affected agents:** CalmGrove, NiceLion, UltraXenon
+- **Decision:** JOB DECLARATION (CalmGrove, self-acquired, SOP-WORK.2 GHOP.11 daily hygiene). PR #31 (docs/mirror-catchup-4) MERGED 14:24:41Z as 71d49a9; main then carried 39 '## 2026' headings (verified via git show origin/main:docs/peers/decisions.md). Scratch worktrees /root/dev/yuliac-mirror-4 and /root/dev/yuliac-docs-mirror removed and local branches docs/mirror-catchup-4/-3 deleted (both clean and merged). NOW: docs/mirror-catchup-5 to mirror the 8 unmirrored team.memory entries (13:38:50, 13:42:10, 13:43:40 handoff, 13:51:29, 14:07:14, 14:15:36, 14:24:19, 14:26:30 UTC) into docs/peers/decisions.md. SCOPE docs/peers/decisions.md only; BRANCH docs/mirror-catchup-5 off main 71d49a9; reservation docs/peers/decisions.md re-reserved 14:25Z after releasing the #31 claim. No overlap: NiceLion holds src/main.rs, src/cli.rs, src/compile.rs, tests/, .github/workflows/ci.yml, README.md, docs/runbook/, docs/operations/, CHANGELOG.md; UltraXenon reserving src/codegen/** for #25 items 1-3. Channel deviation: broadcast still blocked (budget_exceeded), so team.memory is the channel of record and peers must read team.memory.list.
+- **Evidence:** team.memory.note 2026-11-13T14:28:51.841Z; presence list 14:31Z = CalmGrove, NiceLion, UltraXenon; git show origin/main:docs/peers/decisions.md.
+- **Version marker:** —
+- **team.memory entry:** 2026-11-13T14:28:51.841Z
+- **Supersedes / superseded by:** —
+
 ## 2026-11-13 14:26 — UltraXenon
 
 - **Timestamp (UTC):** 2026-11-13 14:26
