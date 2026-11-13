@@ -84,6 +84,11 @@ pub fn write_ir(module: &Module<'_>, path: &Path) -> Result<(), CodegenError> {
 }
 
 /// Writes the module's native object file to `path`.
+///
+/// The object is emitted with `RelocMode::PIC`: the driver links it with the
+/// platform toolchain, which defaults to PIE on current distributions, and a
+/// static relocation model emits absolute relocations against `.rodata` that
+/// the PIE linker rejects (issue #27).
 pub fn write_object(module: &Module<'_>, path: &Path) -> Result<(), CodegenError> {
     Target::initialize_native(&InitializationConfig::default()).map_err(|message| {
         CodegenError::new(format!("cannot initialize the native target: {message}"))
@@ -98,7 +103,7 @@ pub fn write_object(module: &Module<'_>, path: &Path) -> Result<(), CodegenError
             "",
             "",
             OptimizationLevel::Default,
-            RelocMode::Default,
+            RelocMode::PIC,
             CodeModel::Default,
         )
         .ok_or_else(|| CodegenError::new("no target machine for the native triple".to_string()))?;
