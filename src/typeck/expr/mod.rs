@@ -12,7 +12,7 @@ use operator::{binary, unary};
 
 /// Checks `expr`, returning its type.
 pub(crate) fn check(checker: &mut Checker<'_>, expr: &Expr) -> Ty {
-    match &expr.kind {
+    let ty = match &expr.kind {
         ExprKind::IntLit(_) => Ty::Int,
         ExprKind::BoolLit(_) => Ty::Bool,
         ExprKind::FloatLit(_) => out_of_subset(checker, expr, "float"),
@@ -33,7 +33,9 @@ pub(crate) fn check(checker: &mut Checker<'_>, expr: &Expr) -> Ty {
         ExprKind::ArrayRepeat { value, count } => {
             literal::array_repeat(checker, expr, value, count)
         }
-    }
+    };
+    checker.record(expr.span, ty.clone());
+    ty
 }
 
 /// Reports a construct that parses but is outside the Phase 1 subset.
