@@ -20,6 +20,71 @@ Format per entry:
 
 ---
 
+## 2026-11-13 12:42 — CalmGrove
+
+- **Timestamp (UTC):** 2026-11-13 12:42
+- **Author:** CalmGrove
+- **Type:** risk
+- **Status:** resolved
+- **Affected agents:** UltraXenon (#27 owner); CalmGrove, NiceLion
+- **Decision:** CORRECTION — retracting my 12:37Z claim that an unset git identity blocks `git commit` on this host. Verified false: a commit in a fresh /tmp repo with no `user.name`/`user.email` succeeds (exit 0) via git's fallback identity "Super User <root@localhost.localdomain>"; `git var GIT_AUTHOR_IDENT` resolves non-empty; there is no gpg/sign requirement (global config empty, no `/etc/gitconfig`). Residual, not a blocker: fallback commits lose GitHub attribution to Miruameli; the repo convention is "Miruameli <miruamelizabethelrathvonalwood@gmail.com>" (8 recent main commits). Recommended fix for the #27 worktree: repo-local `git config user.name`/`user.email` in `/root/yulia/wt-27-pie`.
+- **Evidence:** fresh /tmp repo commit (exit 0); `git var GIT_AUTHOR_IDENT`; `git config --global --list` empty; `/etc/gitconfig` absent; `git log origin/main -8` author lines; team.memory risk note 2026-11-13T12:42:57Z; roster 12:45Z = CalmGrove, NiceLion, UltraXenon.
+- **Version marker:** —
+- **team.memory entry:** "CORRECTION 2026-11-13 12:43 UTC (CalmGrove)." (2026-11-13T12:42:57Z)
+- **Supersedes / superseded by:** supersedes my 12:37Z broadcast claim.
+
+## 2026-11-13 12:36 — UltraXenon
+
+- **Timestamp (UTC):** 2026-11-13 12:36
+- **Author:** UltraXenon
+- **Type:** decision
+- **Status:** open
+- **Affected agents:** CalmGrove, NiceLion, UltraXenon
+- **Decision:** Taking over #27 (`fix(codegen): emit PIE objects`) — ZenHawk's fix orphaned uncommitted in wt-27-pie @ b87a31e (branch `fix/27-pie-objects`, local-only). Change: `src/codegen/mod.rs` write_object `RelocMode::Default` -> `PIC` + test `emitted_object_links_with_the_host_toolchain`. ZenHawk tests passed 11:23Z; ZenHawk absent from roster. SCOPE `src/codegen/**`; branch `fix/27-pie-objects`; PR to follow. Critical path #27 -> main -> #16 rebase -> #8.
+- **Evidence:** team.memory decision note 2026-11-13T12:36:33Z; wt-27-pie @ b87a31e; reservation `src/codegen/` since 12:36:33Z; roster 12:36Z = CalmGrove, NiceLion, UltraXenon.
+- **Version marker:** —
+- **team.memory entry:** "JOB DECLARATION 2026-11-13 12:36 UTC (UltraXenon)." (2026-11-13T12:36:33Z)
+- **Supersedes / superseded by:** supersedes the 11:09 ZenHawk #27 declaration.
+
+## 2026-11-13 11:16 — QuickFalcon
+
+- **Timestamp (UTC):** 2026-11-13 11:16
+- **Author:** QuickFalcon
+- **Type:** decision
+- **Status:** agreed
+- **Affected agents:** UltraWolf, ZenHawk, TrueOwl
+- **Decision:** OWNERSHIP RESOLUTION — #16/#8 owner = TrueOwl (reserved 11:14:43Z, before QuickFalcon's 11:14:46Z). QuickFalcon released its overlapping reservations (`src/cli.rs`, `src/main.rs`, `src/compile.rs`, `tests/driver/`) and takes #25 (harden codegen follow-ups), gated on ZenHawk's #27 releasing `src/codegen/`. ZenHawk owns #27. Critical path: #27 -> main -> TrueOwl rebases #16 -> review -> merge. QuickFalcon will pre-review #16 content and act as 2nd reviewer after the rebase.
+- **Evidence:** reservation timeline 11:14:43Z vs 11:14:46Z; team.memory decision note 2026-11-13T11:16:43Z; roster 11:16:43Z = UltraWolf, ZenHawk, TrueOwl.
+- **Version marker:** —
+- **team.memory entry:** "OWNERSHIP RESOLUTION 2026-11-13 11:16 UTC (QuickFalcon)." (2026-11-13T11:16:43Z)
+- **Supersedes / superseded by:** resolves the ownership question raised by the 11:14 entry.
+
+## 2026-11-13 11:14 — QuickFalcon
+
+- **Timestamp (UTC):** 2026-11-13 11:14
+- **Author:** QuickFalcon
+- **Type:** decision
+- **Status:** superseded
+- **Affected agents:** UltraWolf, ZenHawk, TrueOwl
+- **Decision:** Claiming #16 (`feat/8-driver-cli`, `Closes #8`) to completion: deep review + rebase onto main after #27 merges + land. Source: self-acquired SOP-WORK.2 scan (orphaned draft PR, author WildWolf absent; BEHIND main; Tests red on #27). Scope: `src/cli.rs`, `src/main.rs`, `src/compile.rs`, `tests/driver/`, `tests/codegen/`, `docs`, `ci.yml`. Out-of-scope: #27 (ZenHawk, reserved `src/codegen/` + `tests/codegen/`), #25 (`src/codegen` only — conflicts with that reservation). Sequencing: #27 merges first, then rebase #16.
+- **Evidence:** team.memory decision note 2026-11-13T11:14:22Z; PR #16 state (draft, BEHIND main, Tests red); roster 11:14:22Z = UltraWolf, ZenHawk, TrueOwl.
+- **Version marker:** —
+- **team.memory entry:** "JOB DECLARATION 2026-11-13 11:14 UTC (QuickFalcon)." (2026-11-13T11:14:22Z)
+- **Supersedes / superseded by:** superseded by the 11:16 entry (ownership resolved to TrueOwl).
+
+## 2026-11-13 11:09 — ZenHawk
+
+- **Timestamp (UTC):** 2026-11-13 11:09
+- **Author:** ZenHawk
+- **Type:** decision
+- **Status:** superseded
+- **Affected agents:** UltraWolf, QuickFalcon, TrueOwl
+- **Decision:** Claiming #27 (`fix(codegen): emit position-independent objects so they link into a PIE`). Source: self-acquired via SOP-WORK.2 scan (open issues; #27 unowned, no comments, blocks PR #16). Scope: `src/codegen/`, `tests/codegen/`. Branch `fix/27-pie-objects`. Declaration evidence: PR #16 run 43349086871 Tests job fails with `R_X86_64_32` PIE relocation error; `src/codegen/mod.rs` creates the target machine with `RelocMode::Default`; main = b87a31e.
+- **Evidence:** run 43349086871; `src/codegen/mod.rs` `RelocMode::Default`; team.memory decision note 2026-11-13T11:09:30Z; roster 11:08Z = UltraWolf, QuickFalcon, TrueOwl.
+- **Version marker:** —
+- **team.memory entry:** "JOB DECLARATION 2026-11-13 11:09 UTC (ZenHawk)." (2026-11-13T11:09:30Z)
+- **Supersedes / superseded by:** superseded by the 12:36 entry (UltraXenon took over #27; ZenHawk absent from roster).
+
 ## 2026-11-13 02:10 — YoungGrove
 
 - **Timestamp (UTC):** 2026-11-13 02:10
