@@ -101,3 +101,40 @@ fn addition_reports_r0103() {
         "{ir}"
     );
 }
+
+#[test]
+fn int_min_division_reports_r0103() {
+    // `sdiv i32 -2147483648, -1` is poison in LLVM, so the divisor guard must
+    // catch it before the division instead of letting the optimizer fold it.
+    let ir = lower(
+        "module app.main;\n\
+         fn main() -> int {\n\
+         let a: int = -2147483647 - 1;\n\
+         let b: int = a / -1;\n\
+         return b;\n\
+         }",
+    );
+    assert!(ir.contains("div.overflow"), "{ir}");
+    assert!(
+        ir.contains("runtime error[R0103]: integer overflow"),
+        "{ir}"
+    );
+}
+
+#[test]
+fn int_min_remainder_reports_r0103() {
+    // `srem i32 -2147483648, -1` is poison for the same reason.
+    let ir = lower(
+        "module app.main;\n\
+         fn main() -> int {\n\
+         let a: int = -2147483647 - 1;\n\
+         let b: int = a % -1;\n\
+         return b;\n\
+         }",
+    );
+    assert!(ir.contains("rem.overflow"), "{ir}");
+    assert!(
+        ir.contains("runtime error[R0103]: integer overflow"),
+        "{ir}"
+    );
+}
