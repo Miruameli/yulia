@@ -8,8 +8,8 @@ How to work on the Yulia compiler: setup, the daily loop, and the spec workflow.
    installs the pinned Rust automatically on the first `cargo` invocation.
 2. Install LLVM 20 — the Phase 1b backend links through inkwell, which needs
    `llvm-config`. `.github/actions/install-llvm20/action.yml` is the reference
-   procedure (apt.llvm.org, then `llvm-20-dev`); export `LLVM_SYS_201_PREFIX`
-   if `llvm-config` is not on the default path.
+   procedure (apt.llvm.org, then `llvm-20-dev` and `libpolly-20-dev`); export
+   `LLVM_SYS_201_PREFIX` if `llvm-config` is not on the default path.
 3. `cargo build` — the crate is `yulia` (see `Cargo.toml`).
 4. `cargo test` — unit tests plus the integration tests in `tests/`.
 
