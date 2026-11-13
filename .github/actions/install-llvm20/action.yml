@@ -23,7 +23,12 @@ runs:
         timeout 600 sudo apt-get update
     - name: Install LLVM 20
       shell: bash
-      run: timeout 600 sudo apt-get install -y --no-install-recommends llvm-20-dev
+      # llvm-sys links statically and asks llvm-config for `--libnames
+      # --link-static`, which lists libPolly.a; llvm-20-dev alone does not
+      # ship it, so the link fails with "could not find native static library
+      # 'Polly'". libpolly-20-dev comes from the same apt.llvm.org repo and
+      # the same 20.1.8 build, so the ABI matches.
+      run: timeout 600 sudo apt-get install -y --no-install-recommends llvm-20-dev libpolly-20-dev
     - name: Export LLVM_SYS_201_PREFIX
       shell: bash
       run: echo "LLVM_SYS_201_PREFIX=/usr/lib/llvm-20" >> "$GITHUB_ENV"
@@ -42,3 +47,24 @@ runs:
           20.*) ;;
           *) echo "expected LLVM 20.x, got $version" >&2; exit 1 ;;
         esac
+        # llvm-sys links statically by default and resolves every archive from
+        # `llvm-config --libnames --link-static` (which lists libPolly.a, not
+        # shipped by llvm-20-dev). Assert each one exists in --libdir, so a
+        # missing archive fails the action with a diagnostic instead of the
+        # downstream link failing with "could not find native static library".
+        libdir="$("$cfg" --libdir)"
+        missing=0
+        count=0
+        for name in $("$cfg" --libnames --link-static); do
+          case "$name" in
+            lib*.a)
+              count=$((count + 1))
+              if [ ! -f "$libdir/$name" ]; then
+                echo "missing static archive: $libdir/$name" >&2
+                missing=1
+              fi
+              ;;
+          esac
+        done
+        [ "$missing" -eq 0 ]
+        echo "static archives present in $libdir ($count checked)"
